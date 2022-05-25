@@ -5,7 +5,7 @@ const User = require("../Model/User")
 const userController = {
   addUser: asyncHandler(async (req, res) => {
     try {
-      const { name, email, password, role,group } = req.body;
+      const { name, email, password, role } = req.body;
       const userExit = await User.findOne({ email });
       if (userExit) {
         res.status(400).json("Email đã tồn tại!!!");

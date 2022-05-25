@@ -8,7 +8,6 @@ const QnAController = {
       if (questionExit) {
         res.status(401).json("Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác");
       }
-
       const newQA = new QnA({ question, answer,by, keywords });
       const savedQA = await newQA.save();
       res.status(200).json(savedQA);

@@ -10,9 +10,9 @@ dotenv.config()
 connectDatabase()
 
 const app = express();
+app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors())
 //API 
 
 app.use("/api/qnas",QnARoute)
