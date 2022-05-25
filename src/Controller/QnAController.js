@@ -24,5 +24,21 @@ const QnAController = {
       throw new Error(err.message);
     }
   }),
+  getLikeQuestion: asyncHandler(async (req, res) => {
+    try{
+      const question =  req.query.question
+      ? {
+          name: {
+            $regex: req.query.question,
+            $options: "i",
+          },
+        }
+      : {};
+      const listQuestion = await QnA.find({...question});
+      res.status(200).json(listQuestion)
+    }catch (err){
+      res.status(401).json(err)
+    }
+  })
 };
 module.exports = QnAController
