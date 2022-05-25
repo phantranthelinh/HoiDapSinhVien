@@ -3,13 +3,13 @@ const asyncHandler = require("express-async-handler");
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
-      const { question, answer, keywords } = req.body;
+      const { question, answer, by ,keywords } = req.body;
       const questionExit = await QnA.findOne({ question });
       if (questionExit) {
         res.status(401).json("Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác");
       }
 
-      const newQA = new QnA({ question, answer, keywords });
+      const newQA = new QnA({ question, answer,by, keywords });
       const savedQA = await newQA.save();
       res.status(200).json(savedQA);
     } catch (err) {

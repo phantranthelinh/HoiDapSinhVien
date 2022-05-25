@@ -4,15 +4,15 @@ const connectDatabase = require('./src/config/database')
 const QnARoute = require('./src/Routes/QnARoute')
 const userRoute = require('./src/Routes/userRoute')
 const bodyParser =require("body-parser") 
+const cors = require('cors')
 const {notFound, errorHandler} =require("./src/middleware/Error") 
 dotenv.config()
 connectDatabase()
 
-
 const app = express();
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(cors())
 //API 
 
 app.use("/api/qnas",QnARoute)

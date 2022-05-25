@@ -32,9 +32,24 @@ const userController = {
     }
   }),
   getUser: asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id);
+    try{
+
+      const user = await User.find({});
+      res.status(200).json(user);
+    }catch (err) {
+      throw new Error(error)
+    }
   }),
-  deleteUser: asyncHandler(async (req, res) => {}),
+  deleteUser: asyncHandler(async (req, res) => {
+    try{
+      const userId = req.params.id
+      await User.deleteOne({_id: userId})
+      res.status(200).json("Xóa người dùng thành công!")
+    }catch(err){
+      res.status(401).json(err);
+    }
+    
+  }),
   login: asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -53,4 +68,6 @@ const userController = {
     }
   }),
 };
+
+
 module.exports = userController;
