@@ -1,0 +1,21 @@
+const commonWords = [
+  "nhu",
+  "toi",
+  "minh",
+  "ma",
+  "la",
+  "duoc",
+  "em",
+  "co",
+  "noi",
+  "thuc hien",
+  "tren",
+  "voi",
+  "tai",
+  "mot",
+  "neu",
+  "no",
+  "bi",
+  "se nhu the nao",
+];
+module.exports = commonWords
