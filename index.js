@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //API 
 
-app.use("/api/QAs",QnARoute)
+app.use("/api/qnas",QnARoute)
 app.use('/api/users',userRoute)
 
 
