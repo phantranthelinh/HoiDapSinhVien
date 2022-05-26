@@ -1,22 +1,21 @@
-
-const asyncHandler = require("express-async-handler");
-const generateToken = require("../utils/generateToken");
-const User = require("../Model/User")
+const asyncHandler = require('express-async-handler')
+const generateToken = require('../utils/generateToken')
+const User = require('../Model/User')
 const userController = {
   addUser: asyncHandler(async (req, res) => {
     try {
-      const { name, email, password, role } = req.body;
-      const userExit = await User.findOne({ email });
+      const { name, email, password, role } = req.body
+      const userExit = await User.findOne({ email })
       if (userExit) {
-        res.status(400).json("Email đã tồn tại!!!");
+        res.status(400).json('Email đã tồn tại!!!')
       }
       const user = await User.create({
         name,
         email,
         role,
         password,
-        group
-      });
+        group,
+      })
       if (user) {
         res.status(200).json({
           _id: user._id,
@@ -24,50 +23,46 @@ const userController = {
           email: user.email,
           role: user.role,
           password: user.password,
-          group: user.group
-        });
-    }
+          group: user.group,
+        })
+      }
     } catch (err) {
-      throw new Error("Thêm mới user thất bại!!!");
+      throw new Error('Thêm mới user thất bại!!!')
     }
   }),
   getUser: asyncHandler(async (req, res) => {
-    try{
-
-      const user = await User.find({});
-      res.status(200).json(user);
-    }catch (err) {
+    try {
+      const user = await User.find({})
+      res.status(200).json(user)
+    } catch (err) {
       throw new Error(error)
     }
   }),
   deleteUser: asyncHandler(async (req, res) => {
-    try{
+    try {
       const userId = req.params.id
-      await User.deleteOne({_id: userId})
-      res.status(200).json("Xóa người dùng thành công!")
-    }catch(err){
-      res.status(401).json(err);
+      await User.deleteOne({ _id: userId })
+      res.status(200).json('Xóa người dùng thành công!')
+    } catch (err) {
+      res.status(401).json(err)
     }
-    
   }),
   login: asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { email, password } = req.body
+    const user = await User.findOne({ email })
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
         token: generateToken(user._id),
         createAt: user.createdAt,
-      });
+      })
     } else {
-      res.status(401);
-      throw new Error("Invalid Email or Password");
+      res.status(401)
+      throw new Error('Invalid Email or Password')
     }
   }),
-};
+}
 
-
-module.exports = userController;
+module.exports = userController

@@ -1,10 +1,15 @@
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
-const QnAController =require('../Controller/QnAController');
-router.get("/:question", QnAController.getLikeQuestion)
-router.get("/", QnAController.getAll);
-router.post("/", QnAController.add);
+const QnAController = require('../Controller/QnAController')
+const { protect } = require('../middleware/Auth')
+router.put('/:id', QnAController.update)
+
+router.delete('/:id', QnAController.delete)
+
+router.post('/', QnAController.add)
+
+router.get('/', QnAController.getQnAs)
 
 module.exports = router
