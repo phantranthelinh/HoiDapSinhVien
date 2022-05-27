@@ -22,19 +22,19 @@ const AddUserMain = () => {
       <section className="content-main" style={{ maxWidth: "1200px" }}>
         <form onSubmit>
           <div className="content-header">
-            <Link to="/products" className="btn btn-danger text-white">
+            <Link to="/users" className="btn btn-danger text-white">
               Trở về
             </Link>
-            <h2 className="content-title">Add product</h2>
+            <h2 className="content-title">Thêm nhân viên</h2>
             <div>
               <button className="btn btn-primary" type="submit">
-                Thêm câu hỏi
+                Thêm
               </button>
             </div>
           </div>
 
           <div className="row mb-4">
-            <div className="col-xl-8 col-lg-8">
+            <div className="col-xl-12 col-lg-12">
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
                   <div className="mb-4">
@@ -42,7 +42,7 @@ const AddUserMain = () => {
                     <textarea
                       placeholder="Nhập vào đây..."
                       className="form-control"
-                      rows="7"
+                      rows="4"
                       value={question}
                       required
                       onChange={(e) => setQuestion(e.target.value)}
@@ -53,7 +53,7 @@ const AddUserMain = () => {
                     <textarea
                       placeholder="Nhập vào đây..."
                       className="form-control"
-                      rows="7"
+                      rows="4"
                       value={answer}
                       required
                       onChange={(e) => setAnswer(e.target.value)}
