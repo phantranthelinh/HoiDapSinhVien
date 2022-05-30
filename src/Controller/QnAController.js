@@ -33,6 +33,15 @@ const QnAController = {
       throw new Error(err.message)
     }
   }),
+  getSingleQnA: asyncHandler(async (req, res) => {
+    try {
+      const questionId = req.params.id
+      const qna = await QnA.findById(questionId)
+      res.status(200).json(qna)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }),
   delete: asyncHandler(async (req, res) => {
     try {
       await QnA.deleteOne({ _id: req.params.id })

@@ -26,11 +26,11 @@ const protect = asyncHandler(async (req, res, next) => {
 })
 
 const admin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
+  if (req.user && req.user.role) {
     next()
   } else {
     res.status(401)
-    throw new Error('Not authorized as an Admin')
+    throw new Error('Bạn không có quyền truy cập')
   }
 }
 

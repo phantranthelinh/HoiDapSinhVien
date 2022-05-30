@@ -13,6 +13,7 @@ const userController = {
         token: generateToken(user._id),
         createAt: user.createdAt,
       })
+      req.user = user
     } else {
       res.status(401)
       throw new Error('Invalid Email or Password')
@@ -38,7 +39,6 @@ const userController = {
           email: user.email,
           role: user.role,
           password: user.password,
-          group: user.group,
         })
       }
     } catch (err) {
