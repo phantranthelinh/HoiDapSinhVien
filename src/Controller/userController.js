@@ -10,10 +10,11 @@ const userController = {
         _id: user._id,
         name: user.name,
         email: user.email,
+        password: user.password,
         token: generateToken(user._id),
+        role: user.role,
         createAt: user.createdAt,
       })
-      req.user = user
     } else {
       res.status(401)
       throw new Error('Invalid Email or Password')
