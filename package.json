@@ -9,7 +9,10 @@
     "jsonwebtoken": "^8.5.1",
     "keyword-extractor": "^0.0.22",
     "mongoose": "^6.3.4",
-    "nodemon": "^2.0.16"
+    "mongoose-slug-generator": "^1.0.4",
+    "nodemon": "^2.0.16",
+    "save": "^2.5.0",
+    "vntk": "^1.4.4"
   },
   "name": "thuctap",
   "version": "1.0.0",
@@ -23,7 +26,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phantranthelinh/HoiDapSinhVien.git"

@@ -1,21 +1,51 @@
 const QnA = require('../Model/QnA')
 const asyncHandler = require('express-async-handler')
+var vntk = require('vntk')
+const commonWords = require('../utils/commonWords')
+var pos_tag = vntk.posTag()
+
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
-      const { question, answer, by, keywords } = req.body
+      const { question, answer } = req.body
       const questionExit = await QnA.findOne({ question })
       if (questionExit) {
         res.status(401).json('Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác')
+        return
       }
-      const newQA = new QnA({ question, answer, by, keywords })
+
+      const arrayKeywords = pos_tag.tag(question)
+      const keywords = []
+      arrayKeywords.map((word) => {
+        if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
+          keywords.push(word[0].toLowerCase())
+        }
+      })
+
+      const newQA = new QnA({ question, answer, by: req.user._id, keywords })
       const savedQA = await newQA.save()
       res.status(200).json(savedQA)
     } catch (err) {
       res.status(401)
-      throw new Error('Thêm câu hỏi và câu trả lời thất bại!!')
+      throw new Error(err)
     }
   }),
+  extractKeywordFromQuestion: asyncHandler(async (req, res) => {
+    try {
+      const { question } = req.body
+      const arrayKeywords = pos_tag.tag(question)
+      const keywords = []
+      arrayKeywords.map((word) => {
+        if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
+          keywords.push(word[0].toLowerCase())
+        }
+      })
+      res.status(200).json(keywords)
+    } catch (err) {
+      res.status(500).json(err)
+    }
+  }),
+
   getQnAs: asyncHandler(async (req, res) => {
     try {
       const question = req.query.question
@@ -26,7 +56,9 @@ const QnAController = {
             },
           }
         : {}
-      const QAs = await QnA.find({ ...question }).limit(5)
+      const QAs = await QnA.find({ ...question })
+        .populate({ path: 'by', select: 'name' })
+        .limit(5)
 
       res.status(200).json(QAs)
     } catch (err) {
@@ -35,8 +67,8 @@ const QnAController = {
   }),
   getSingleQnA: asyncHandler(async (req, res) => {
     try {
-      const questionId = req.params.id
-      const qna = await QnA.findById(questionId)
+      const slug = req.params.slug
+      const qna = await QnA.find({ slug: slug })
       res.status(200).json(qna)
     } catch (err) {
       throw new Error(err)
