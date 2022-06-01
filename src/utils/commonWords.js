@@ -18,5 +18,8 @@ const commonWords = [
   '(',
   ')',
   'ạ',
+  '%',
+  'hay',
+  '-',
 ]
 module.exports = commonWords

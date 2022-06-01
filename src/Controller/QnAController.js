@@ -68,7 +68,7 @@ const QnAController = {
   getSingleQnA: asyncHandler(async (req, res) => {
     try {
       const slug = req.params.slug
-      const qna = await QnA.find({ slug: slug })
+      const qna = await QnA.find({ slug: slug }).populate({ path: 'by', select: 'name' })
       res.status(200).json(qna)
     } catch (err) {
       throw new Error(err)
