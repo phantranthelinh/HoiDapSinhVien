@@ -10,7 +10,6 @@ const userController = {
         _id: user._id,
         name: user.name,
         email: user.email,
-        password: user.password,
         token: generateToken(user._id),
         role: user.role,
         createAt: user.createdAt,
