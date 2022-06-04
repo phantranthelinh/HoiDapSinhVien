@@ -7,8 +7,10 @@ const ProductsStatistics = () => {
     <div className="col-xl-6 col-lg-12">
       <div className="card mb-4 shadow-sm">
         <article className="card-body">
-          <h5 className="card-title">Sales statistics</h5>
-        
+          <h5 className="card-title">
+            Biểu đồ số câu hỏi được hỏi trong tháng
+          </h5>
+
           <iframe
             style={{
               background: "#FFFFFF",

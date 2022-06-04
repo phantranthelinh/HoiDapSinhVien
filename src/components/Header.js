@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
+import { logOut } from "../redux/User/userSlice";
+import { useDispatch } from "react-redux";
 const Header = () => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     $("[data-trigger]").on("click", function (e) {
       e.preventDefault();
@@ -71,9 +75,12 @@ const Header = () => {
               />
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
-              <Link className="dropdown-item text-danger" to="#">
+              <div
+                className="dropdown-item text-danger"
+                onClick={() => dispatch(logOut())}
+              >
                 Đăng xuất
-              </Link>
+              </div>
             </div>
           </li>
         </ul>

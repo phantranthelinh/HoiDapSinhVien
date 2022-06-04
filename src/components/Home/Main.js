@@ -13,10 +13,10 @@ const Main = () => {
         </div>
 
         <TopTotal products={products} />
-        <div className="row">
+        {/* <div className="row">
           <SaleStatistics />
           <ProductsStatistics />
-        </div>
+        </div> */}
 
         <div className="card mb-4 shadow-sm"></div>
       </section>

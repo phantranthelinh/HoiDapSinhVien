@@ -7,7 +7,7 @@ const MainQnAs = () => {
       <div className="content-header">
         <h2 className="content-title">Danh sách câu hỏi</h2>
         <div>
-          <Link to="/add-product" className="btn btn-primary">
+          <Link to="/add-qna" className="btn btn-primary">
             Thêm mới
           </Link>
         </div>

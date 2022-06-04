@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import Toast from "../LoadingError/Toast";
+import { useDispatch, useSelector } from "react-redux";
+import { extractKeywords } from "./../../redux/Keyword/keywordSlice";
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -13,14 +15,29 @@ const ToastObjects = {
 };
 const AddQnAMain = () => {
   const [question, setQuestion] = useState("");
+
   const [answer, setAnswer] = useState("");
   const [file, setFile] = useState("");
+  const dispatch = useDispatch();
 
+  const { listKeywords } = useSelector((state) => state.keywords);
+
+  console.log(listKeywords);
+
+  console.log(question);
+  const submitHander = (e) => {
+    e.preventDefault();
+  };
+
+  const onMouseOutHandler = () => {
+    dispatch(extractKeywords(question));
+  };
+  useEffect(() => {}, [dispatch]);
   return (
     <>
       <Toast />
       <section className="content-main" style={{ maxWidth: "1200px" }}>
-        <form onSubmit>
+        <form onSubmit={submitHander}>
           <div className="content-header">
             <Link to="/qnas" className="btn btn-danger text-white">
               Trở về
@@ -43,9 +60,11 @@ const AddQnAMain = () => {
                       placeholder="Nhập vào đây..."
                       className="form-control"
                       rows="4"
+                      name="question"
                       value={question}
                       required
                       onChange={(e) => setQuestion(e.target.value)}
+                      onBlur={onMouseOutHandler}
                     ></textarea>
                   </div>
                   <div className="mb-4">

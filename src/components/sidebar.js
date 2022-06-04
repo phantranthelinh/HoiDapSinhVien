@@ -50,7 +50,7 @@ const Sidebar = () => {
                 className="menu-link"
                 to="/add-qna"
               >
-                <i class="icon fas fa-plus "></i>
+                <i className="icon fas fa-plus "></i>
                 <span className="text">Thêm câu hỏi</span>
               </NavLink>
             </li>
@@ -71,7 +71,7 @@ const Sidebar = () => {
                 className="menu-link"
                 to="/add-user"
               >
-                <i class="icon fas fa-plus "></i>
+                <i className="icon fas fa-plus "></i>
                 <span className="text">Thêm nhân viên</span>
               </NavLink>
             </li>

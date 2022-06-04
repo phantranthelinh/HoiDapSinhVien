@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import "./responsive.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,7 +23,6 @@ function App() {
           <PrivateRouter path="/qnas" component={QnAScreen} />
           <PrivateRouter path="/add-qna" component={AddQnA} />
           <PrivateRouter path="/add-user" component={AddUser} />
-
           <PrivateRouter path="/users" component={UsersScreen} />
           <PrivateRouter path="/qna/:id/edit" component={QnAEditScreen} />
           <Route path="/login" component={Login} />
