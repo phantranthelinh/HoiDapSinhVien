@@ -7,8 +7,9 @@ const postionController = {
       const nameExits = await Department.findOne({ name })
       if (nameExits) {
         res.status(400).json('Bộ phận đã tồn tại')
+        return
       }
-      const position = await Department.create({
+      await Department.create({
         name,
       })
       res.status(200).json('Thêm mới bộ phận thành công')
