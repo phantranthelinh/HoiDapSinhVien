@@ -31,6 +31,7 @@ const postionController = {
   }),
   getAll: asyncHandler(async (req, res) => {
     try {
+      console.log(req.user)
       const departments = await Department.find({})
       res.status(200).json(departments)
     } catch (err) {
