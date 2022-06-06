@@ -16,7 +16,7 @@ const userController = {
       })
     } else {
       res.status(401)
-      throw new Error('Invalid Email or Password')
+      throw new Error('Mật khẩu hoặc email không đúng!')
     }
   }),
   addUser: asyncHandler(async (req, res) => {
