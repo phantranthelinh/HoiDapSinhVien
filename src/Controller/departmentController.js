@@ -18,7 +18,38 @@ const postionController = {
       throw new Error('Thêm mới bộ phận thất bại!!!')
     }
   }),
-  delete: asyncHandler(async (req, res) => {}),
+  get: asyncHandler(async (req, res) => {
+    try {
+      const department = await Department.findById(req.params.id).populate({
+        path: 'users',
+        select: 'name',
+      })
+      res.status(200).json(department)
+    } catch (err) {
+      res.status(400).json(err)
+    }
+  }),
+  getAll: asyncHandler(async (req, res) => {
+    try {
+      const departments = await Department.find({})
+      res.status(200).json(departments)
+    } catch (err) {
+      res.status(400).json(err)
+    }
+  }),
+  update: asyncHandler(async (req, res) => {
+    try {
+      const department = await Department.findById(req.params.id)
+    } catch (err) {}
+  }),
+
+  delete: asyncHandler(async (req, res) => {
+    try {
+      await Department.findByIdAndRemove(req.params.id)
+    } catch (err) {
+      res.status(400).json(err)
+    }
+  }),
 }
 
 module.exports = postionController
