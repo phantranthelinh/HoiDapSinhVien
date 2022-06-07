@@ -20,10 +20,7 @@ const postionController = {
   }),
   get: asyncHandler(async (req, res) => {
     try {
-      const department = await Department.findById(req.params.id).populate({
-        path: 'users',
-        select: 'name',
-      })
+      const department = await Department.findById(req.params.id).populate('users')
       res.status(200).json(department)
     } catch (err) {
       res.status(400).json(err)
