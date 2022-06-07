@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TopTotal from "./TopTotal";
 import SaleStatistics from "./SaleStatistics";
 import ProductsStatistics from "./ProductsStatistics";
+import { useDispatch, useSelector } from "react-redux";
+import { getListQnAs } from "../../redux/Slice/qna";
 
 const Main = () => {
-  const products = [];
+  const dispatch = useDispatch();
+
+  const qnas = useSelector((state) => state.qnas);
+
+  const { listQnAs } = qnas;
+
+  useEffect(() => {
+    dispatch(getListQnAs());
+  }, [dispatch]);
   return (
     <>
       <section className="content-main">
@@ -12,7 +22,7 @@ const Main = () => {
           <h2 className="content-title"> Dashboard </h2>
         </div>
 
-        <TopTotal products={products} />
+        <TopTotal listQnAs={listQnAs} />
         {/* <div className="row">
           <SaleStatistics />
           <ProductsStatistics />

@@ -20,13 +20,6 @@ const AddQnAMain = () => {
   const [file, setFile] = useState("");
   const dispatch = useDispatch();
 
-  const { listKeywords } = useSelector((state) => state.keywords);
-  console.log(
-    "🚀 ~ file: AddQnAMain.js ~ line 24 ~ AddQnAMain ~ listKeywords",
-    listKeywords
-  );
-
-  console.log(question);
   const submitHander = (e) => {
     e.preventDefault();
   };

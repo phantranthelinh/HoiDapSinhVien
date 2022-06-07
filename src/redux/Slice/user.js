@@ -198,12 +198,12 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 export const editUser = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: "user/Request" });
-
     const {
       userLogin: { userInfo },
     } = getState();
     const config = {
       headers: {
+        "Context-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -226,7 +226,6 @@ export const editUser = (id) => async (dispatch, getState) => {
 export const updateUser = (user) => async (dispatch, getState) => {
   try {
     dispatch({ type: "user/Request" });
-
     const {
       userLogin: { userInfo },
     } = getState();
@@ -242,6 +241,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
       config
     );
     dispatch({ type: "user/updateDepartmentsSuccess", payload: data });
+    dispatch({ type: "user/Reset" });
   } catch (error) {
     const message =
       error.response && error.response.data.message

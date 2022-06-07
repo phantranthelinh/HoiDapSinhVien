@@ -3,11 +3,11 @@ import Toast from "../LoadingError/Toast";
 import { Link } from "react-router-dom";
 
 import { toast } from "react-toastify";
-import Message from "../LoadingError/Error";
+
 import Loading from "../LoadingError/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { editDepartment, updateDepartment } from "../../redux/Slice/department";
 import { editUser, updateUser } from "../../redux/Slice/user";
+import { getListDepartments } from "../../redux/Slice/department";
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -19,28 +19,41 @@ const ToastObjects = {
 const EditUserMain = ({ userId }) => {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+
+  const [password, setPassword] = useState("");
+
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, user, success } = userLogin;
-
+  const { listDepartments, loading: loadingListDepartments } = useSelector(
+    (state) => state.departments
+  );
   useEffect(() => {
+    dispatch(getListDepartments());
     if (success) {
       dispatch({ type: "user/Reset" });
-      toast.success("Cập nhật thành công!");
+      toast.success("Cập nhật thành công!", ToastObjects);
     }
-    if (!user.name || userId._id !== userId) {
+    if (!user.name || user._id !== userId) {
       dispatch(editUser(userId));
     } else {
       setName(user.name);
+      setEmail(user.email);
+      setPassword(user.password);
+      setRole(user.role);
     }
-  }, [user, dispatch, userId, success]);
+  }, [dispatch, userId, user, success]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     dispatch(
       updateUser({
         _id: userId,
         name,
+        email,
+        password,
+        role,
       })
     );
   };
@@ -72,18 +85,78 @@ const EditUserMain = ({ userId }) => {
                   <>
                     <div className="mb-4">
                       <label htmlFor="name" className="form-label">
-                        Tên đơn vị
+                        Tên
                       </label>
                       <input
                         type="text"
                         placeholder="Tên đơn vị"
                         className="form-control"
-                        id="name"
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                       />
                     </div>
+                    <div className="mb-4">
+                      <label htmlFor="name" className="form-label">
+                        Email
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Tên đơn vị"
+                        className="form-control"
+                        required
+                        value={email}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="name" className="form-label">
+                        Mật khẩu
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="Tên đơn vị"
+                        className="form-control"
+                        required
+                        value={password}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
+                    {loadingListDepartments ? (
+                      <Loading />
+                    ) : (
+                      <div className="mb-4">
+                        <label htmlFor="name" className="form-label">
+                          Thuộc đơn vị
+                        </label>
+                        <select
+                          name="role"
+                          onChange={(e) => setRole(e.target.value)}
+                          className="form-control"
+                          defaultValue={"DEFAULT"}
+                        >
+                          <option
+                            className="form-control"
+                            value={user.role}
+                            disabled
+                          >
+                            - Chọn đơn vị -
+                          </option>
+                          {listDepartments.length > 0 &&
+                            listDepartments.map((department) => {
+                              return (
+                                <option
+                                  key={department._id}
+                                  className="form-control"
+                                  value={department.name}
+                                >
+                                  {department.name}
+                                </option>
+                              );
+                            })}
+                        </select>
+                      </div>
+                    )}
                   </>
                 </div>
               </div>
