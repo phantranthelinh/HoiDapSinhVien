@@ -35,15 +35,22 @@ const postionController = {
       res.status(400).json(err)
     }
   }),
-  update: asyncHandler(async (req, res) => {
-    try {
-      const department = await Department.findById(req.params.id)
-    } catch (err) {}
+  edit: asyncHandler(async (req, res) => {
+    const department = await Department.findById(req.params.id)
+    const { name } = req.body
+    if (department) {
+      department.name = name || department.name
+      const updatedDepartments = await department.save()
+      res.status(200).json(updatedDepartments)
+    } else {
+      res.status(400)
+      throw new Error('Không tìm thấy đơn vị')
+    }
   }),
 
   delete: asyncHandler(async (req, res) => {
     try {
-      await Department.findByIdAndRemove(req.params.id)
+      await Department.findByIdAndUpdate(req.params.id, req.body)
     } catch (err) {
       res.status(400).json(err)
     }
