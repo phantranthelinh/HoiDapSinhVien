@@ -50,7 +50,8 @@ const postionController = {
 
   delete: asyncHandler(async (req, res) => {
     try {
-      await Department.findByIdAndUpdate(req.params.id, req.body)
+      await Department.findByIdAndRemove(req.params.id)
+      res.status(200).json('Xóa thành công!!!')
     } catch (err) {
       res.status(400).json(err)
     }
