@@ -46,12 +46,24 @@ const userController = {
       throw new Error('Thêm mới user thất bại!!!')
     }
   }),
-  getUser: asyncHandler(async (req, res) => {
+  getAll: asyncHandler(async (req, res) => {
     try {
       const user = await User.find({})
       res.status(200).json(user)
     } catch (err) {
       throw new Error(error)
+    }
+  }),
+  edit: asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id)
+    const { name } = req.body
+    if (user) {
+      user.name = name || user.name
+      const updatedUser = await user.save()
+      res.status(200).json(updatedUser)
+    } else {
+      res.status(400)
+      throw new Error('Không tìm thấy user')
     }
   }),
   deleteUser: asyncHandler(async (req, res) => {
