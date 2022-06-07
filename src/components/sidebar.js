@@ -2,6 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
 const Sidebar = () => {
+  const token = JSON.parse(window.localStorage.getItem("userInfo"));
   return (
     <div>
       <aside className="navbar-aside" id="offcanvas_aside">
@@ -54,27 +55,50 @@ const Sidebar = () => {
                 <span className="text">Thêm câu hỏi</span>
               </NavLink>
             </li>
-
-            <li className="menu-item">
-              <NavLink
-                activeClassName="active"
-                className="menu-link"
-                to="/users"
-              >
-                <i className="icon fas fa-user"></i>
-                <span className="text">Nhân viên</span>
-              </NavLink>
-            </li>
-            <li className="menu-item">
-              <NavLink
-                activeClassName="active"
-                className="menu-link"
-                to="/add-user"
-              >
-                <i className="icon fas fa-plus "></i>
-                <span className="text">Thêm nhân viên</span>
-              </NavLink>
-            </li>
+            {token.role === "admin" && (
+              <>
+                <li className="menu-item">
+                  <NavLink
+                    activeClassName="active"
+                    className="menu-link"
+                    to="/users"
+                  >
+                    <i className="icon fas fa-user"></i>
+                    <span className="text">Nhân viên</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink
+                    activeClassName="active"
+                    className="menu-link"
+                    to="/add-user"
+                  >
+                    <i className="icon fas fa-plus "></i>
+                    <span className="text">Thêm nhân viên</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink
+                    activeClassName="active"
+                    className="menu-link"
+                    to="/departments"
+                  >
+                    <i className="icon fas fa-user"></i>
+                    <span className="text">Các đơn vị</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink
+                    activeClassName="active"
+                    className="menu-link"
+                    to="/add-department"
+                  >
+                    <i className="icon fas fa-plus "></i>
+                    <span className="text">Thêm đơn vị</span>
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
           <br />
           <br />

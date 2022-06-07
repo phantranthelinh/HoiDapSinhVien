@@ -6,7 +6,7 @@ import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import Toast from "../LoadingError/Toast";
 import { useDispatch, useSelector } from "react-redux";
-import { extractKeywords } from "./../../redux/Keyword/keywordSlice";
+import { extractKeywordRecieve } from "./../../redux/Slice/keyword";
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -21,18 +21,19 @@ const AddQnAMain = () => {
   const dispatch = useDispatch();
 
   const { listKeywords } = useSelector((state) => state.keywords);
-
-  console.log(listKeywords);
+  console.log(
+    "🚀 ~ file: AddQnAMain.js ~ line 24 ~ AddQnAMain ~ listKeywords",
+    listKeywords
+  );
 
   console.log(question);
   const submitHander = (e) => {
     e.preventDefault();
   };
-
-  const onMouseOutHandler = () => {
-    dispatch(extractKeywords(question));
+  const handleOnBlur = () => {
+    dispatch(extractKeywordRecieve(question));
   };
-  useEffect(() => {}, [dispatch]);
+  useEffect(() => {}, [dispatch, question]);
   return (
     <>
       <Toast />
@@ -60,11 +61,10 @@ const AddQnAMain = () => {
                       placeholder="Nhập vào đây..."
                       className="form-control"
                       rows="4"
-                      name="question"
                       value={question}
                       required
                       onChange={(e) => setQuestion(e.target.value)}
-                      onBlur={onMouseOutHandler}
+                      onBlur={handleOnBlur}
                     ></textarea>
                   </div>
                   <div className="mb-4">

@@ -10,6 +10,7 @@ const Toast = () => {
         newestOnTop={false}
         closeOnClick
         rtl={false}
+        theme="colored"
       />
       {/* Same as */}
       <ToastContainer />

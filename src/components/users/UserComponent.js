@@ -1,10 +1,25 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import Loading from "./../LoadingError/Loading";
-import Message from "./../LoadingError/Error";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteUser, getListUsers } from "./../../redux/Slice/user";
 
 const UserComponent = () => {
+  const dispatch = useDispatch();
+  let history = useHistory();
+  const { listUsers, loading } = useSelector((state) => state.userLogin);
+
+  useEffect(() => {
+    dispatch(getListUsers());
+  }, [dispatch]);
+
+  const deleteHandler = (id) => {
+    if (window.confirm("Are you sure you want to delete?")) {
+      dispatch(deleteUser(id));
+      history.push("/users");
+    }
+  };
   return (
     <section className="content-main">
       <div className="content-header">
@@ -46,29 +61,51 @@ const UserComponent = () => {
 
         {/* Card */}
         <div className="card-body">
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4">
-            List users
-            <div className="col">
-              <div className="card card-user shadow-sm">
-                <div className="card-header">
-                  <img
-                    className="img-md img-avatar"
-                    src="images/logo.gif"
-                    alt="User pic"
-                  />
-                </div>
-                <div className="card-body">
-                  <h5 className="card-title mt-5">name</h5>
-                  <div className="card-text text-muted">
-                    <p className="m-0">Role:</p>
-                    <p>
-                      <a href={`mailto:`}>Email</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4">
+              {listUsers.length > 0 &&
+                listUsers.map((user) => {
+                  return (
+                    <div key={user._id} className="col">
+                      <div className="card card-user shadow-sm">
+                        <div className="card-header">
+                          <img
+                            className="img-md img-avatar"
+                            src="images/logo.gif"
+                            alt="User pic"
+                          />
+                        </div>
+                        <div className="card-body">
+                          <h5 className="card-title mt-5">{user.name}</h5>
+                          <div className="card-text text-muted">
+                            <p className="m-0">Role:{user.role}</p>
+                            <p>
+                              <a href={`mailto:${user.email}`}>{user.email}</a>
+                            </p>
+                          </div>
+                          <div className="row">
+                            <Link
+                              to={`/user/${user._id}/edit`}
+                              className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
+                            >
+                              <i className="fas fa-pen"></i>
+                            </Link>
+                            <div
+                              onClick={() => deleteHandler(user._id)}
+                              className="btn btn-sm btn-outline-danger p-2 pb-3 col-md-6"
+                            >
+                              <i className="fas fa-trash-alt"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
-          </div>
+          )}
 
           {/* nav */}
           <nav className="float-end mt-4" aria-label="Page navigation">

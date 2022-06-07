@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Toast from "./../components/LoadingError/Toast";
 import { useDispatch, useSelector } from "react-redux";
-import { logIn } from "../redux/User/userSlice";
+import { logIn } from "../redux/Slice/user";
 import Loading from "../components/LoadingError/Loading";
 import Message from "../components/LoadingError/Error";
 
@@ -18,7 +18,7 @@ const Login = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(logIn({ email, password }));
+    dispatch(logIn(email, password));
   };
   useEffect(() => {
     if (loginSuccess) {

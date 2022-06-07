@@ -12,7 +12,7 @@ const ToastObjects = {
   pauseOnHouver: false,
   autoClose: 2000,
 };
-const EditProductMain = (props) => {
+const EditQnAMain = (props) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
@@ -115,4 +115,4 @@ const EditProductMain = (props) => {
   );
 };
 
-export default EditProductMain;
+export default EditQnAMain;

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
-import { logOut } from "../redux/User/userSlice";
+import { logOut } from "../redux/Slice/user";
 import { useDispatch } from "react-redux";
 const Header = () => {
   const dispatch = useDispatch();

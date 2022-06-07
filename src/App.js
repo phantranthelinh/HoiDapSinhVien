@@ -13,6 +13,11 @@ import UsersScreen from "./screens/UsersScreen";
 import QnAEditScreen from "./screens/QnAEditScreen";
 import NotFound from "./screens/NotFound";
 import PrivateRouter from "./PrivateRouter";
+import AdminRouter from "./AdminRouter";
+import AddDepartment from "./screens/AddDepartment";
+import DepartmentsScreen from "./screens/DepartmentsScreen";
+import DepartmentEditScreen from "./screens/DepartmentEditScreen";
+import UserEditScreen from "./screens/UserEditScreen";
 
 function App() {
   return (
@@ -22,9 +27,16 @@ function App() {
           <PrivateRouter path="/" component={HomeScreen} exact />
           <PrivateRouter path="/qnas" component={QnAScreen} />
           <PrivateRouter path="/add-qna" component={AddQnA} />
-          <PrivateRouter path="/add-user" component={AddUser} />
-          <PrivateRouter path="/users" component={UsersScreen} />
+          <AdminRouter path="/add-user" component={AddUser} />
+          <AdminRouter path="/users" component={UsersScreen} />
+          <AdminRouter path="/add-department" component={AddDepartment} />
+          <AdminRouter path="/departments" component={DepartmentsScreen} />
           <PrivateRouter path="/qna/:id/edit" component={QnAEditScreen} />
+          <AdminRouter
+            path="/department/:id/edit"
+            component={DepartmentEditScreen}
+          />
+          <AdminRouter path="/user/:id/edit" component={UserEditScreen} />
           <Route path="/login" component={Login} />
           <Route path="*" component={NotFound} />
         </Switch>
