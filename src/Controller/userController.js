@@ -25,6 +25,7 @@ const userController = {
       const userExit = await User.findOne({ email })
       if (userExit) {
         res.status(400).json('Email đã tồn tại!!!')
+        return
       }
       const user = await User.create({
         name,
