@@ -66,6 +66,14 @@ const userController = {
       throw new Error('Không tìm thấy user')
     }
   }),
+  get: asyncHandler(async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id)
+      res.status(200).json(user)
+    } catch (err) {
+      res.status(400).json(err)
+    }
+  }),
   deleteUser: asyncHandler(async (req, res) => {
     try {
       const userId = req.params.id
