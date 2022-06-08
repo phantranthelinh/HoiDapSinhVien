@@ -49,7 +49,7 @@ const userController = {
   }),
   getAll: asyncHandler(async (req, res) => {
     try {
-      const user = await User.find({ role: { $lt: 1 } })
+      const user = await User.find({ role: { $lt: 1 } }).populate({ path: 'from', select: 'name' })
       res.status(200).json(user)
     } catch (err) {
       throw new Error(error)
