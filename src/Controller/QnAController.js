@@ -66,10 +66,37 @@ const QnAController = {
       throw new Error(err.message)
     }
   }),
+  getAllQnAs: asyncHandler(async (req, res) => {
+    try {
+      const limit = req.query.limit || 5
+      const keyword = req.query.keyword
+        ? {
+            keywords: {
+              $regex: req.query.keyword,
+              $options: 'i',
+            },
+          }
+        : {}
+      const pageSize = 12
+      const page = Number(req.query.page) || 1
+
+      const count = await QnA.countDocuments({})
+
+      const QAs = await QnA.find({ ...keyword })
+        .populate({ path: 'by', select: 'name' })
+        .limit(limit)
+        .skip(pageSize * page - 1)
+        .sort({ createAt: -1 })
+
+      res.status(200).json({ QAs, page, pages: Math.ceil(count / pageSize) })
+    } catch (err) {
+      throw new Error(err.message)
+    }
+  }),
   getSingleQnA: asyncHandler(async (req, res) => {
     try {
-      const slug = req.params.slug
-      const qna = await QnA.find({ slug: slug }).populate({ path: 'by', select: 'name' })
+      const id = req.params.id
+      const qna = await QnA.find({ _id: id }).populate({ path: 'by', select: 'name' })
       res.status(200).json(qna)
     } catch (err) {
       throw new Error(err)
