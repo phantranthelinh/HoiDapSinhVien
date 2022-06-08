@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../Controller/userController')
 const { admin, protect } = require('../middleware/Auth')
-router.get('/', protect, admin, userController.getAll)
+router.get('/', userController.getAll)
 
 router.get('/:id', protect, admin, userController.get)
 router.put('/:id', protect, admin, userController.edit)

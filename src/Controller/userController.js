@@ -29,7 +29,6 @@ const userController = {
       const user = await User.create({
         name,
         email,
-        role,
         password,
         from,
       })
@@ -48,7 +47,7 @@ const userController = {
   }),
   getAll: asyncHandler(async (req, res) => {
     try {
-      const user = await User.find({ role: { $ne: 'admin' } })
+      const user = await User.find({ role: { $lt: 1 } })
       res.status(200).json(user)
     } catch (err) {
       throw new Error(error)
