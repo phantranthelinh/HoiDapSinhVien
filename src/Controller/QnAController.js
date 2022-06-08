@@ -7,7 +7,7 @@ var pos_tag = vntk.posTag()
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
-      const { question, answer } = req.body
+      const { question, answer, by } = req.body
       const questionExit = await QnA.findOne({ question })
       if (questionExit) {
         res.status(401).json('Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác')
@@ -22,7 +22,7 @@ const QnAController = {
         }
       })
 
-      const newQA = new QnA({ question, answer, by: req.user._id, keywords })
+      const newQA = new QnA({ question, answer, by, keywords })
       const savedQA = await newQA.save()
       res.status(200).json(savedQA)
     } catch (err) {

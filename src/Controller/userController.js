@@ -11,7 +11,6 @@ const userController = {
         name: user.name,
         email: user.email,
         token: generateToken(user._id),
-        role: user.role,
         createAt: user.createdAt,
       })
     } else {
@@ -21,7 +20,7 @@ const userController = {
   }),
   addUser: asyncHandler(async (req, res) => {
     try {
-      const { name, email, password, role } = req.body
+      const { name, email, password, from } = req.body
       const userExit = await User.findOne({ email })
       if (userExit) {
         res.status(400).json('Email đã tồn tại!!!')
@@ -32,6 +31,7 @@ const userController = {
         email,
         role,
         password,
+        from,
       })
       if (user) {
         res.status(200).json({

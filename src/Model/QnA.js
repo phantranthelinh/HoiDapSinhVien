@@ -21,7 +21,7 @@ const QnASchema = mongoose.Schema(
     },
     by: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Department' || 'User',
     },
   },
   { timestamps: true }

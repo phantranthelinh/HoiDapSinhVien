@@ -19,6 +19,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    from: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Department',
+    },
   },
   { timestamp: true }
 )
