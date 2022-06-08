@@ -68,7 +68,6 @@ const QnAController = {
   }),
   getAllQnAs: asyncHandler(async (req, res) => {
     try {
-      const limit = req.query.limit || 5
       const keyword = req.query.keyword
         ? {
             keywords: {
@@ -84,8 +83,7 @@ const QnAController = {
 
       const QAs = await QnA.find({ ...keyword })
         .populate({ path: 'by', select: 'name' })
-        .limit(limit)
-        .skip(pageSize * page - 1)
+        .skip(pageSize * (page - 1))
         .sort({ createAt: -1 })
 
       res.status(200).json({ QAs, page, pages: Math.ceil(count / pageSize) })
