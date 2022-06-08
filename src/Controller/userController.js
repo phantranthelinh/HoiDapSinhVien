@@ -67,7 +67,7 @@ const userController = {
   }),
   get: asyncHandler(async (req, res) => {
     try {
-      const user = await User.findById(req.params.id)
+      const user = await User.findById(req.params.id).populate({ path: 'from', select: 'name' })
       res.status(200).json(user)
     } catch (err) {
       res.status(400).json(err)
