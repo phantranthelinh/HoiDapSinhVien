@@ -48,17 +48,18 @@ const QnAController = {
 
   getQnAs: asyncHandler(async (req, res) => {
     try {
-      const question = req.query.question
+      const limit = req.query.limit || 5
+      const keyword = req.query.keyword
         ? {
-            question: {
-              $regex: req.query.question,
+            keywords: {
+              $regex: req.query.keyword,
               $options: 'i',
             },
           }
         : {}
-      const QAs = await QnA.find({ ...question })
+      const QAs = await QnA.find({ ...keyword })
         .populate({ path: 'by', select: 'name' })
-        .limit(5)
+        .limit(limit)
 
       res.status(200).json(QAs)
     } catch (err) {
