@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const generateToken = require('../utils/generateToken')
 const User = require('../Model/User')
+const Department = require('../Model/Department')
 const userController = {
   login: asyncHandler(async (req, res) => {
     const { email, password } = req.body
@@ -40,6 +41,7 @@ const userController = {
           role: user.role,
           password: user.password,
         })
+        await Department.updateOne({ _id: from }, { $push: { users: user._id } })
       }
     } catch (err) {
       throw new Error('Thêm mới user thất bại!!!')
