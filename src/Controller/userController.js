@@ -79,6 +79,8 @@ const userController = {
     try {
       const userId = req.params.id
       await User.deleteOne({ _id: userId })
+      await Department.updateOne({ $pull: { users: userId } })
+
       res.status(200).json('Xóa người dùng thành công!')
     } catch (err) {
       res.status(401).json(err)
