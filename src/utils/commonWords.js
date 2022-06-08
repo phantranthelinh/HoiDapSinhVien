@@ -21,5 +21,7 @@ const commonWords = [
   '%',
   'hay',
   '-',
+  'các',
+  'để',
 ]
 module.exports = commonWords
