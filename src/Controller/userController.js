@@ -14,6 +14,7 @@ const userController = {
         role: user.role,
         token: generateToken(user._id),
         createAt: user.createdAt,
+        from: user.from,
       })
     } else {
       res.status(401)
