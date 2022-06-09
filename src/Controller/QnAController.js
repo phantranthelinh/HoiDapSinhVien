@@ -123,5 +123,6 @@ const QnAController = {
       throw new Error('Q&A không tìm thấy')
     }
   }),
+  addWithFile: asyncHandler(async (req, res) => {}),
 }
 module.exports = QnAController
