@@ -12,10 +12,10 @@ const postionController = {
       await Department.create({
         name,
       })
-      res.status(200).json('Thêm mới bộ phận thành công')
+      res.status(200).json('Thêm mới thành công')
     } catch (err) {
       res.status(400).json(err)
-      throw new Error('Thêm mới bộ phận thất bại!!!')
+      throw new Error('Thêm mới thất bại!!!')
     }
   }),
   get: asyncHandler(async (req, res) => {
