@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const departmentSchema = mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+  },
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,

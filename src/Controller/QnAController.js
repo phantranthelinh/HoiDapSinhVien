@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler')
 var vntk = require('vntk')
 const commonWords = require('../utils/commonWords')
 var pos_tag = vntk.posTag()
-
+const csv = require('csvtojson')
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -84,7 +84,7 @@ const QnAController = {
       const QAs = await QnA.find({ ...keyword })
         .populate({ path: 'by', select: 'name' })
         .skip(pageSize * (page - 1))
-        .sort({ createAt: -1 })
+        .sort({ createdAt: -1 })
 
       res.status(200).json({ QAs, page, pages: Math.ceil(count / pageSize) })
     } catch (err) {
@@ -123,6 +123,11 @@ const QnAController = {
       throw new Error('Q&A không tìm thấy')
     }
   }),
-  addWithFile: asyncHandler(async (req, res) => {}),
+  addWithFile: asyncHandler(async (req, res) => {
+    try {
+      const data = await csv().fromfile(req.body.file)
+      res.status(200).json(req.body.file)
+    } catch (err) {}
+  }),
 }
 module.exports = QnAController

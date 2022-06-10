@@ -13,7 +13,7 @@ router.put('/:id', protect, QnAController.update)
 router.delete('/:id', protect, QnAController.delete)
 
 router.post('/', protect, QnAController.add)
-router.post('/addfile', protect, QnAController.addWithFile)
+router.post('/fromfile', protect, QnAController.addWithFile)
 
 router.post('/extract', QnAController.extractKeywordFromQuestion)
 
