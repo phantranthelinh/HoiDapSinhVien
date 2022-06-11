@@ -1,7 +1,7 @@
 import React from "react";
 
 const TopTotal = (props) => {
-  const { orders, listQnAs } = props;
+  const { newQuestions, listQnAs } = props;
 
   return (
     <div className="row">
@@ -12,8 +12,12 @@ const TopTotal = (props) => {
               <i className="text-success fas fa-bags-shopping"></i>
             </span>
             <div className="text">
-              <h6 className="mb-1">Số câu hỏi đã có</h6>
-              {listQnAs ? <span>{listQnAs.length}</span> : <span>0</span>}
+              <h6 className="mb-1">Số câu hỏi mới</h6>
+              {newQuestions ? (
+                <span>{newQuestions.length}</span>
+              ) : (
+                <span>0</span>
+              )}
             </div>
           </article>
         </div>
@@ -25,8 +29,8 @@ const TopTotal = (props) => {
               <i className="text-warning fas fa-shopping-basket"></i>
             </span>
             <div className="text">
-              <h6 className="mb-1">Số câu hỏi mới</h6>
-              {orders ? <span>{orders.length}</span> : <span>0</span>}
+              <h6 className="mb-1">Số câu hỏi đã có</h6>
+              {listQnAs ? <span>{listQnAs.length}</span> : <span>0</span>}
             </div>
           </article>
         </div>

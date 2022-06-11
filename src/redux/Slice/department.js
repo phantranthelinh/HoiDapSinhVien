@@ -3,6 +3,12 @@ import axios from "axios";
 import { logOut } from "./user";
 import { URL } from "../Url";
 
+export const listDepartmentsFromLocalStorage = localStorage.getItem(
+  "listDepartmets"
+)
+  ? JSON.parse(localStorage.getItem("listDepartmets"))
+  : [];
+
 const departmentSlice = createSlice({
   name: "department",
   initialState: {
@@ -10,7 +16,8 @@ const departmentSlice = createSlice({
     success: false,
     error: false,
     department: {},
-    listDepartments: {},
+    messageDelete: null,
+    listDepartments: listDepartmentsFromLocalStorage,
   },
   reducers: {
     Request: (state) => {
@@ -28,21 +35,21 @@ const departmentSlice = createSlice({
       state.error = false;
     },
     addDepartmentSuccess: (state, action) => {
+      state.message = action.payload;
       state.success = true;
-      state.department = action.payload;
     },
     listDepartmentsSuccess: (state, action) => {
       state.loading = false;
       state.success = true;
       state.listDepartments = action.payload;
     },
-    deleteDepartmentSuccess: (state) => {
+    deleteDepartmentSuccess: (state, action) => {
       state.loading = false;
       state.success = true;
+      state.messageDelete = action.payload;
     },
     editDepartmentSuccess: (state, action) => {
       state.loading = false;
-      state.success = true;
       state.department = action.payload;
     },
     updateDepartmentsSuccess: (state, action) => {
@@ -74,6 +81,7 @@ export const addDepartment = (name) => async (dispatch, getState) => {
       config
     );
     dispatch({ type: "department/addDepartmentSuccess", payload: data });
+    dispatch(getListDepartments());
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -104,6 +112,7 @@ export const getListDepartments = () => async (dispatch, getState) => {
     };
     const { data } = await axios.get(`${URL}/api/departments/all`, config);
     dispatch({ type: "department/listDepartmentsSuccess", payload: data });
+    localStorage.setItem("listDepartmets", JSON.stringify(data));
     dispatch({ type: "department/Reset" });
   } catch (error) {
     const message =
@@ -137,6 +146,7 @@ export const deleteDepartment = (id) => async (dispatch, getState) => {
 
     await axios.delete(`${URL}/api/departments/${id}`, config);
     dispatch({ type: "department/deleteDepartmentSuccess" });
+    dispatch(getListDepartments());
   } catch (error) {
     const message =
       error.response && error.response.data.message

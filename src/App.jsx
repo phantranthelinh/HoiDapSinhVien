@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import "./responsive.css";
 import "react-toastify/dist/ReactToastify.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
 import QnAScreen from "./screens/QnAScreen";
 import AddQnA from "./screens/AddQnA";
@@ -18,16 +18,21 @@ import AddDepartment from "./screens/AddDepartment";
 import DepartmentsScreen from "./screens/DepartmentsScreen";
 import DepartmentEditScreen from "./screens/DepartmentEditScreen";
 import UserEditScreen from "./screens/UserEditScreen";
+import newQuestionScreen from "./screens/NewQuestionScreen";
+import AddQnAsFile from "./screens/AddQnAsFile";
 
 function App() {
   return (
     <>
-      <Router>
+      <BrowserRouter>
         <Switch>
           <PrivateRouter path="/" component={HomeScreen} exact />
           <PrivateRouter path="/qnas" component={QnAScreen} />
           <PrivateRouter path="/add-qna" component={AddQnA} />
+          <PrivateRouter path="/add-qnas-file" component={AddQnAsFile} />
+
           <AdminRouter path="/add-user" component={AddUser} />
+          <AdminRouter path="/newquestions" component={newQuestionScreen} />
           <AdminRouter path="/users" component={UsersScreen} />
           <AdminRouter path="/add-department" component={AddDepartment} />
           <AdminRouter path="/departments" component={DepartmentsScreen} />
@@ -40,7 +45,7 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="*" component={NotFound} />
         </Switch>
-      </Router>
+      </BrowserRouter>
     </>
   );
 }

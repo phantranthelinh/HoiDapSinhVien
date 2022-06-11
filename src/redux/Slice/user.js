@@ -6,7 +6,9 @@ export const userLoginFromLocalStorage = JSON.parse(
 )
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
-
+export const listUsersLoginFromLocalStorage = localStorage.getItem("listUsers")
+  ? JSON.parse(localStorage.getItem("listUsers"))
+  : [];
 export const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -16,7 +18,7 @@ export const userSlice = createSlice({
     success: false,
     addUserSuccess: false,
     userInfo: userLoginFromLocalStorage,
-    listUsers: [],
+    listUsers: listUsersLoginFromLocalStorage,
     user: {},
   },
   reducers: {
@@ -37,6 +39,7 @@ export const userSlice = createSlice({
     },
     logOut: (state) => {
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("listDepartmets");
       state.loginSuccess = false;
       state.userInfo = null;
       document.location.href = "/login";
@@ -54,13 +57,13 @@ export const userSlice = createSlice({
       state.loading = false;
       state.listUsers = action.payload;
     },
-    deleteUserSuccess: (state) => {
+    deleteUserSuccess: (state, action) => {
       state.loading = false;
       state.success = true;
+      state.messageDelete = action.payload;
     },
     editUserSuccess: (state, action) => {
       state.loading = false;
-      state.success = true;
       state.user = action.payload;
     },
     updateUserSuccess: (state, action) => {
@@ -148,6 +151,7 @@ export const getListUsers = () => async (dispatch, getState) => {
     };
     const { data } = await axios.get(`${URL}/api/users`, config);
     dispatch({ type: "user/listUsersSuccess", payload: data });
+    localStorage.setItem("listUsers", JSON.stringify(data));
   } catch (error) {
     const message =
       error.response && error.response.data.message
@@ -178,8 +182,8 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`${URL}/api/users/${id}`, config);
-    dispatch({ type: "user/deleteUserSuccess" });
+    const { data } = await axios.delete(`${URL}/api/users/${id}`, config);
+    dispatch({ type: "user/deleteUserSuccess", payload: data });
   } catch (error) {
     const message =
       error.response && error.response.data.message

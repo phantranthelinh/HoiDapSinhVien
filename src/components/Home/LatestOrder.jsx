@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Message from "./../LoadingError/Error";
-import Loading from "./../LoadingError/Loading";
+import Message from "../LoadingError/Error";
+import Loading from "../LoadingError/Loading";
 import moment from "moment";
 const LatestOrder = (props) => {
   const { loading, error, orders } = props;

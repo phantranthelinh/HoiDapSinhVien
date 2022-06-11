@@ -8,20 +8,13 @@ import Toast from "../LoadingError/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import AddDepartment from "./../../screens/AddDepartment";
 import { addDepartment } from "../../redux/Slice/department";
-const ToastObjects = {
-  pauseOnFocusLoss: false,
-  draggable: false,
-  pauseOnHouver: false,
-  autoClose: 2000,
-  theme: "colored",
-};
 
 const AddDepartmentMain = () => {
   const [name, setName] = useState("");
   const dispatch = useDispatch();
 
   const departments = useSelector((state) => state.departments);
-  const { success, loading } = departments;
+  const { success, loading, message } = departments;
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -32,14 +25,13 @@ const AddDepartmentMain = () => {
     if (success) {
       dispatch({ type: "department/Reset" });
       setName("");
-      toast.success("Thêm mới đơn vị thành công!", ToastObjects);
     }
   }, [success, dispatch]);
 
   return (
     <>
-      <Toast />
       <section className="content-main" style={{ maxWidth: "1200px" }}>
+        {message && <Message variant="alert-success">{message}</Message>}
         {loading && <Loading />}
         <form onSubmit={submitHandler}>
           <div className="content-header">

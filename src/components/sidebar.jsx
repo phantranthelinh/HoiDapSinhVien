@@ -1,8 +1,10 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
   const token = JSON.parse(window.localStorage.getItem("userInfo"));
+  const { data } = useSelector((state) => state.newQuestions);
   return (
     <div>
       <aside className="navbar-aside" id="offcanvas_aside">
@@ -12,7 +14,7 @@ const Sidebar = () => {
               src="/images/logo.gif"
               style={{ height: "46" }}
               className="logo"
-              alt="Ecommerce dashboard template"
+              alt="CTUMP - Admin Dashboard"
             />
           </Link>
           <div>
@@ -35,13 +37,29 @@ const Sidebar = () => {
                 <span className="text">Trang chủ</span>
               </NavLink>
             </li>
+            {token.role === 1 && (
+              <li className="menu-item">
+                <NavLink
+                  activeClassName="active"
+                  className="menu-link"
+                  to="/newquestions"
+                >
+                  <i className="icon fas fa-comment-plus"></i>
+                  <span className="text">Câu hỏi mới</span>
+                  <span className="badge bg-danger" style={{ marginLeft: 8 }}>
+                    {data.length}
+                  </span>
+                </NavLink>
+              </li>
+            )}
+
             <li className="menu-item">
               <NavLink
                 activeClassName="active"
                 className="menu-link"
                 to="/qnas"
               >
-                <i className="icon fas fa-shopping-bag"></i>
+                <i className="icon fas fa-question"></i>
                 <span className="text">Danh sách câu hỏi</span>
               </NavLink>
             </li>
@@ -55,7 +73,7 @@ const Sidebar = () => {
                 <span className="text">Thêm câu hỏi</span>
               </NavLink>
             </li>
-            {token.role === "admin" && (
+            {token.role === 1 && (
               <>
                 <li className="menu-item">
                   <NavLink
@@ -83,7 +101,7 @@ const Sidebar = () => {
                     className="menu-link"
                     to="/departments"
                   >
-                    <i className="icon fas fa-user"></i>
+                    <i className="icon fas fa-user-nurse"></i>
                     <span className="text">Các đơn vị</span>
                   </NavLink>
                 </li>

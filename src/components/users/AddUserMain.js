@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import Toast from "../LoadingError/Toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getListDepartments } from "../../redux/Slice/department";
 import { addUser } from "../../redux/Slice/user";
 const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -30,7 +28,7 @@ const AddUserMain = () => {
       name: "",
       password: "",
       email: "",
-      role: "",
+      from: "",
     },
     validationSchema: yup.object({
       name: yup.string().required("*Bắt buộc phải nhập trường này"),
@@ -40,7 +38,7 @@ const AddUserMain = () => {
         .required("*Bắt buộc phải nhập trường này"),
       password: yup
         .string()
-        .min(8, "Tối thiểu 8 ký tự")
+        .min(6, "Tối thiểu 6 ký tự")
         .required("*Bắt buộc phải nhập trường này"),
     }),
     onSubmit: (values, { resetForm }) => {
@@ -50,7 +48,6 @@ const AddUserMain = () => {
   });
 
   useEffect(() => {
-    dispatch(getListDepartments());
     if (addUserSuccess) {
       dispatch({ type: "user/Reset" });
       toast.success("Thêm mới thành viên thành công", ToastObjects);
@@ -127,7 +124,7 @@ const AddUserMain = () => {
                       <label className="form-label">Chức vụ</label>
 
                       <select
-                        name="role"
+                        name="from"
                         onChange={formik.handleChange}
                         className="form-control"
                         onBlur={formik.handleBlur}
@@ -146,7 +143,7 @@ const AddUserMain = () => {
                               <option
                                 key={department._id}
                                 className="form-control"
-                                value={department.name}
+                                value={department._id}
                               >
                                 {department.name}
                               </option>

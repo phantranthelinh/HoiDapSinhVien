@@ -1,30 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { URL } from "../Url";
+import { logOut } from "./user";
 
 export const keywordSlice = createSlice({
-  name: "qna",
+  name: "keyword",
   initialState: {
     loading: false,
     error: false,
-    listKeywords: [],
+    listKeywords: null,
   },
   reducers: {
-    extractKeywordLoading: (state) => {
+    Request: (state) => {
       state.loading = true;
+      state.success = false;
     },
-    extractKeywordRecieve: (state, action) => {
-      state.listKeywords = action.payload;
+    Fail: (state, action) => {
       state.loading = false;
+      state.error = action.payload;
+      state.success = false;
+    },
+    Reset: (state) => {
+      state.success = false;
+      state.error = false;
+    },
+    extractKeywordsSuccess: (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.listKeywords = action.payload;
     },
   },
-  extraReducers: {},
 });
 
 // EXTRACT KEYWORDS FROM QUESTION
 export const extractKeywords = (question) => async (dispatch, getState) => {
   try {
-    dispatch(extractKeywordLoading());
+    dispatch({ type: "keyword/Request" });
     const { userLogin: userInfo } = getState();
     const config = {
       Headers: {
@@ -38,13 +49,20 @@ export const extractKeywords = (question) => async (dispatch, getState) => {
       { question },
       config
     );
-    console.log({ data });
-    dispatch(extractKeywordRecieve(data));
-  } catch (err) {
-    console.error(err);
+    dispatch({ type: "keyword/extractKeywordsSuccess", payload: data });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logOut());
+    }
+    dispatch({
+      type: "keyword/Fail",
+      payload: message,
+    });
   }
 };
 
-export const { extractKeywordLoading, extractKeywordRecieve } =
-  keywordSlice.actions;
 export default keywordSlice.reducer;

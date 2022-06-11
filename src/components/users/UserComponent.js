@@ -3,17 +3,12 @@ import { Link, useHistory } from "react-router-dom";
 
 import Loading from "./../LoadingError/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, getListUsers } from "./../../redux/Slice/user";
+import { deleteUser } from "./../../redux/Slice/user";
 
 const UserComponent = () => {
   const dispatch = useDispatch();
   let history = useHistory();
   const { listUsers, loading } = useSelector((state) => state.userLogin);
-
-  useEffect(() => {
-    dispatch(getListUsers());
-  }, [dispatch]);
-
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
       dispatch(deleteUser(id));
@@ -80,7 +75,7 @@ const UserComponent = () => {
                         <div className="card-body">
                           <h5 className="card-title mt-5">{user.name}</h5>
                           <div className="card-text text-muted">
-                            <p className="m-0">Role:{user.role}</p>
+                            <p className="m-0">Thuộc:{user.from?.name}</p>
                             <p>
                               <a href={`mailto:${user.email}`}>{user.email}</a>
                             </p>
