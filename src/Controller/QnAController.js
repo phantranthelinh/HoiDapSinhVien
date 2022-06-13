@@ -94,7 +94,7 @@ const QnAController = {
   getSingleQnA: asyncHandler(async (req, res) => {
     try {
       const id = req.params.id
-      const qna = await QnA.find({ _id: id }).populate({ path: 'by', select: 'name' })
+      const qna = await QnA.find({ _id: id }).populate({ path: 'by', select: 'name id' })
       res.status(200).json(qna)
     } catch (err) {
       throw new Error(err)
@@ -108,7 +108,7 @@ const QnAController = {
       res.status(500).json(err)
     }
   }),
-  update: asyncHandler(async (req, res) => {
+  edit: asyncHandler(async (req, res) => {
     const { question, answer, by } = req.body
     const qna = await QnA.findById(req.params.id)
     if (qna) {
