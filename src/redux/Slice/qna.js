@@ -31,7 +31,7 @@ export const qnaSlice = createSlice({
       state.loading = false
     },
     addQnASuccess: (state) => {
-      state.success = true
+      state.actionSuccess = true
       state.loading = false
     },
     deleteQnASuccess: (state) => {

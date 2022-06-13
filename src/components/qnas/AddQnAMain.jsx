@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { extractKeywords } from '../../redux/Slice/keyword'
 import { addQnA } from '../../redux/Slice/qna'
 import Papa from 'papaparse'
+import { useEffect } from 'react'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -21,7 +22,7 @@ const AddQnAMain = () => {
   const [file, setFile] = useState('')
   const { userInfo } = useSelector((state) => state.userLogin)
   const dispatch = useDispatch()
-
+  const { actionSuccess } = useSelector((state) => state.qnas)
   const { loading, listKeywords } = useSelector((state) => state.keywords)
   const { listDepartments, loading: loadingDepartments } = useSelector((state) => state.departments)
   const submitHander = (e) => {
@@ -31,6 +32,12 @@ const AddQnAMain = () => {
   const blurHandler = () => {
     dispatch(extractKeywords(question))
   }
+  useEffect(() => {
+    if (actionSuccess) {
+      dispatch({ type: 'qna/Reset' })
+      toast.success('Thêm mới thành công!!!', ToastObjects)
+    }
+  }, [dispatch, actionSuccess])
   return (
     <>
       <Toast />
