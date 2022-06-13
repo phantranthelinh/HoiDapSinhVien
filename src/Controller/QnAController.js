@@ -110,10 +110,18 @@ const QnAController = {
   edit: asyncHandler(async (req, res) => {
     const { question, answer, by } = req.body
     const qna = await QnA.findById(req.params.id)
+    const arrayKeywords = pos_tag.tag(question)
+    const keywords = []
+    arrayKeywords.map((word) => {
+      if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
+        keywords.push(word[0].toLowerCase())
+      }
+    })
     if (qna) {
       qna.question = question || qna.question
       qna.answer = answer || qna.answer
       qna.by = by || qna.by
+      qna.keywords = keywords || qna.keywords
       const updatedQna = await qna.save()
       res.status(200).json(updatedQna)
     } else {
