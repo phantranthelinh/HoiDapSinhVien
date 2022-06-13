@@ -111,27 +111,26 @@ const QnAController = {
     const { question, answer, by } = req.body
     const questionExit = await QnA.findOne({ question })
     if (questionExit) {
-      res.status(301).json('Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác')
-    } else {
-      const qna = await QnA.findById(req.params.id)
-      const arrayKeywords = pos_tag.tag(question)
-      const keywords = []
-      arrayKeywords.map((word) => {
-        if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
-          keywords.push(word[0].toLowerCase())
-        }
-      })
-      if (qna) {
-        qna.question = question || qna.question
-        qna.answer = answer || qna.answer
-        qna.by = by || qna.by
-        qna.keywords = keywords || qna.keywords
-        const updatedQna = await qna.save()
-        res.status(200).json(updatedQna)
-      } else {
-        res.status(400)
-        throw new Error('Q&A không tìm thấy')
+      throw new Error('Câu hỏi đã tồn tại!!!')
+    }
+    const qna = await QnA.findById(req.params.id)
+    const arrayKeywords = pos_tag.tag(question)
+    const keywords = []
+    arrayKeywords.map((word) => {
+      if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
+        keywords.push(word[0].toLowerCase())
       }
+    })
+    if (qna) {
+      qna.question = question || qna.question
+      qna.answer = answer || qna.answer
+      qna.by = by || qna.by
+      qna.keywords = keywords || qna.keywords
+      const updatedQna = await qna.save()
+      res.status(200).json(updatedQna)
+    } else {
+      res.status(400)
+      throw new Error('Q&A không tìm thấy')
     }
   }),
   addWithFile: asyncHandler(async (req, res) => {
