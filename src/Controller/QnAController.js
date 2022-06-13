@@ -10,7 +10,7 @@ const QnAController = {
       const { question, answer, by } = req.body
       const questionExit = await QnA.findOne({ question })
       if (questionExit) {
-        res.status(401).json('Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác')
+        res.status(401).json({ message: 'Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác' })
         return
       }
 
