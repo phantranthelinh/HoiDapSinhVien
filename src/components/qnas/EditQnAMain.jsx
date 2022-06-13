@@ -1,37 +1,74 @@
-import React, { useEffect, useState } from "react";
-import Toast from "../LoadingError/Toast";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import Toast from '../LoadingError/Toast'
+import { Link } from 'react-router-dom'
 
-import { toast } from "react-toastify";
-import Message from "../LoadingError/Error";
-import Loading from "../LoadingError/Loading";
+import { toast } from 'react-toastify'
+import Message from '../LoadingError/Error'
+import Loading from '../LoadingError/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { getListDepartments } from '../../redux/Slice/department'
+import { editQnA, updateQnA } from './../../redux/Slice/qna'
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHouver: false,
   autoClose: 2000,
-};
-const EditQnAMain = (props) => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
-  const [countInStock, setCountInStock] = useState("");
-  const [description, setDescription] = useState("");
+  theme: 'colored',
+}
+const EditQnAMain = ({ qnaId }) => {
+  const [question, setQuestion] = useState('')
+  const [answer, setAnswer] = useState('')
+  const [by, setBy] = useState('')
+  const dispatch = useDispatch()
 
+  const { listDepartments, loading: loadingListDepartments } = useSelector(
+    (state) => state.departments
+  )
+
+  const { actionSuccess, qna, error } = useSelector((state) => state.qnas)
+  useEffect(() => {
+    if (actionSuccess) {
+      dispatch({ type: 'qna/Reset' })
+      toast.success('Cập nhật thành công!', ToastObjects)
+    }
+    if (error) {
+      toast.error(error, ToastObjects)
+    }
+
+    if (!qna.question || qna._id !== qnaId) {
+      dispatch(editQnA(qnaId))
+    } else {
+      setQuestion(qna.question)
+      setAnswer(qna.answer)
+      setBy(qna.by)
+    }
+  }, [dispatch, qnaId, error, qna, actionSuccess])
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    dispatch(
+      updateQnA({
+        _id: qnaId,
+        question,
+        answer,
+        by,
+      })
+    )
+  }
   return (
     <>
       <Toast />
-      <section className="content-main" style={{ maxWidth: "1200px" }}>
-        <form>
+      <section className="content-main" style={{ maxWidth: '1200px' }}>
+        <form onSubmit={submitHandler}>
           <div className="content-header">
-            <Link to="/products" className="btn btn-danger text-white">
-              Go to products
+            <Link to="/qnas" className="btn btn-danger text-white">
+              Trở về
             </Link>
-            <h2 className="content-title">Update Product</h2>
+            <h2 className="content-title">Cập nhật câu hỏi</h2>
             <div>
               <button type="submit" className="btn btn-primary">
-                Publish now
+                Cập nhật
               </button>
             </div>
           </div>
@@ -41,69 +78,60 @@ const EditQnAMain = (props) => {
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
                   <>
-                    {" "}
+                    {' '}
                     <div className="mb-4">
                       <label htmlFor="product_title" className="form-label">
-                        Product title
+                        Câu hỏi
                       </label>
                       <input
                         type="text"
-                        placeholder="Type here"
                         className="form-control"
-                        id="product_title"
                         required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
                       />
                     </div>
                     <div className="mb-4">
                       <label htmlFor="product_price" className="form-label">
-                        Price
+                        Câu trả lời
                       </label>
                       <input
-                        type="number"
-                        placeholder="Type here"
-                        className="form-control"
-                        id="product_price"
-                        required
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label htmlFor="product_price" className="form-label">
-                        Count In Stock
-                      </label>
-                      <input
-                        type="number"
-                        placeholder="Type here"
-                        className="form-control"
-                        id="product_price"
-                        required
-                        value={countInStock}
-                        onChange={(e) => setCountInStock(e.target.value)}
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label className="form-label">Description</label>
-                      <textarea
-                        placeholder="Type here"
-                        className="form-control"
-                        rows="7"
-                        required
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                      ></textarea>
-                    </div>
-                    <div className="mb-4">
-                      <label className="form-label">Images</label>
-                      <input
-                        className="form-control"
                         type="text"
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
+                        className="form-control"
+                        required
+                        value={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
                       />
                     </div>
+                    {loadingListDepartments ? (
+                      <Loading />
+                    ) : (
+                      <div className="mb-4">
+                        <label htmlFor="name" className="form-label">
+                          Thuộc đơn vị
+                        </label>
+                        <select
+                          name="role"
+                          onChange={(e) => setBy(e.target.value)}
+                          className="form-control"
+                          defaultValue={qna.by?._id}>
+                          <option className="form-control" value={qna.by?._id} selected>
+                            {qna.by?.name}
+                          </option>
+                          {listDepartments.length > 0 &&
+                            listDepartments.map((department) => {
+                              return (
+                                <option
+                                  key={department._id}
+                                  className="form-control"
+                                  value={department._id}>
+                                  {department.name}
+                                </option>
+                              )
+                            })}
+                        </select>
+                      </div>
+                    )}
                   </>
                 </div>
               </div>
@@ -112,7 +140,7 @@ const EditQnAMain = (props) => {
         </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default EditQnAMain;
+export default EditQnAMain

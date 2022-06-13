@@ -1,5 +1,5 @@
-import React from "react";
-import { ToastContainer } from "react-toastify";
+import React from 'react'
+import { ToastContainer } from 'react-toastify'
 
 const Toast = () => {
   return (
@@ -13,9 +13,8 @@ const Toast = () => {
         theme="colored"
       />
       {/* Same as */}
-      <ToastContainer />
     </div>
-  );
-};
+  )
+}
 
-export default Toast;
+export default Toast

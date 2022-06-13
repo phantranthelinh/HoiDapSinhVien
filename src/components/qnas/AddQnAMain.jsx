@@ -1,42 +1,40 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import Loading from "../LoadingError/Loading";
-import Toast from "../LoadingError/Toast";
-import { useDispatch, useSelector } from "react-redux";
-import { extractKeywords } from "../../redux/Slice/keyword";
-import { addQnA } from "../../redux/Slice/qna";
-import Papa from "papaparse";
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import Loading from '../LoadingError/Loading'
+import Toast from '../LoadingError/Toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { extractKeywords } from '../../redux/Slice/keyword'
+import { addQnA } from '../../redux/Slice/qna'
+import Papa from 'papaparse'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHouver: false,
   autoClose: 2000,
-};
+}
 const AddQnAMain = () => {
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState('')
 
-  const [answer, setAnswer] = useState("");
-  const [by, setBy] = useState("");
-  const [file, setFile] = useState("");
-  const { userInfo } = useSelector((state) => state.userLogin);
-  const dispatch = useDispatch();
+  const [answer, setAnswer] = useState('')
+  const [by, setBy] = useState('')
+  const [file, setFile] = useState('')
+  const { userInfo } = useSelector((state) => state.userLogin)
+  const dispatch = useDispatch()
 
-  const { loading, listKeywords } = useSelector((state) => state.keywords);
-  const { listDepartments, loading: loadingDepartments } = useSelector(
-    (state) => state.departments
-  );
+  const { loading, listKeywords } = useSelector((state) => state.keywords)
+  const { listDepartments, loading: loadingDepartments } = useSelector((state) => state.departments)
   const submitHander = (e) => {
-    e.preventDefault();
-    dispatch(addQnA(question, answer, by));
-  };
+    e.preventDefault()
+    dispatch(addQnA(question, answer, by))
+  }
   const blurHandler = () => {
-    dispatch(extractKeywords(question));
-  };
+    dispatch(extractKeywords(question))
+  }
   return (
     <>
       <Toast />
-      <section className="content-main" style={{ maxWidth: "1200px" }}>
+      <section className="content-main" style={{ maxWidth: '1200px' }}>
         <form onSubmit={submitHander}>
           <div className="content-header">
             <Link to="/qnas" className="btn btn-danger text-white">
@@ -63,8 +61,7 @@ const AddQnAMain = () => {
                       value={question}
                       required
                       onChange={(e) => setQuestion(e.target.value)}
-                      onBlur={blurHandler}
-                    ></textarea>
+                      onBlur={blurHandler}></textarea>
                   </div>
                   <div className="mb-4">
                     <label className="form-label">Từ khóa</label>
@@ -79,7 +76,7 @@ const AddQnAMain = () => {
                                 <li className="text-keyword">{keyword}</li>
                                 <li className="btn btn-delete-keyword">X</li>
                               </ul>
-                            );
+                            )
                           })}
                       </div>
                     )}
@@ -92,8 +89,7 @@ const AddQnAMain = () => {
                       rows="4"
                       value={answer}
                       required
-                      onChange={(e) => setAnswer(e.target.value)}
-                    ></textarea>
+                      onChange={(e) => setAnswer(e.target.value)}></textarea>
                   </div>
                   {userInfo.role === 1 &&
                     (loadingDepartments ? (
@@ -104,13 +100,8 @@ const AddQnAMain = () => {
                           name="by"
                           onChange={(e) => setBy(e.target.value)}
                           className="form-control"
-                          defaultValue={"DEFAULT"}
-                        >
-                          <option
-                            className="form-control"
-                            value="DEFAULT"
-                            disabled
-                          >
+                          defaultValue={'DEFAULT'}>
+                          <option className="form-control" value="DEFAULT" disabled>
                             - Chọn đơn vị -
                           </option>
                           {listDepartments.length > 0 &&
@@ -119,11 +110,10 @@ const AddQnAMain = () => {
                                 <option
                                   key={department._id}
                                   className="form-control"
-                                  value={department._id}
-                                >
+                                  value={department._id}>
                                   {department.name}
                                 </option>
-                              );
+                              )
                             })}
                         </select>
                       </div>
@@ -138,7 +128,7 @@ const AddQnAMain = () => {
         </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default AddQnAMain;
+export default AddQnAMain

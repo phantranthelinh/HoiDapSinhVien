@@ -1,20 +1,20 @@
-import React from "react";
+import React from 'react'
 
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route } from 'react-router-dom'
 
 export default function AdminRouter({ component: Component, ...rest }) {
-  const token = JSON.parse(window.localStorage.getItem("userInfo"));
+  const token = JSON.parse(window.localStorage.getItem('userInfo'))
 
   return (
     <Route
       {...rest}
       component={(props) => {
         if (token.role === 1) {
-          return <Component {...props} />;
+          return <Component {...props} />
         } else {
-          return <Redirect to={"/"} />;
+          return <Redirect to={'/'} />
         }
       }}
     />
-  );
+  )
 }

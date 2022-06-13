@@ -1,52 +1,52 @@
-import React, { useEffect, useState } from "react";
-import Toast from "../LoadingError/Toast";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import Toast from '../LoadingError/Toast'
+import { Link } from 'react-router-dom'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
 
-import Loading from "../LoadingError/Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { editUser, updateUser } from "../../redux/Slice/user";
-import { getListDepartments } from "../../redux/Slice/department";
+import Loading from '../LoadingError/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { editUser, updateUser } from '../../redux/Slice/user'
+import { getListDepartments } from '../../redux/Slice/department'
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHouver: false,
   autoClose: 2000,
-  theme: "colored",
-};
+  theme: 'colored',
+}
 const EditUserMain = ({ userId }) => {
-  const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
+  const dispatch = useDispatch()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [role, setRole] = useState('')
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('')
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { loading, user, success } = userLogin;
+  const userLogin = useSelector((state) => state.userLogin)
+  const { loading, user, success } = userLogin
   const { listDepartments, loading: loadingListDepartments } = useSelector(
     (state) => state.departments
-  );
+  )
   useEffect(() => {
-    dispatch(getListDepartments());
+    dispatch(getListDepartments())
     if (success) {
-      dispatch({ type: "user/Reset" });
-      toast.success("Cập nhật thành công!", ToastObjects);
+      dispatch({ type: 'user/Reset' })
+      toast.success('Cập nhật thành công!', ToastObjects)
     }
     if (!user.name || user._id !== userId) {
-      dispatch(editUser(userId));
+      dispatch(editUser(userId))
     } else {
-      setName(user.name);
-      setEmail(user.email);
-      setPassword(user.password);
-      setRole(user.role);
+      setName(user.name)
+      setEmail(user.email)
+      setPassword(user.password)
+      setRole(user.role)
     }
-  }, [dispatch, userId, user, success]);
+  }, [dispatch, userId, user, success])
 
   const submitHandler = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     dispatch(
       updateUser({
         _id: userId,
@@ -55,15 +55,12 @@ const EditUserMain = ({ userId }) => {
         password,
         role,
       })
-    );
-  };
+    )
+  }
   return (
     <>
       <Toast />
-      <section
-        className="content-main"
-        style={{ maxWidth: "1200px", height: "100vh" }}
-      >
+      <section className="content-main" style={{ maxWidth: '1200px', height: '100vh' }}>
         <form onSubmit={submitHandler}>
           <div className="content-header">
             <Link to="/users" className="btn btn-danger text-white">
@@ -133,14 +130,9 @@ const EditUserMain = ({ userId }) => {
                           name="role"
                           onChange={(e) => setRole(e.target.value)}
                           className="form-control"
-                          defaultValue={"DEFAULT"}
-                        >
-                          <option
-                            className="form-control"
-                            value={user.role}
-                            disabled
-                          >
-                            - Chọn đơn vị -
+                          defaultValue={user.from?.name}>
+                          <option className="form-control" value={user.from?._id} selected>
+                            {user.from?.name}
                           </option>
                           {listDepartments.length > 0 &&
                             listDepartments.map((department) => {
@@ -148,11 +140,10 @@ const EditUserMain = ({ userId }) => {
                                 <option
                                   key={department._id}
                                   className="form-control"
-                                  value={department.name}
-                                >
+                                  value={department.name}>
                                   {department.name}
                                 </option>
-                              );
+                              )
                             })}
                         </select>
                       </div>
@@ -165,7 +156,7 @@ const EditUserMain = ({ userId }) => {
         </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default EditUserMain;
+export default EditUserMain

@@ -1,40 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import Loading from "../LoadingError/Loading";
-import Toast from "../LoadingError/Toast";
-import { useDispatch, useSelector } from "react-redux";
-import Papa from "papaparse";
-import CSVReader from "../CSVReaderClickAndDragUpload";
+import React, { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import Loading from '../LoadingError/Loading'
+import Toast from '../LoadingError/Toast'
+import { useSelector } from 'react-redux'
+import Papa from 'papaparse'
+import CSVReader from '../CSVReaderClickAndDragUpload'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHouver: false,
   autoClose: 2000,
-};
+}
 const AddQnAsFileMain = () => {
-  const [by, setBy] = useState("");
-  const [file, setFile] = useState("");
-  const { userInfo } = useSelector((state) => state.userLogin);
-  const dispatch = useDispatch();
+  const [by, setBy] = useState('')
+  const [file, setFile] = useState('')
+  // const [columnData, setClumnData] = useState("");
+  const [rowData, setRowData] = useState([])
+  // const columns = useMemo(() => columnData, [columnData]);
 
+  const data = useMemo(() => rowData, [rowData])
+
+  const { userInfo } = useSelector((state) => state.userLogin)
   // const { loading, listKeywords } = useSelector((state) => state.keywords);
-  const { listDepartments, loading: loadingDepartments } = useSelector(
-    (state) => state.departments
-  );
+  const { listDepartments, loading: loadingDepartments } = useSelector((state) => state.departments)
   const submitHander = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (file) {
       Papa.parse(file, {
-        complete: (results) => console.log("Finished:", results.data),
-      });
+        complete: (results) => {
+          const data = results.data
+          const columns = [
+            {
+              accessor: 'question',
+            },
+            {
+              accessor: 'answer',
+            },
+          ]
+          const rows = data.slice(1).map((row) => {
+            return row.reduce((acc, cur, index) => {
+              acc[columns[index].accessor] = cur
+              return acc
+            }, {})
+          })
+          setRowData(rows)
+          // setClumnData(columns);
+        },
+      })
     }
-  };
+  }
+
+  const dataFilter = data.filter((data) => data.question.trim() !== '' && data.answer.trim() !== '')
+
+  let dataFinal = []
+
+  for (let i = 0; i < data.dataFilter; i++) {
+    dataFinal.push({
+      by: by,
+      ...dataFilter,
+    })
+  }
+
+  console.log('🚀 ~ file: AddQnAsFileMain.jsx ~ line 67 ~ AddQnAsFileMain ~ dataFinal', dataFinal)
 
   return (
     <>
       <Toast />
-      <section className="content-main" style={{ maxWidth: "1200px" }}>
+      <section className="content-main" style={{ maxWidth: '1200px' }}>
         <form onSubmit={submitHander} encType="multipart/form-data">
           <div className="content-header">
             <Link to="/qnas" className="btn btn-danger text-white">
@@ -52,11 +84,7 @@ const AddQnAsFileMain = () => {
             <div className="col-xl-12 col-lg-12">
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
-                  <a
-                    href="./import_data.csv"
-                    className="btn btn-success mb-4"
-                    download
-                  >
+                  <a href="./import_data.csv" className="btn btn-success mb-4" download>
                     Tải file mẫu
                   </a>
                   {userInfo.role === 1 &&
@@ -68,13 +96,8 @@ const AddQnAsFileMain = () => {
                           name="by"
                           onChange={(e) => setBy(e.target.value)}
                           className="form-control"
-                          defaultValue={"DEFAULT"}
-                        >
-                          <option
-                            className="form-control"
-                            value="DEFAULT"
-                            disabled
-                          >
+                          defaultValue={'DEFAULT'}>
+                          <option className="form-control" value="DEFAULT" disabled>
                             - Chọn đơn vị -
                           </option>
                           {listDepartments.length > 0 &&
@@ -83,11 +106,10 @@ const AddQnAsFileMain = () => {
                                 <option
                                   key={department._id}
                                   className="form-control"
-                                  value={department._id}
-                                >
+                                  value={department._id}>
                                   {department.name}
                                 </option>
-                              );
+                              )
                             })}
                         </select>
                       </div>
@@ -99,8 +121,7 @@ const AddQnAsFileMain = () => {
                       type="file"
                       className="form-control"
                       required
-                      onChange={(e) => setFile(e.target.files[0])}
-                    ></input>
+                      onChange={(e) => setFile(e.target.files[0])}></input>
                   </div>
                 </div>
               </div>
@@ -109,7 +130,7 @@ const AddQnAsFileMain = () => {
         </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default AddQnAsFileMain;
+export default AddQnAsFileMain

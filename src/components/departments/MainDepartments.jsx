@@ -8,7 +8,6 @@ import { deleteDepartment } from "../../redux/Slice/department";
 
 const MainDepartments = () => {
   const dispatch = useDispatch();
-  let history = useHistory();
   const list = useSelector((state) => state.departments);
   const { loading, listDepartments: data, error, messageDelete } = list;
 
@@ -16,7 +15,6 @@ const MainDepartments = () => {
   const handleDeleteDepartment = (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
       dispatch(deleteDepartment(id));
-      history.push("/departments");
     }
   };
   return (

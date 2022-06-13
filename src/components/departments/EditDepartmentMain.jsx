@@ -1,54 +1,50 @@
-import React, { useEffect, useState } from "react";
-import Toast from "../LoadingError/Toast";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import Toast from '../LoadingError/Toast'
+import { Link } from 'react-router-dom'
 
-import { toast } from "react-toastify";
-import Message from "../LoadingError/Error";
-import Loading from "../LoadingError/Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { editDepartment, updateDepartment } from "../../redux/Slice/department";
+import { toast } from 'react-toastify'
+import Loading from '../LoadingError/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { editDepartment, updateDepartment } from '../../redux/Slice/department'
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHouver: false,
   autoClose: 2000,
-};
+}
 const EditDepartmentMain = ({ departmentId }) => {
-  const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const departments = useSelector((state) => state.departments);
-  const { loading, department, success } = departments;
+  const dispatch = useDispatch()
+  const [name, setName] = useState('')
+  const departments = useSelector((state) => state.departments)
+  const { loading, department, actionSuccess } = departments
 
   useEffect(() => {
-    if (success) {
-      dispatch({ type: "department/Reset" });
-      toast.success("Cập nhật thành công!");
+    if (actionSuccess) {
+      dispatch({ type: 'department/Reset' })
+      toast.success('Cập nhật thành công!', ToastObjects)
     }
     if (!department.name || department._id !== departmentId) {
-      dispatch(editDepartment(departmentId));
+      dispatch(editDepartment(departmentId))
     } else {
-      setName(department.name);
+      setName(department.name)
     }
-  }, [department, dispatch, departmentId, success]);
+  }, [department, dispatch, departmentId, actionSuccess])
 
   const submitHandler = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     dispatch(
       updateDepartment({
         _id: departmentId,
         name,
       })
-    );
-  };
+    )
+  }
   return (
     <>
       <Toast />
-      <section
-        className="content-main"
-        style={{ maxWidth: "1200px", height: "100vh" }}
-      >
+      <section className="content-main" style={{ maxWidth: '1200px', height: '100vh' }}>
         <form onSubmit={submitHandler}>
           <div className="content-header">
             <Link to="/departments" className="btn btn-danger text-white">
@@ -90,7 +86,7 @@ const EditDepartmentMain = ({ departmentId }) => {
         </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default EditDepartmentMain;
+export default EditDepartmentMain

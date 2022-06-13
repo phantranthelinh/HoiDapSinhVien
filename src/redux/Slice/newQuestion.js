@@ -1,14 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { URL } from "../Url";
-import { logOut } from "./user";
-export const newQuestionFromLocalStorage = JSON.parse(
-  localStorage.getItem("newQuestions")
-)
-  ? JSON.parse(localStorage.getItem("newQuestions"))
-  : [];
+import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { URL } from '../Url'
+import { logOut } from './user'
+export const newQuestionFromLocalStorage = JSON.parse(localStorage.getItem('newQuestions'))
+  ? JSON.parse(localStorage.getItem('newQuestions'))
+  : []
 export const newQuestionSlice = createSlice({
-  name: "newquestion",
+  name: 'newquestion',
   initialState: {
     loading: false,
     success: false,
@@ -17,93 +15,119 @@ export const newQuestionSlice = createSlice({
   },
   reducers: {
     Request: (state) => {
-      state.loading = true;
-      state.success = false;
+      state.loading = true
+      state.success = false
     },
     Fail: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-      state.success = false;
+      state.loading = false
+      state.error = action.payload
+      state.success = false
     },
     Reset: (state) => {
-      state.success = false;
-      state.error = false;
+      state.success = false
+      state.error = false
     },
     listNewQuestionSuccess: (state, action) => {
-      state.success = true;
-      state.data = action.payload;
-      state.loading = false;
+      state.success = true
+      state.data = action.payload
+      state.loading = false
     },
     addQnASuccess: (state) => {
-      state.success = true;
-      state.loading = false;
+      state.success = true
+      state.loading = false
+    },
+    deleteNewQuestionSuccess: (state) => {
+      state.actionSuccess = true
     },
   },
-});
+})
 
 //LIST QNA
 
 export const getListNewQuestion = () => async (dispatch, getState) => {
   try {
-    dispatch({ type: "newquestion/Request" });
+    dispatch({ type: 'newquestion/Request' })
     const {
       userLogin: { userInfo },
-    } = getState();
+    } = getState()
     const config = {
       headers: {
-        "Context-Type": "application/json",
+        'Context-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
-    };
+    }
 
-    const { data } = await axios.get(`${URL}/api/newquestions`, config);
-    dispatch({ type: "newquestion/listNewQuestionSuccess", payload: data });
-    localStorage.setItem("newQuestions", JSON.stringify(data));
-    dispatch({ type: "newquestion/Reset" });
+    const { data } = await axios.get(`${URL}/api/newquestions`, config)
+    dispatch({ type: 'newquestion/listNewQuestionSuccess', payload: data })
+    localStorage.setItem('newQuestions', JSON.stringify(data))
+    dispatch({ type: 'newquestion/Reset' })
   } catch (error) {
     const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    if (message === "Not authorized, token failed") {
-      dispatch(logOut());
+      error.response && error.response.data.message ? error.response.data.message : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logOut())
     }
     dispatch({
-      type: "newquestion/Fail",
+      type: 'newquestion/Fail',
       payload: message,
-    });
+    })
   }
-};
+}
 
 //ADD QNA
 
 export const addQnA = (qna) => async (dispatch, getState) => {
   try {
-    dispatch({ type: "qna/Request" });
+    dispatch({ type: 'qna/Request' })
     const {
       userLogin: { userInfo },
-    } = getState();
+    } = getState()
     const config = {
       headers: {
-        "Context-Type": "application/json",
+        'Context-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
-    };
-    await axios.post(`${URL}/api/qnas`, qna, config);
-    dispatch({ type: "qna/addQnASuccess" });
+    }
+    await axios.post(`${URL}/api/qnas`, qna, config)
+    dispatch({ type: 'qna/addQnASuccess' })
   } catch (error) {
     const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    if (message === "Not authorized, token failed") {
-      dispatch(logOut());
+      error.response && error.response.data.message ? error.response.data.message : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logOut())
     }
     dispatch({
-      type: "user/Fail",
+      type: 'newquestion/Fail',
       payload: message,
-    });
+    })
   }
-};
+}
 
-export default newQuestionSlice.reducer;
+export const deleteNewQuestion = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: 'newquestion/Request' })
+    const {
+      userLogin: { userInfo },
+    } = getState()
+    const config = {
+      headers: {
+        'Context-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    await axios.delete(`${URL}/api/newquestions/${id}`, config)
+    dispatch({ type: 'newquestion/deleteNewQuestionSuccess' })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message ? error.response.data.message : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logOut())
+    }
+    dispatch({
+      type: 'newquestion/Fail',
+      payload: message,
+    })
+  }
+}
+
+export default newQuestionSlice.reducer

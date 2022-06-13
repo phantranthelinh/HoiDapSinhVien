@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React from 'react'
+import { Link, useHistory } from 'react-router-dom'
 
-import Loading from "./../LoadingError/Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteUser } from "./../../redux/Slice/user";
+import Loading from '../LoadingError/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteUser } from '../../redux/Slice/user'
 
 const UserComponent = () => {
-  const dispatch = useDispatch();
-  let history = useHistory();
-  const { listUsers, loading } = useSelector((state) => state.userLogin);
+  const dispatch = useDispatch()
+  let history = useHistory()
+  const { listUsers, loading } = useSelector((state) => state.userLogin)
   const deleteHandler = (id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
-      dispatch(deleteUser(id));
-      history.push("/users");
+    if (window.confirm('Are you sure you want to delete?')) {
+      dispatch(deleteUser(id))
+      history.push('/users')
     }
-  };
+  }
   return (
     <section className="content-main">
       <div className="content-header">
@@ -30,11 +30,7 @@ const UserComponent = () => {
         <header className="card-header">
           <div className="row gx-3">
             <div className="col-lg-4 col-md-6 me-auto">
-              <input
-                type="text"
-                placeholder="Tìm kiếm"
-                className="form-control"
-              />
+              <input type="text" placeholder="Tìm kiếm" className="form-control" />
             </div>
             <div className="col-lg-2 col-6 col-md-3">
               <select className="form-select">
@@ -66,16 +62,12 @@ const UserComponent = () => {
                     <div key={user._id} className="col">
                       <div className="card card-user shadow-sm">
                         <div className="card-header">
-                          <img
-                            className="img-md img-avatar"
-                            src="images/logo.gif"
-                            alt="User pic"
-                          />
+                          <img className="img-md img-avatar" src="images/logo.gif" alt="User pic" />
                         </div>
                         <div className="card-body">
                           <h5 className="card-title mt-5">{user.name}</h5>
                           <div className="card-text text-muted">
-                            <p className="m-0">Thuộc:{user.from?.name}</p>
+                            <p className="m-0">Thuộc: {user.from?.name}</p>
                             <p>
                               <a href={`mailto:${user.email}`}>{user.email}</a>
                             </p>
@@ -83,21 +75,19 @@ const UserComponent = () => {
                           <div className="row">
                             <Link
                               to={`/user/${user._id}/edit`}
-                              className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
-                            >
+                              className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6">
                               <i className="fas fa-pen"></i>
                             </Link>
                             <div
                               onClick={() => deleteHandler(user._id)}
-                              className="btn btn-sm btn-outline-danger p-2 pb-3 col-md-6"
-                            >
+                              className="btn btn-sm btn-outline-danger p-2 pb-3 col-md-6">
                               <i className="fas fa-trash-alt"></i>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  );
+                  )
                 })}
             </div>
           )}
@@ -125,7 +115,7 @@ const UserComponent = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default UserComponent;
+export default UserComponent

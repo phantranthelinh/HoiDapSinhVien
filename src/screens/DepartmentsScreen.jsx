@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/sidebar";
 import Header from "../components/Header";
-import MainDepartments from "./../components/departments/MainDepartments";
+import MainDepartments from "../components/departments/MainDepartments";
 
 const DepartmentsScreen = () => {
   return (

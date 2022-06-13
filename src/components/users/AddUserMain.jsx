@@ -1,62 +1,59 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import Loading from "../LoadingError/Loading";
-import Toast from "../LoadingError/Toast";
-import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../../redux/Slice/user";
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import * as yup from 'yup'
+import { useFormik } from 'formik'
+import Loading from '../LoadingError/Loading'
+import Toast from '../LoadingError/Toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { addUser } from '../../redux/Slice/user'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHouver: false,
   autoClose: 2000,
-  theme: "colored",
-};
+  theme: 'colored',
+}
 
 const AddUserMain = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const { listDepartments, loading: loadingListDepartments } = useSelector(
     (state) => state.departments
-  );
-  const { loading, addUserSuccess } = useSelector((state) => state.userLogin);
+  )
+  const { loading, addUserSuccess } = useSelector((state) => state.userLogin)
 
   //Validate form
   const formik = useFormik({
     initialValues: {
-      name: "",
-      password: "",
-      email: "",
-      from: "",
+      name: '',
+      password: '',
+      email: '',
+      from: '',
     },
     validationSchema: yup.object({
-      name: yup.string().required("*Bắt buộc phải nhập trường này"),
+      name: yup.string().required('*Bắt buộc phải nhập trường này'),
       email: yup
         .string()
-        .email("*Địa chỉ email không hợp lệ")
-        .required("*Bắt buộc phải nhập trường này"),
-      password: yup
-        .string()
-        .min(6, "Tối thiểu 6 ký tự")
-        .required("*Bắt buộc phải nhập trường này"),
+        .email('*Địa chỉ email không hợp lệ')
+        .required('*Bắt buộc phải nhập trường này'),
+      password: yup.string().min(6, 'Tối thiểu 6 ký tự').required('*Bắt buộc phải nhập trường này'),
     }),
     onSubmit: (values, { resetForm }) => {
-      dispatch(addUser(values));
-      resetForm({ values: "" });
+      dispatch(addUser(values))
+      resetForm({ values: '' })
     },
-  });
+  })
 
   useEffect(() => {
     if (addUserSuccess) {
-      dispatch({ type: "user/Reset" });
-      toast.success("Thêm mới thành viên thành công", ToastObjects);
+      dispatch({ type: 'user/Reset' })
+      toast.success('Thêm mới thành viên thành công', ToastObjects)
     }
-  }, [dispatch, addUserSuccess]);
+  }, [dispatch, addUserSuccess])
   return (
     <>
       <Toast />
-      <section className="content-main" style={{ maxWidth: "1200px" }}>
+      <section className="content-main" style={{ maxWidth: '1200px' }}>
         <form onSubmit={formik.handleSubmit} method="post">
           <div className="content-header">
             <Link to="/users" className="btn btn-danger text-white">
@@ -128,13 +125,8 @@ const AddUserMain = () => {
                         onChange={formik.handleChange}
                         className="form-control"
                         onBlur={formik.handleBlur}
-                        defaultValue={"DEFAULT"}
-                      >
-                        <option
-                          className="form-control"
-                          value="DEFAULT"
-                          disabled
-                        >
+                        defaultValue={'DEFAULT'}>
+                        <option className="form-control" value="DEFAULT" disabled>
                           - Chọn đơn vị -
                         </option>
                         {listDepartments.length > 0 &&
@@ -143,11 +135,10 @@ const AddUserMain = () => {
                               <option
                                 key={department._id}
                                 className="form-control"
-                                value={department._id}
-                              >
+                                value={department._id}>
                                 {department.name}
                               </option>
-                            );
+                            )
                           })}
                       </select>
                       {formik.touched.name && formik.errors.name ? (
@@ -162,7 +153,7 @@ const AddUserMain = () => {
         </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default AddUserMain;
+export default AddUserMain

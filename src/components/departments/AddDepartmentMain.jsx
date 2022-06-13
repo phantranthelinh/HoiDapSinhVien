@@ -1,36 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
-import Message from "../LoadingError/Error";
-import Loading from "../LoadingError/Loading";
-import Toast from "../LoadingError/Toast";
-import { useDispatch, useSelector } from "react-redux";
-import AddDepartment from "./../../screens/AddDepartment";
-import { addDepartment } from "../../redux/Slice/department";
+import Message from '../LoadingError/Error'
+import Loading from '../LoadingError/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { addDepartment } from '../../redux/Slice/department'
 
 const AddDepartmentMain = () => {
-  const [name, setName] = useState("");
-  const dispatch = useDispatch();
+  const [name, setName] = useState('')
+  const dispatch = useDispatch()
 
-  const departments = useSelector((state) => state.departments);
-  const { success, loading, message } = departments;
+  const departments = useSelector((state) => state.departments)
+  const { actionSuccess, loading, message } = departments
 
   const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(addDepartment(name));
-  };
+    e.preventDefault()
+    dispatch(addDepartment(name))
+  }
 
   useEffect(() => {
-    if (success) {
-      dispatch({ type: "department/Reset" });
-      setName("");
+    if (actionSuccess) {
+      dispatch({ type: 'department/Reset' })
+      setName('')
     }
-  }, [success, dispatch]);
+  }, [actionSuccess, dispatch])
 
   return (
     <>
-      <section className="content-main" style={{ maxWidth: "1200px" }}>
+      <section className="content-main" style={{ maxWidth: '1200px' }}>
         {message && <Message variant="alert-success">{message}</Message>}
         {loading && <Loading />}
         <form onSubmit={submitHandler}>
@@ -67,7 +64,7 @@ const AddDepartmentMain = () => {
         </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default AddDepartmentMain;
+export default AddDepartmentMain
