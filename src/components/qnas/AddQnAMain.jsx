@@ -26,7 +26,7 @@ const AddQnAMain = () => {
   const { listDepartments, loading: loadingDepartments } = useSelector((state) => state.departments)
   const submitHander = (e) => {
     e.preventDefault()
-    dispatch(addQnA(question, answer, by))
+    dispatch(addQnA({ question, answer, by }))
   }
   const blurHandler = () => {
     dispatch(extractKeywords(question))

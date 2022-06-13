@@ -103,7 +103,7 @@ export const addQnA = (qna) => async (dispatch, getState) => {
       dispatch(logOut())
     }
     dispatch({
-      type: 'user/Fail',
+      type: 'qna/Fail',
       payload: message,
     })
   }
