@@ -93,8 +93,7 @@ const QnAController = {
   }),
   getSingleQnA: asyncHandler(async (req, res) => {
     try {
-      const id = req.params.id
-      const qna = await QnA.find({ _id: id }).populate({ path: 'by', select: 'name id' })
+      const qna = await QnA.findById(req.params.id).populate({ path: 'by', select: 'name _id' })
       res.status(200).json(qna)
     } catch (err) {
       throw new Error(err)
