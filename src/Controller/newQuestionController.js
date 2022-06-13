@@ -20,6 +20,7 @@ const newQuestionController = {
   get: asyncHandler(async (req, res) => {
     try {
       const newQuestion = await NewQuestion.findById(req.params.id)
+      res.status(200).json(newQuestion)
     } catch (err) {
       throw new Error(err.message)
     }
@@ -28,6 +29,14 @@ const newQuestionController = {
     try {
       const newQuestions = await NewQuestion.find({}).sort({ createdAt: -1 })
       res.status(200).json(newQuestions)
+    } catch (err) {
+      throw new Error(err.message)
+    }
+  }),
+  delete: asyncHandler(async (req, res) => {
+    try {
+      await NewQuestion.findByIdAndRemove(req.params.id)
+      res.status(200).json('Xoá thành công!!!')
     } catch (err) {
       throw new Error(err.message)
     }

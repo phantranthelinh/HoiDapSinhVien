@@ -109,6 +109,11 @@ const QnAController = {
   }),
   edit: asyncHandler(async (req, res) => {
     const { question, answer, by } = req.body
+    const questionExit = await QnA.findOne({ question })
+    if (questionExit) {
+      res.status(301).json('Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác')
+      return
+    }
     const qna = await QnA.findById(req.params.id)
     const arrayKeywords = pos_tag.tag(question)
     const keywords = []
