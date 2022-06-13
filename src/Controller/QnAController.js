@@ -109,13 +109,12 @@ const QnAController = {
     }
   }),
   update: asyncHandler(async (req, res) => {
-    const { question, answer } = req.body
+    const { question, answer, by } = req.body
     const qna = await QnA.findById(req.params.id)
-
     if (qna) {
-      qna.question = question || product.question
-      qna.answer = answer || product.answer
-      // qna.keywords = keywords || product.keywords
+      qna.question = question || qna.question
+      qna.answer = answer || qna.answer
+      qna.by = by || qna.by
       const updatedQna = await qna.save()
       res.status(200).json(updatedQna)
     } else {
