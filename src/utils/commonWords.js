@@ -23,5 +23,9 @@ const commonWords = [
   '-',
   'các',
   'để',
+  'và',
+  'sẽ',
+  'về',
+  'rất',
 ]
 module.exports = commonWords
