@@ -118,9 +118,14 @@ const AddQnAMain = () => {
                         </select>
                       </div>
                     ))}
-                  <Link to="/add-qnas-file" className="btn btn-primary">
+                  <Link to="/add-qnas-file" className="btn btn-primary mb-4">
                     Thêm bằng file
                   </Link>
+                  <div>
+                    <button className="btn btn-primary" type="submit">
+                      Thêm
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
