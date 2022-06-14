@@ -6,7 +6,7 @@ const QnAController = require('../Controller/QnAController')
 const { protect } = require('../middleware/Auth')
 
 router.get('/all', QnAController.getAllQnAs)
-router.get('/keywords', QnAController.getQnAs)
+router.post('/keywords', QnAController.getQnAs)
 router.get('/search', QnAController.searchQnA)
 router.get('/:id', QnAController.getSingleQnA)
 
