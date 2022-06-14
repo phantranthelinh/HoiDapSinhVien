@@ -95,15 +95,16 @@ const QnAController = {
 
   searchQnA: asyncHandler(async (req, res) => {
     try {
-      const question = req.query.question
-        ? {
-            question: {
-              $regex: req.query.question,
-              $options: 'i',
-            },
-          }
-        : {}
-      const qnas = await QnA.find({ ...question }).sort({ createdAt: -1 })
+      if (!req.query.question) {
+        res.json([])
+        return
+      }
+      const qnas = await QnA.find({
+        question: {
+          $regex: req.query.question,
+          $options: 'i',
+        },
+      }).sort({ createdAt: -1 })
       res.status(200).json(qnas)
     } catch (err) {
       throw new Error(err)
