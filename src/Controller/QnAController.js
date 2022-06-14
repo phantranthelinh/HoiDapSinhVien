@@ -4,6 +4,7 @@ var vntk = require('vntk')
 const commonWords = require('../utils/commonWords')
 var pos_tag = vntk.posTag()
 const csv = require('csvtojson')
+const { search } = require('../Routes/QnARoute')
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -89,6 +90,23 @@ const QnAController = {
       res.status(200).json({ QAs, page, pages: Math.ceil(count / pageSize) })
     } catch (err) {
       throw new Error(err.message)
+    }
+  }),
+
+  searchQnA: asyncHandler(async (req, res) => {
+    try {
+      const question = req.query.question
+        ? {
+            question: {
+              $regex: req.query.question,
+              $options: 'i',
+            },
+          }
+        : {}
+      const qnas = await QnA.find({ ...question }).sort({ createdAt: -1 })
+      res.status(200).json(qnas)
+    } catch (err) {
+      throw new Error(err)
     }
   }),
   getSingleQnA: asyncHandler(async (req, res) => {

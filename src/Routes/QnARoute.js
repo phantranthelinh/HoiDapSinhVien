@@ -7,7 +7,9 @@ const { protect } = require('../middleware/Auth')
 
 router.get('/all', QnAController.getAllQnAs)
 router.get('/', QnAController.getQnAs)
+router.get('/search', QnAController.searchQnA)
 router.get('/:id', QnAController.getSingleQnA)
+
 router.put('/:id', protect, QnAController.edit)
 
 router.delete('/:id', protect, QnAController.delete)
