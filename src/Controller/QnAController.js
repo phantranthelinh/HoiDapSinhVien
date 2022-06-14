@@ -51,7 +51,10 @@ const QnAController = {
     try {
       const { keywords } = req.body
       console.log(keywords)
-      const qnas = await QnA.find({ keywords: { $in: keywords } })
+      const qnas = await QnA.find({ keywords: { $in: keywords } }).populate({
+        path: 'by',
+        select: 'name _id',
+      })
       res.status(200).json(qnas)
     } catch (err) {
       res.status(500).json(err)
