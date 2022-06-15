@@ -50,8 +50,7 @@ const QnAController = {
   getQnAs: asyncHandler(async (req, res) => {
     try {
       const { keywords } = req.body
-      console.log(keywords)
-      const qnas = await QnA.find({ keywords: { $in: keywords } }).populate({
+      const qnas = await QnA.find({ keywords: { $in: keywords, $size: 3 } }).populate({
         path: 'by',
         select: 'name _id',
       })

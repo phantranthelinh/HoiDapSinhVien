@@ -5,7 +5,7 @@ const Department = require('../Model/Department')
 const userController = {
   login: asyncHandler(async (req, res) => {
     const { email, password } = req.body
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email }).sort({ 'messages.createdAt': -1 })
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
@@ -15,6 +15,7 @@ const userController = {
         token: generateToken(user._id),
         createAt: user.createdAt,
         from: user.from,
+        messages: user.messages,
       })
     } else {
       res.status(401)
@@ -86,6 +87,19 @@ const userController = {
       res.status(200).json('Xóa người dùng thành công!')
     } catch (err) {
       res.status(401).json(err)
+    }
+  }),
+  sendQuestion: asyncHandler(async (req, res) => {
+    try {
+      const { question, toId } = req.body
+      const message = {
+        question,
+      }
+
+      await User.findOneAndUpdate({ from: toId }, { $push: { messages: message } })
+      res.status(200).json('Chuyển câu hỏi thành công')
+    } catch (err) {
+      throw new Error('Thất bại')
     }
   }),
 }
