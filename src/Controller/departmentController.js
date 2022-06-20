@@ -12,7 +12,7 @@ const postionController = {
       await Department.create({
         name,
       })
-      res.status(200).json('Thêm mới thành công')
+      res.status(201).json('Thêm mới thành công')
     } catch (err) {
       res.status(400).json(err)
       throw new Error('Thêm mới thất bại!!!')
@@ -51,7 +51,7 @@ const postionController = {
   delete: asyncHandler(async (req, res) => {
     try {
       await Department.findByIdAndRemove(req.params.id)
-      res.status(200).json('Xóa thành công!!!')
+      res.status(204).json('Xóa thành công!!!')
     } catch (err) {
       res.status(400).json(err)
     }

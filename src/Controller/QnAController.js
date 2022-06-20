@@ -43,7 +43,7 @@ const QnAController = {
       })
       res.status(200).json(keywords)
     } catch (err) {
-      res.status(500).json(err)
+      res.status(400).json(err)
     }
   }),
 
@@ -56,7 +56,7 @@ const QnAController = {
       })
       res.status(200).json(qnas)
     } catch (err) {
-      res.status(500).json(err)
+      res.status(400).json(err)
     }
   }),
   getAllQnAs: asyncHandler(async (req, res) => {
@@ -113,9 +113,9 @@ const QnAController = {
   delete: asyncHandler(async (req, res) => {
     try {
       await QnA.deleteOne({ _id: req.params.id })
-      res.status(200).json('Xóa thành công Q&A')
+      res.status(204).json('Xóa thành công Q&A')
     } catch (err) {
-      res.status(500).json(err)
+      res.status(400).json(err)
     }
   }),
   edit: asyncHandler(async (req, res) => {
@@ -147,7 +147,7 @@ const QnAController = {
   addWithFile: asyncHandler(async (req, res) => {
     try {
       const data = await csv().fromfile(req.body.file)
-      res.status(200).json(req.body.file)
+      res.status(201).json(req.body.file)
     } catch (err) {}
   }),
 }

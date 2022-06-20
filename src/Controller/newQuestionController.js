@@ -7,13 +7,13 @@ const newQuestionController = {
       const { question } = req.body
       const questionExit = await NewQuestion.findOne({ question })
       if (questionExit) {
-        res.status(401).json('Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác')
+        res.status(400).json('Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác')
         return
       }
       const newQuestion = await NewQuestion.create({ question })
-      res.status(200).json(newQuestion)
+      res.status(201).json(newQuestion)
     } catch (err) {
-      res.status(401)
+      res.status(400)
       throw new Error(err)
     }
   }),
@@ -36,7 +36,7 @@ const newQuestionController = {
   delete: asyncHandler(async (req, res) => {
     try {
       await NewQuestion.findByIdAndRemove(req.params.id)
-      res.status(200).json('Xoá thành công!!!')
+      res.status(204).json('Xoá thành công!!!')
     } catch (err) {
       throw new Error(err.message)
     }
