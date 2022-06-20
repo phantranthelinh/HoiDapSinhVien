@@ -94,11 +94,11 @@ const userController = {
     try {
       const { question, toId } = req.body
 
+      await User.updateOne({ from: toId }, { $push: { messages: { question } } })
       await NewQuestion.findOneAndRemove({ question: question })
-      await User.findOneAndUpdate({ from: toId }, { $push: { 'messages.question': question } })
       res.status(200).json('Chuyển câu hỏi thành công')
     } catch (err) {
-      throw new Error('Thất bại')
+      throw new Error(err)
     }
   }),
 }

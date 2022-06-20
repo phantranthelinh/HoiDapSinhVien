@@ -1,15 +1,12 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-const messageSchema = mongoose.Schema(
-  {
-    question: {
-      type: String,
-      required: true,
-    },
+const messageSchema = mongoose.Schema({
+  question: {
+    type: String,
+    required: true,
   },
-  { timestamps: true }
-)
+})
 
 const userSchema = mongoose.Schema(
   {
