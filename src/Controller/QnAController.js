@@ -1,10 +1,10 @@
 const QnA = require('../Model/QnA')
+const NewQuestion = require('../Model/newQuestion')
 const asyncHandler = require('express-async-handler')
 var vntk = require('vntk')
 const commonWords = require('../utils/commonWords')
 var pos_tag = vntk.posTag()
 const csv = require('csvtojson')
-const { search } = require('../Routes/QnARoute')
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -14,6 +14,7 @@ const QnAController = {
         res.status(401).json({ message: 'Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác' })
         return
       }
+      await NewQuestion.findOneAndRemove({ question: question })
 
       const arrayKeywords = pos_tag.tag(question)
       const keywords = []
