@@ -8,7 +8,7 @@ const { protect } = require('../middleware/Auth')
 router.get('/', protect, newQuestionController.getAll)
 router.get('/:id', protect, newQuestionController.get)
 
-router.delete('/:id', protect, newQuestionController.delete)
+router.delete('/:question', protect, newQuestionController.delete)
 
 router.post('/', newQuestionController.add)
 

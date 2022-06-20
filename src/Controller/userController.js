@@ -95,7 +95,7 @@ const userController = {
       const { question, toId } = req.body
 
       await NewQuestion.findOneAndRemove({ question: question })
-      await User.findOneAndUpdate({ from: toId }, { $push: { messages: message } })
+      await User.findOneAndUpdate({ from: toId }, { $push: { 'messages.question': question } })
       res.status(200).json('Chuyển câu hỏi thành công')
     } catch (err) {
       throw new Error('Thất bại')
