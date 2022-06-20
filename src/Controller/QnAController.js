@@ -1,5 +1,5 @@
 const QnA = require('../Model/QnA')
-const NewQuestion = require('../Model/newQuestion')
+const User = require('../Model/User')
 const asyncHandler = require('express-async-handler')
 var vntk = require('vntk')
 const commonWords = require('../utils/commonWords')
@@ -14,7 +14,7 @@ const QnAController = {
         res.status(401).json({ message: 'Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác' })
         return
       }
-      await NewQuestion.findOneAndRemove({ question: question })
+      await User.findOneAndUpdate({ from: by }, { $pull: { 'message.question': question } })
 
       const arrayKeywords = pos_tag.tag(question)
       const keywords = []
