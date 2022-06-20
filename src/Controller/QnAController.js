@@ -14,7 +14,7 @@ const QnAController = {
         res.status(401).json({ message: 'Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác' })
         return
       }
-      await User.findOneAndUpdate({ from: by }, { $pull: { 'message.question': question } })
+      await User.findOneAndUpdate({ from: by }, { $pull: { 'messages.question': question } })
 
       const arrayKeywords = pos_tag.tag(question)
       const keywords = []
