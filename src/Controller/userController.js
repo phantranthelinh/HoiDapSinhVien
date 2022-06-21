@@ -2,10 +2,13 @@ const asyncHandler = require('express-async-handler')
 const generateToken = require('../utils/generateToken')
 const User = require('../Model/User')
 const Department = require('../Model/Department')
+const Message = require('../Model/Message')
+
 const userController = {
   login: asyncHandler(async (req, res) => {
     const { email, password } = req.body
-    const user = await User.findOne({ email }).sort({ 'messages.createdAt': -1 })
+    const user = await User.findOne({ email })
+
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
@@ -45,6 +48,9 @@ const userController = {
           password: user.password,
         })
         await Department.updateOne({ _id: from }, { $push: { users: user._id } })
+        await Message.create({
+          idUser: user._id,
+        })
       }
     } catch (err) {
       throw new Error('Thêm mới user thất bại!!!')

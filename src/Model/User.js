@@ -1,13 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-const messageSchema = mongoose.Schema({
-  question: {
-    type: String,
-    required: true,
-  },
-})
-
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -31,7 +24,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Department',
     },
-    messages: [messageSchema],
+    messages: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Messages',
+    },
   },
   { timestamp: true }
 )

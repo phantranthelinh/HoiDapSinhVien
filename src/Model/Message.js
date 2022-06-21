@@ -5,7 +5,7 @@ const messageSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  messages: [
+  listMessage: [
     {
       question: {
         type: String,
@@ -15,6 +15,6 @@ const messageSchema = mongoose.Schema({
   ],
 })
 
-const Messages = mongoose.model('messages', messageSchema)
+const Messages = mongoose.model('Messages', messageSchema)
 
 module.exports = Messages
