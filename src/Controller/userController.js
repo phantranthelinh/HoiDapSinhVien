@@ -2,7 +2,6 @@ const asyncHandler = require('express-async-handler')
 const generateToken = require('../utils/generateToken')
 const User = require('../Model/User')
 const Department = require('../Model/Department')
-const NewQuestion = require('../Model/newQuestion')
 const userController = {
   login: asyncHandler(async (req, res) => {
     const { email, password } = req.body
@@ -88,26 +87,6 @@ const userController = {
       res.status(204).json('Xóa người dùng thành công!')
     } catch (err) {
       res.status(401).json(err)
-    }
-  }),
-  sendQuestion: asyncHandler(async (req, res) => {
-    try {
-      const { question, toId } = req.body
-
-      await User.updateOne({ from: toId }, { $push: { messages: { question } } })
-      await NewQuestion.findOneAndRemove({ question: question })
-      res.status(200).json('Chuyển câu hỏi thành công')
-    } catch (err) {
-      throw new Error('Thất bại')
-    }
-  }),
-  deleteMessage: asyncHandler(async (req, res) => {
-    try {
-      const { idUser } = req.body
-      await User.findOneAndUpdate({ _id: idUser }, { $pull: { messages: { _id: req.params.id } } })
-      res.status(200).json('Xóa thành công!')
-    } catch (err) {
-      throw new Error('Thất bại')
     }
   }),
 }

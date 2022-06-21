@@ -14,7 +14,6 @@ const QnAController = {
         res.status(401).json({ message: 'Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác' })
         return
       }
-      await User.findOneAndUpdate({ from: by }, { $pull: { 'messages.question': question } })
 
       const arrayKeywords = pos_tag.tag(question)
       const keywords = []
@@ -51,7 +50,7 @@ const QnAController = {
   getQnAs: asyncHandler(async (req, res) => {
     try {
       const { keywords } = req.body
-      const qnas = await QnA.find({ keywords: { $in: keywords, $size: 3 } }).populate({
+      const qnas = await QnA.find({ keywords: { $in: keywords } }).populate({
         path: 'by',
         select: 'name _id',
       })
