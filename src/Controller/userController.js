@@ -30,8 +30,7 @@ const userController = {
       const { name, email, password, from } = req.body
       const userExit = await User.findOne({ email })
       if (userExit) {
-        res.status(400).json('Email đã tồn tại!!!')
-        return
+        throw Error('Địa chỉ email đã trùng!!')
       }
       const user = await User.create({
         name,
@@ -53,7 +52,7 @@ const userController = {
         })
       }
     } catch (err) {
-      throw new Error('Thêm mới user thất bại!!!')
+      throw new Error(err)
     }
   }),
   getAll: asyncHandler(async (req, res) => {
@@ -90,7 +89,7 @@ const userController = {
       await User.deleteOne({ _id: userId })
       await Department.updateOne({ $pull: { users: userId } })
 
-      res.status(204).json('Xóa người dùng thành công!')
+      res.status(204).json({ message: 'Xóa người dùng thành công!' })
     } catch (err) {
       res.status(401).json(err)
     }
