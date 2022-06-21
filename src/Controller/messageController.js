@@ -5,7 +5,7 @@ const messageController = {
   addQuestionFromUser: asyncHandler(async (req, res) => {
     try {
       const { question } = req.body
-      const questionExit = await Message.findOne({ messages: { question: question } })
+      const questionExit = await Message.findOne({ 'listMessage.question': question })
       if (questionExit) {
         throw new Error('Câu hỏi đã tồn tại')
       }
