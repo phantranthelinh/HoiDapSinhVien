@@ -37,7 +37,7 @@ const messageController = {
   delete: asyncHandler(async (req, res) => {
     try {
       await Message.findOneAndUpdate(
-        { idUser: req.body.idUser },
+        { idUser: req.user._id },
         { $pull: { listMessage: { _id: req.params.id } } }
       )
       res.status(200).json('Xóa thành công')
