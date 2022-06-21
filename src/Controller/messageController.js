@@ -5,13 +5,17 @@ const messageController = {
   addQuestionFromUser: asyncHandler(async (req, res) => {
     try {
       const { question } = req.body
+      const questionExit = await Message.findOne({ messages: { question: question } })
+      if (questionExit) {
+        throw new Error('Câu hỏi đã tồn tại')
+      }
       await Message.updateOne(
         { idUser: process.env.ID_ADMIN },
         { $push: { listMessage: { question: question } } }
       )
       res.status(200).json('Chuyển câu hỏi cho admin thành công!')
     } catch (err) {
-      throw new Error('Thất bại')
+      throw new Error(err)
     }
   }),
   get: asyncHandler(async (req, res) => {
@@ -30,6 +34,16 @@ const messageController = {
       throw new Error('Thất bại')
     }
   }),
-  delete: asyncHandler(async (req, res) => {}),
+  delete: asyncHandler(async (req, res) => {
+    try {
+      await Message.findOneAndUpdate(
+        { idUser: req.body.idUser },
+        { $pull: { listMessage: { _id: req.params.id } } }
+      )
+      res.status(200).json('Xóa thành công')
+    } catch (err) {
+      throw new Error('Thất bại')
+    }
+  }),
 }
 module.exports = messageController
