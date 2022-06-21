@@ -6,16 +6,14 @@ const postionController = {
       const { name } = req.body
       const nameExits = await Department.findOne({ name })
       if (nameExits) {
-        res.status(400).json('Bộ phận đã tồn tại')
-        return
+        throw new Error('Tên đơn vị đã tồn tại')
       }
       await Department.create({
         name,
       })
       res.status(201).json('Thêm mới thành công')
     } catch (err) {
-      res.status(400).json(err)
-      throw new Error('Thêm mới thất bại!!!')
+      throw new Error(err)
     }
   }),
   get: asyncHandler(async (req, res) => {

@@ -30,7 +30,7 @@ const userController = {
       const { name, email, password, from } = req.body
       const userExit = await User.findOne({ email })
       if (userExit) {
-        throw Error('Địa chỉ email đã trùng!!')
+        throw Error('Địa chỉ email đã tồn tại!!')
       }
       const user = await User.create({
         name,

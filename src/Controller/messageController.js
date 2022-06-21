@@ -14,7 +14,14 @@ const messageController = {
       throw new Error('Thất bại')
     }
   }),
-  get: asyncHandler(async (req, res) => {}),
+  get: asyncHandler(async (req, res) => {
+    try {
+      const message = await Message.findOne({ idUser: req.params.id })
+      res.status(200).json(message)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }),
   getAll: asyncHandler(async (req, res) => {
     try {
       const messages = await Message.find({})
