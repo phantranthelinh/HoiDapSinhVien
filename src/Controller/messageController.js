@@ -16,7 +16,7 @@ const messageController = {
   }),
   get: asyncHandler(async (req, res) => {
     try {
-      const message = await Message.findOne({ idUser: req.params.id })
+      const message = await Message.findOne({ idUser: req.params.id }).select('listMessage')
       res.status(200).json(message)
     } catch (err) {
       throw new Error(err)
