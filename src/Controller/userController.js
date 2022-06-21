@@ -98,7 +98,7 @@ const userController = {
       await NewQuestion.findOneAndRemove({ question: question })
       res.status(200).json('Chuyển câu hỏi thành công')
     } catch (err) {
-      throw new Error(err)
+      throw new Error('Thất bại')
     }
   }),
 }
