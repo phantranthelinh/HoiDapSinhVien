@@ -7,7 +7,9 @@ router.get('/', userController.getAll)
 router.get('/:id', protect, admin, userController.get)
 router.put('/:id', protect, admin, userController.edit)
 
+router.put('/messages/:id', protect, userController.deleteMessage)
 router.delete('/:id', protect, admin, userController.deleteUser)
+
 router.post('/send', protect, admin, userController.sendQuestion)
 router.post('/login', userController.login)
 router.post('/', protect, admin, userController.addUser)

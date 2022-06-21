@@ -101,6 +101,15 @@ const userController = {
       throw new Error('Thất bại')
     }
   }),
+  deleteMessage: asyncHandler(async (req, res) => {
+    try {
+      const { idUser } = req.body
+      await User.findOneAndUpdate({ _id: idUser }, { $pull: { messages: { _id: req.params.id } } })
+      res.status(200).json('Xóa thành công!')
+    } catch (err) {
+      throw new Error('Thất bại')
+    }
+  }),
 }
 
 module.exports = userController
