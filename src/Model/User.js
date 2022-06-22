@@ -24,10 +24,6 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Department',
     },
-    messages: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Messages',
-    },
   },
   { timestamp: true }
 )

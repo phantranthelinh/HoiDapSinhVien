@@ -49,6 +49,7 @@ const userController = {
         await Department.updateOne({ _id: from }, { $push: { users: user._id } })
         await Message.create({
           idUser: user._id,
+          userFrom: user.from,
         })
       }
     } catch (err) {

@@ -10,7 +10,7 @@ const messageController = {
         throw new Error('Câu hỏi đã tồn tại')
       }
       await Message.updateOne(
-        { idUser: process.env.ID_ADMIN },
+        { idUser: { _id: process.env.ID_ADMIN } },
         { $push: { listMessage: { question: question } } }
       )
       res.status(200).json('Chuyển câu hỏi cho admin thành công!')
@@ -20,7 +20,9 @@ const messageController = {
   }),
   get: asyncHandler(async (req, res) => {
     try {
-      const message = await Message.findOne({ idUser: req.params.id }).select('listMessage')
+      const message = await Message.findOne({ idUser: { _id: req.params.id } }).select(
+        'listMessage'
+      )
       res.status(200).json(message)
     } catch (err) {
       throw new Error(err)
@@ -28,7 +30,7 @@ const messageController = {
   }),
   getAll: asyncHandler(async (req, res) => {
     try {
-      const messages = await Message.find({})
+      const messages = await Message.find({}).populate({ path: 'idUser', select: 'from' })
       res.status(200).json(messages)
     } catch (err) {
       throw new Error('Thất bại')
@@ -43,6 +45,33 @@ const messageController = {
       res.status(200).json('Xóa thành công')
     } catch (err) {
       throw new Error('Thất bại')
+    }
+  }),
+  sendTo: asyncHandler(async (req, res) => {
+    try {
+      const { toId, question } = req.body
+      console.log(toId)
+      const idCurrentUser = req.user._id.toString()
+      // await Message.findOneAndUpdate(
+      //   { idUser: idCurrentUser },
+      //   { $pull: { listMessage: { question: question } } }
+      // )
+      // const users = await Message.find({}).populate({
+      //   path: 'idUser',
+      //   select: '_id from',
+      // })
+
+      // const userRecieves = users.filter((user) => {
+      //   if (user.idUser.from) {
+      //     return user.idUser.from.toString() === toId
+      //   }
+      // })
+
+      console.log(userReceive)
+
+      res.status(200).json('Chuyển đến câu hỏi đến đơn vị thành công')
+    } catch (err) {
+      throw new Error(err)
     }
   }),
 }

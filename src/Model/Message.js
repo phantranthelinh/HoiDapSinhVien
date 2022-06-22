@@ -5,6 +5,10 @@ const messageSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  userFrom: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Department',
+  },
   listMessage: [
     {
       question: {

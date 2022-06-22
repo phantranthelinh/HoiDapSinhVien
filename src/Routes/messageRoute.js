@@ -7,6 +7,7 @@ const { protect } = require('../middleware/Auth')
 
 router.post('/', messageController.addQuestionFromUser)
 router.delete('/:id', protect, messageController.delete)
+router.put('/send', protect, messageController.sendTo)
 
 router.get('/:id', protect, messageController.get)
 
