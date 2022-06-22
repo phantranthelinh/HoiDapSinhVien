@@ -5,6 +5,7 @@ var vntk = require('vntk')
 const commonWords = require('../utils/commonWords')
 var pos_tag = vntk.posTag()
 const csv = require('csvtojson')
+const Messages = require('../Model/Message')
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -14,6 +15,7 @@ const QnAController = {
         res.status(401).json({ message: 'Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác' })
         return
       }
+      await Messages.deleteOne({ listMessage: { question: question } })
 
       const arrayKeywords = pos_tag.tag(question)
       const keywords = []
