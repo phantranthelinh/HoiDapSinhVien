@@ -10,7 +10,7 @@ const messageController = {
         throw new Error('Câu hỏi đã tồn tại')
       }
       await Message.updateOne(
-        { idUser: { _id: process.env.ID_ADMIN } },
+        { idUser: process.env.ID_ADMIN },
         { $push: { listMessage: { question: question } } }
       )
       res.status(200).json('Chuyển câu hỏi cho admin thành công!')
@@ -30,7 +30,7 @@ const messageController = {
   }),
   getAll: asyncHandler(async (req, res) => {
     try {
-      const messages = await Message.find({}).populate({ path: 'idUser', select: 'from' })
+      const messages = await Message.find({})
       res.status(200).json(messages)
     } catch (err) {
       throw new Error('Thất bại')
@@ -52,22 +52,14 @@ const messageController = {
       const { toId, question } = req.body
       console.log(toId)
       const idCurrentUser = req.user._id.toString()
-      // await Message.findOneAndUpdate(
-      //   { idUser: idCurrentUser },
-      //   { $pull: { listMessage: { question: question } } }
-      // )
-      // const users = await Message.find({}).populate({
-      //   path: 'idUser',
-      //   select: '_id from',
-      // })
-
-      // const userRecieves = users.filter((user) => {
-      //   if (user.idUser.from) {
-      //     return user.idUser.from.toString() === toId
-      //   }
-      // })
-
-      console.log(userReceive)
+      await Message.findOneAndUpdate(
+        { idUser: idCurrentUser },
+        { $pull: { listMessage: { question: question } } }
+      )
+      await Message.updateOne(
+        { userFrom: toId },
+        { $push: { listMessage: { question: question } } }
+      )
 
       res.status(200).json('Chuyển đến câu hỏi đến đơn vị thành công')
     } catch (err) {
