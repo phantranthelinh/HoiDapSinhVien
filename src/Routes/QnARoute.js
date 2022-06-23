@@ -1,5 +1,6 @@
 const express = require('express')
-
+const multer = require('multer')
+const upload = multer({ dest: './public/uploads/' })
 const router = express.Router()
 
 const QnAController = require('../Controller/QnAController')
@@ -15,7 +16,7 @@ router.put('/:id', protect, QnAController.edit)
 router.delete('/:id', protect, QnAController.delete)
 
 router.post('/', protect, QnAController.add)
-router.post('/fromfile', protect, QnAController.addWithFile)
+router.post('/file', upload.single('import_data'), protect, QnAController.addWithFile)
 
 router.post('/extract', QnAController.extractKeywordFromQuestion)
 

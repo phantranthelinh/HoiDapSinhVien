@@ -6,6 +6,7 @@ const commonWords = require('../utils/commonWords')
 var pos_tag = vntk.posTag()
 const csv = require('csvtojson')
 const Messages = require('../Model/Message')
+
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -148,8 +149,7 @@ const QnAController = {
   }),
   addWithFile: asyncHandler(async (req, res) => {
     try {
-      const data = await csv().fromfile(req.body.file)
-      res.status(201).json(req.body.file)
+      console.log(req.file, req.body)
     } catch (err) {}
   }),
 }

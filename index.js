@@ -6,9 +6,12 @@ const departmentRoute = require('./src/Routes/departmentRoute')
 const messageRoute = require('./src/Routes/messageRoute')
 const userRoute = require('./src/Routes/userRoute')
 const bodyParser = require('body-parser')
+const multer = require('multer')
+const upload = multer({ dest: './public/uploads/' })
 const cors = require('cors')
-var multipart = require('connect-multiparty')
+
 const { notFound, errorHandler } = require('./src/middleware/Error')
+
 dotenv.config()
 connectDatabase()
 
@@ -16,7 +19,6 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(multipart())
 
 //ROUTES
 
