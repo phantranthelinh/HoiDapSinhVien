@@ -6,7 +6,7 @@ const commonWords = require('../utils/commonWords')
 var pos_tag = vntk.posTag()
 const csv = require('csvtojson')
 const Messages = require('../Model/Message')
-
+const fs = require('fs')
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -149,8 +149,41 @@ const QnAController = {
   }),
   addWithFile: asyncHandler(async (req, res) => {
     try {
-      console.log(req.file, req.body)
-    } catch (err) {}
+      // const csv = fs.readFileSync('../../public/uploads/import_data.csv')
+      // const array = csv.toString().split('\n')
+      // const csvToJsonResult = []
+      // const headers = array[0].split(',')
+      // for (let i = 0; i < array.lenght - 1; i++) {
+      //   const jsonObject = {}
+      //   const currentArrayString = array[i]
+      //   let string = ''
+      //   let quoteFlag = 0
+      //   for (let character of currentArrayString) {
+      //     if (character === '"' && quoteFlag === 0) {
+      //       quoteFlag = 1
+      //     } else if (character === '"' && quoteFlag === 1) quoteFlag = 0
+      //     if (character === ', ' && quoteFlag === 0) character = '|'
+      //     if (character !== '"') string += character
+      //   }
+      //   let jsonProperties = string.split('|')
+      //   for (let j in headers) {
+      //     if (jsonProperties[j].includes(', ')) {
+      //       jsonObject[headers[j]] = jsonProperties[j].split(', ').map((item) => item.trim())
+      //     } else {
+      //       jsonObject[headers[j]] = jsonProperties[j]
+      //     }
+      //   }
+      //   csvToJsonResult.push(jsonObject)
+      //   const json = JSON.stringify(csvToJsonResult)
+      //   res.status(200).json(json)
+      // }
+      csv()
+        .fromFile('localhost:5000/uploads/import.data.csv')
+        .then((c) => console.log(c))
+    } catch (err) {
+      res.status(500).json(err)
+    }
   }),
 }
+
 module.exports = QnAController

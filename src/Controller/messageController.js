@@ -54,7 +54,7 @@ const messageController = {
       const idCurrentUser = req.user._id.toString()
       await Message.findOneAndUpdate(
         { idUser: idCurrentUser },
-        { $pull: { listMessage: { question: question } } }
+        { $set: { listMessage: { isMoved: true } } }
       )
       await Message.updateOne(
         { userFrom: toId },

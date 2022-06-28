@@ -1,6 +1,16 @@
 const express = require('express')
 const multer = require('multer')
-const upload = multer({ dest: './public/uploads/' })
+
+const fileStorageEngine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  },
+})
+const upload = multer({ storage: fileStorageEngine })
+
 const router = express.Router()
 
 const QnAController = require('../Controller/QnAController')
@@ -16,7 +26,7 @@ router.put('/:id', protect, QnAController.edit)
 router.delete('/:id', protect, QnAController.delete)
 
 router.post('/', protect, QnAController.add)
-router.post('/file', upload.single('import_data'), protect, QnAController.addWithFile)
+router.post('/file', protect, upload.single('import_data'), QnAController.addWithFile)
 
 router.post('/extract', QnAController.extractKeywordFromQuestion)
 

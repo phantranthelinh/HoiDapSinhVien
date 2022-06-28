@@ -15,6 +15,14 @@ const messageSchema = mongoose.Schema({
         type: String,
         required: true,
       },
+      isAnswered: {
+        type: Boolean,
+        default: false,
+      },
+      isMoved: {
+        type: Boolean,
+        default: false,
+      },
     },
   ],
 })
