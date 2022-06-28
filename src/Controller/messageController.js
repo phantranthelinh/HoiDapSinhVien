@@ -30,9 +30,7 @@ const messageController = {
   }),
   getAll: asyncHandler(async (req, res) => {
     try {
-      const messages = await Message.find({})
-        .populate({ path: 'userFrom', select: 'name' })
-        .sort({ 'listMessage.$.isMoved': -1 })
+      const messages = await Message.find({}).populate({ path: 'userFrom', select: 'name' })
       res.status(200).json(messages)
     } catch (err) {
       throw new Error('Thất bại')

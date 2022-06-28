@@ -16,7 +16,10 @@ const QnAController = {
         res.status(401).json({ message: 'Câu hỏi đã tồn tại. Vui lòng thêm câu hỏi khác' })
         return
       }
-      await Messages.deleteOne({ listMessage: { question: question } })
+      await Messages.updateOne(
+        { 'listMessage.$.question': question },
+        { $set: { 'listMessage.$.isAnswered': true, 'listMessage.$.question': question } }
+      )
 
       const arrayKeywords = pos_tag.tag(question)
       const keywords = []
