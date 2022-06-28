@@ -20,6 +20,11 @@ const QnAController = {
         idUser: process.env.ID_ADMIN,
         'listMessage.$.question': question,
       }
+      await Messages.updateOne(
+        { idUser: req.user._id, listMessage: { question: question } },
+        { $pullAll: { listMessage: { question: question } } }
+      )
+
       await Messages.updateOne(filter, {
         $set: { 'listMessage.$.isAnswered': true, 'listMessage.$.question': question },
       })
