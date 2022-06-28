@@ -17,7 +17,7 @@ const QnAController = {
         return
       }
       await Messages.updateOne(
-        { 'listMessage.$.question': question },
+        { listMessage: { question: question } },
         { $set: { 'listMessage.$.isAnswered': true, 'listMessage.$.question': question } }
       )
 
