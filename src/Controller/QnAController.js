@@ -22,7 +22,7 @@ const QnAController = {
       }
       await Messages.updateOne(
         { idUser: req.user._id, listMessage: { question: question } },
-        { $pullAll: { listMessage: { question: question } } }
+        { $pull: { listMessage: { question: question } } }
       )
 
       await Messages.updateOne(filter, {
