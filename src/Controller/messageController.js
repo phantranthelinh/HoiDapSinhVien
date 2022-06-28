@@ -50,12 +50,16 @@ const messageController = {
   sendTo: asyncHandler(async (req, res) => {
     try {
       const { toId, question } = req.body
-      console.log(toId)
       const idCurrentUser = req.user._id.toString()
-      await Message.findOneAndUpdate(
-        { idUser: idCurrentUser },
-        { $set: { listMessage: { isMoved: true } } }
-      )
+      const filter = {
+        idUser: idCurrentUser,
+        'listMessage.question': question,
+      }
+
+      await Message.updateOne(filter, {
+        $set: { 'listMessage.$.question': question, 'listMessage.$.isMoved': true },
+      })
+
       await Message.updateOne(
         { userFrom: toId },
         { $push: { listMessage: { question: question } } }
