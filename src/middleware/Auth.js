@@ -24,9 +24,10 @@ const protect = asyncHandler(async (req, res, next) => {
     throw new Error('Not authorized, no token')
   }
 })
+const ROLE_ADMIN = 1
 
 const admin = (req, res, next) => {
-  if (req.user && req.user.role === 1) {
+  if (req.user && req.user.role === ROLE_ADMIN) {
     next()
   } else {
     res.status(401)
