@@ -7,6 +7,7 @@ var pos_tag = vntk.posTag()
 const csv = require('csvtojson')
 const Messages = require('../Model/Message')
 const fs = require('fs')
+const { createCipheriv } = require('crypto')
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -191,6 +192,37 @@ const QnAController = {
       csv()
         .fromFile('localhost:5000/uploads/import.data.csv')
         .then((c) => console.log(c))
+    } catch (err) {
+      res.status(500).json(err)
+    }
+  }),
+  happy: asyncHandler(async (req, res) => {
+    try {
+      await QnA.findByIdAndUpdate(
+        req.params.id,
+        { $push: { happies: req.user._id } },
+        { new: true }
+      )
+      await QnA.findByIdAndUpdate(req.params.id, { $pull: { unhappies: req.user._id } })
+      res.status(200).json('Thành công')
+    } catch (err) {
+      res.status(500).json(err)
+    }
+  }),
+  unhappy: asyncHandler(async (req, res) => {
+    try {
+      await QnA.findByIdAndUpdate(
+        req.params.id,
+        { $push: { unhappies: req.user._id } },
+        { new: true }
+      )
+      await QnA.findByIdAndUpdate(
+        req.params.id,
+        { $pull: { happies: req.user._id } },
+        { new: true }
+      )
+
+      res.status(200).json('Thành công')
     } catch (err) {
       res.status(500).json(err)
     }
