@@ -19,10 +19,10 @@ const { protect } = require('../middleware/Auth')
 router.get('/all', QnAController.getAllQnAs)
 router.post('/keywords', QnAController.getQnAs)
 router.get('/search', QnAController.searchQnA)
-router.get('/:id', QnAController.getSingleQnA)
 
 router.put('/happy/:id', protect, QnAController.happy)
 router.put('/unhappy/:id', protect, QnAController.unhappy)
+router.get('/:id', QnAController.getSingleQnA)
 router.put('/:id', protect, QnAController.edit)
 
 router.delete('/:id', protect, QnAController.delete)
