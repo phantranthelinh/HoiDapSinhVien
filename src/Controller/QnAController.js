@@ -198,12 +198,10 @@ const QnAController = {
   }),
   happy: asyncHandler(async (req, res) => {
     try {
-      await QnA.findByIdAndUpdate(
-        req.params.id,
-        { $push: { happies: req.user._id } },
-        { new: true }
-      )
-      await QnA.findByIdAndUpdate(req.params.id, { $pull: { unhappies: req.user._id } })
+      const { idUser } = req.body
+
+      await QnA.findByIdAndUpdate(req.params.id, { $push: { happies: idUser } }, { new: true })
+      await QnA.findByIdAndUpdate(req.params.id, { $pull: { unhappies: idUser } })
       res.status(200).json({ message: 'Thành công' })
     } catch (err) {
       res.status(500).json(err)
@@ -211,16 +209,9 @@ const QnAController = {
   }),
   unhappy: asyncHandler(async (req, res) => {
     try {
-      await QnA.findByIdAndUpdate(
-        req.params.id,
-        { $push: { unhappies: req.user._id } },
-        { new: true }
-      )
-      await QnA.findByIdAndUpdate(
-        req.params.id,
-        { $pull: { happies: req.user._id } },
-        { new: true }
-      )
+      const { idUser } = req.body
+      await QnA.findByIdAndUpdate(req.params.id, { $push: { unhappies: idUser } }, { new: true })
+      await QnA.findByIdAndUpdate(req.params.id, { $pull: { happies: idUser } }, { new: true })
 
       res.status(200).json('Thành công')
     } catch (err) {
