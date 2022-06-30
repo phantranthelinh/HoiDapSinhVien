@@ -204,7 +204,7 @@ const QnAController = {
         { new: true }
       )
       await QnA.findByIdAndUpdate(req.params.id, { $pull: { unhappies: req.user._id } })
-      res.status(200).json('Thành công')
+      res.status(200).json({ message: 'Thành công' })
     } catch (err) {
       res.status(500).json(err)
     }
