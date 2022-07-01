@@ -73,10 +73,10 @@ const QnAController = {
   }),
   getAllQnAs: asyncHandler(async (req, res) => {
     try {
-      const keyword = req.query.keyword
+      const inputSearch = req.query.search
         ? {
             keywords: {
-              $regex: req.query.keyword,
+              $regex: req.query.search,
               $options: 'i',
             },
           }
@@ -86,7 +86,7 @@ const QnAController = {
 
       const count = await QnA.countDocuments({})
 
-      const QAs = await QnA.find({ ...keyword })
+      const QAs = await QnA.find({ ...inputSearch })
         .populate({ path: 'by', select: 'name' })
         .skip(pageSize * (page - 1))
         .sort({ createdAt: -1 })
