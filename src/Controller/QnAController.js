@@ -1,5 +1,4 @@
 const QnA = require('../Model/QnA')
-const User = require('../Model/User')
 const asyncHandler = require('express-async-handler')
 var vntk = require('vntk')
 const commonWords = require('../utils/commonWords')
@@ -7,7 +6,6 @@ var pos_tag = vntk.posTag()
 const csv = require('csvtojson')
 const Messages = require('../Model/Message')
 const fs = require('fs')
-const { createCipheriv } = require('crypto')
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -19,13 +17,12 @@ const QnAController = {
       }
       const filter = {
         idUser: process.env.ID_ADMIN,
-        'listMessage.$.question': question,
+        'listMessage.question': question,
       }
       await Messages.updateOne(
         { idUser: req.user._id, listMessage: { question: question } },
         { $pull: { listMessage: { question: question } } }
       )
-
       await Messages.updateOne(filter, {
         $set: { 'listMessage.$.isAnswered': true, 'listMessage.$.question': question },
       })
@@ -109,7 +106,7 @@ const QnAController = {
       const qnas = await QnA.find({
         question: {
           $regex: req.query.question,
-          $options: 'i',
+          $options: 'gi',
         },
       }).sort({ createdAt: -1 })
       res.status(200).json(qnas)
@@ -199,6 +196,10 @@ const QnAController = {
   happy: asyncHandler(async (req, res) => {
     try {
       const { idUser } = req.body
+      const userChoosedHappy = await QnA.findOne({ happies: idUser })
+      if (userChoosedHappy) {
+        res.status(300).json({ message: 'Bạn bình chọn rồi' })
+      }
 
       await QnA.findByIdAndUpdate(req.params.id, { $push: { happies: idUser } }, { new: true })
       await QnA.findByIdAndUpdate(req.params.id, { $pull: { unhappies: idUser } })

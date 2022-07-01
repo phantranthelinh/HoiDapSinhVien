@@ -50,14 +50,14 @@ const messageController = {
   sendTo: asyncHandler(async (req, res) => {
     try {
       const { toId, question } = req.body
-      const idCurrentUser = req.user._id.toString()
+
       const filter = {
-        idUser: idCurrentUser,
+        idUser: process.env.ID_ADMIN,
         'listMessage.question': question,
       }
 
       await Message.updateOne(filter, {
-        $set: { 'listMessage.$.question': question, 'listMessage.$.isMoved': true },
+        $set: { 'listMessage.$.isMoved': true },
       })
 
       await Message.updateOne(
