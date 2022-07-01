@@ -7,6 +7,7 @@ import Loading from '../LoadingError/Loading'
 import Toast from '../LoadingError/Toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { addUser } from '../../redux/Slice/user'
+import Message from './../LoadingError/Error'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -20,7 +21,7 @@ const AddUserMain = () => {
   const { listDepartments, loading: loadingListDepartments } = useSelector(
     (state) => state.departments
   )
-  const { loading, addUserSuccess } = useSelector((state) => state.userLogin)
+  const { loading, error, addUserSuccess } = useSelector((state) => state.userLogin)
 
   //Validate form
   const formik = useFormik({
@@ -71,6 +72,7 @@ const AddUserMain = () => {
             <div className="col-xl-12 col-lg-12">
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
+                  {error && <Message variant="alert-danger">{error}</Message>}
                   {loading && <Loading />}
                   <div className="mb-4">
                     <label className="form-label">Tên</label>

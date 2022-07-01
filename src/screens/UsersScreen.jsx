@@ -1,7 +1,7 @@
-import React from "react";
-import Sidebar from "../components/sidebar";
-import Header from "../components/Header";
-import UserComponent from "../components/users/UserComponent";
+import React from 'react'
+import Sidebar from '../components/sidebar'
+import Header from '../components/Header'
+import UserComponent from '../components/users/UserComponent'
 
 const UsersScreen = () => {
   return (
@@ -12,7 +12,7 @@ const UsersScreen = () => {
         <UserComponent />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default UsersScreen;
+export default UsersScreen

@@ -8,20 +8,19 @@ import { extractKeywords } from '../../redux/Slice/keyword'
 import { addQnA } from '../../redux/Slice/qna'
 
 import { useEffect } from 'react'
-import Message from './../LoadingError/Error'
+import Message from '../LoadingError/Error'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHouver: false,
   autoClose: 2000,
 }
-const AddQnAMain = () => {
-  const [question, setQuestion] = useState('')
+const AddAnswerMain = ({ qnaQuestion }) => {
+  const [question, setQuestion] = useState(qnaQuestion || '')
 
   const [answer, setAnswer] = useState('')
-  const [file, setFile] = useState('')
   const { userInfo } = useSelector((state) => state.userLogin)
-  const [by, setBy] = useState('')
+  const [by, setBy] = useState(userInfo.from || '')
 
   const dispatch = useDispatch()
   const { actionSuccess, error } = useSelector((state) => state.qnas)
@@ -123,13 +122,12 @@ const AddQnAMain = () => {
                         </select>
                       </div>
                     ))}
-                  <div className="d-flex justify-content-between">
-                    <Link to="/add-qnas-file" className="btn btn-primary">
-                      Thêm bằng file
-                    </Link>
-                    <button className="btn btn-primary" type="submit">
-                      Thêm
-                    </button>
+                  <div>
+                    <div className="d-flex justify-content-end">
+                      <button className="btn btn-primary" type="submit">
+                        Thêm
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -141,4 +139,4 @@ const AddQnAMain = () => {
   )
 }
 
-export default AddQnAMain
+export default AddAnswerMain

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import Loading from '../LoadingError/Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { editDepartment, updateDepartment } from '../../redux/Slice/department'
+import Message from './../LoadingError/Error'
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -17,7 +18,7 @@ const EditDepartmentMain = ({ departmentId }) => {
   const dispatch = useDispatch()
   const [name, setName] = useState('')
   const departments = useSelector((state) => state.departments)
-  const { loading, department, actionSuccess } = departments
+  const { loading, department, actionSuccess, error } = departments
 
   useEffect(() => {
     if (actionSuccess) {
@@ -57,7 +58,7 @@ const EditDepartmentMain = ({ departmentId }) => {
               </button>
             </div>
           </div>
-
+          {error && <Message variant="alert-danger">{error}</Message>}
           <div className="row mb-4">
             <div className="col-xl-8 col-lg-8">
               <div className="card mb-4 shadow-sm">

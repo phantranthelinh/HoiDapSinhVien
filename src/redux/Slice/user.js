@@ -7,6 +7,7 @@ export const userLoginFromLocalStorage = JSON.parse(localStorage.getItem('userIn
 export const listUsersLoginFromLocalStorage = localStorage.getItem('listUsers')
   ? JSON.parse(localStorage.getItem('listUsers'))
   : []
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -17,12 +18,12 @@ export const userSlice = createSlice({
     addUserSuccess: false,
     userInfo: userLoginFromLocalStorage,
     listUsers: listUsersLoginFromLocalStorage,
+
     user: {},
   },
   reducers: {
     Request: (state) => {
       state.loading = true
-      state.success = false
     },
     Fail: (state, action) => {
       state.loading = false
@@ -34,6 +35,7 @@ export const userSlice = createSlice({
       state.success = false
       state.error = false
       state.addUserSuccess = false
+      state.deleteSuccess = false
     },
     logOut: (state) => {
       localStorage.removeItem('userInfo')
@@ -55,10 +57,8 @@ export const userSlice = createSlice({
       state.loading = false
       state.listUsers = action.payload
     },
-    deleteUserSuccess: (state, action) => {
-      state.loading = false
-      state.success = true
-      state.messageDelete = action.payload
+    deleteUserSuccess: (state) => {
+      state.deleteSuccess = true
     },
     editUserSuccess: (state, action) => {
       state.loading = false
@@ -68,6 +68,13 @@ export const userSlice = createSlice({
       state.loading = false
       state.success = true
       state.user = action.payload
+    },
+    getUserMessageSuccess: (state, action) => {
+      state.loading = false
+      state.listMessage = action.payload
+    },
+    deleteMessageSuccess: (state) => {
+      state.actionSuccess = true
     },
   },
 })
@@ -82,8 +89,8 @@ export const logIn = (email, password) => async (dispatch) => {
       },
     }
     const { data } = await axios.post(`${URL}/api/users/login`, { email, password }, config)
-    localStorage.setItem('userInfo', JSON.stringify(data))
     dispatch({ type: 'user/loginSuccess', payload: data })
+    localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
     const message =
       error.response && error.response.data.message ? error.response.data.message : error.message
@@ -160,8 +167,6 @@ export const getListUsers = () => async (dispatch, getState) => {
 
 export const deleteUser = (id) => async (dispatch, getState) => {
   try {
-    dispatch({ type: 'user/Request' })
-
     const {
       userLogin: { userInfo },
     } = getState()
@@ -171,8 +176,8 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.delete(`${URL}/api/users/${id}`, config)
-    dispatch({ type: 'user/deleteUserSuccess', payload: data })
+    await axios.delete(`${URL}/api/users/${id}`, config)
+    dispatch({ type: 'user/deleteUserSuccess' })
     dispatch(getListUsers())
   } catch (error) {
     const message =
@@ -242,6 +247,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
     })
   }
 }
+//DELETE MESSAGE
 
 export const { logOut } = userSlice.actions
 export default userSlice.reducer

@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import Loading from '../LoadingError/Loading'
 import Message from '../LoadingError/Error'
 import { useDispatch } from 'react-redux'
-import { deleteNewQuestion, getListNewQuestion } from './../../redux/Slice/newQuestion'
 import { toast } from 'react-toastify'
-import Toast from './../LoadingError/Toast'
+import Toast from '../LoadingError/Toast'
+import { deleteMessage } from '../../redux/Slice/newMessage'
+import { sendMessage } from './../../redux/Slice/newMessage'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -15,34 +16,42 @@ const ToastObjects = {
   theme: 'colored',
 }
 const MainNewQuestion = () => {
-  const [to, setTo] = useState('')
-  const [question, setQuestion] = useState('')
+  const [toId, setToId] = useState('')
   let { search } = useLocation()
   const page = search.split('?page=')[1]
   const { userInfo } = useSelector((state) => state.userLogin)
-  const { data, loading, error, actionSuccess } = useSelector((state) => state.newQuestions)
+  const {
+    listMessage: data,
+    loading,
+    deleteMessageSuccess,
+    error,
+    sendMessageSuccess,
+  } = useSelector((state) => state.messages)
   const { listDepartments, loading: loadingDepartments } = useSelector((state) => state.departments)
   const dispatch = useDispatch()
 
-  const clickHandler = (id) => {
-    console.log({ id, to })
+  const clickHandler = (question) => {
+    dispatch(sendMessage(question, toId))
   }
   const deleteHandler = (id) => {
-    dispatch(deleteNewQuestion(id))
+    dispatch(deleteMessage(id))
   }
   useEffect(() => {
-    dispatch(getListNewQuestion())
-    if (actionSuccess) {
-      dispatch({ type: 'newquestion/Reset' })
-      toast.success('Xóa thành công!!', ToastObjects)
+    if (sendMessageSuccess) {
+      toast.success('Chuyển câu hỏi thành công', ToastObjects)
+      dispatch({ type: 'message/Reset' })
     }
-  }, [dispatch, actionSuccess])
+    if (deleteMessageSuccess) {
+      toast.success('Xoá câu hỏi thành công', ToastObjects)
+      dispatch({ type: 'message/Reset' })
+    }
+  }, [dispatch, deleteMessageSuccess, sendMessageSuccess, data.isMoved])
   return (
     <>
       <Toast />
       <section className="content-main">
         <div className="content-header">
-          <h2 className="content-title">Các câu hỏi chưa được trả lời</h2>
+          <h2 className="content-title">Các câu hỏi có thể chuyển</h2>
           <div>
             <Link to="/add-qna" className="btn btn-primary">
               Thêm mới
@@ -58,6 +67,8 @@ const MainNewQuestion = () => {
                 <Loading />
               ) : error ? (
                 <Message variant="alert-danger">{error}</Message>
+              ) : data?.length === 0 ? (
+                <h5 className="text-center">Không có câu hỏi mới nào</h5>
               ) : (
                 <>
                   {data?.length > 0 &&
@@ -70,45 +81,66 @@ const MainNewQuestion = () => {
                                 <h5 className="card-title">Câu hỏi</h5>
                                 <p className="card-text">{nq.question}</p>
                                 <div style={{ display: 'flex' }}>
-                                  <button
-                                    onClick={() => deleteHandler(nq._id)}
-                                    className="btn btn-danger"
-                                    style={{ marginLeft: 8 }}>
-                                    Xóa
-                                  </button>
-                                  <button
-                                    onClick={() => clickHandler(nq._id)}
-                                    className="btn btn-primary"
-                                    style={{ marginLeft: 8 }}>
-                                    Chuyển đến
-                                  </button>
-                                  {userInfo.role === 1 &&
-                                    (loadingDepartments ? (
-                                      <Loading />
-                                    ) : (
-                                      <div style={{ marginLeft: '8px' }}>
-                                        <select
-                                          name="by"
-                                          onChange={(e) => setTo(e.target.value)}
-                                          className="form-select"
-                                          defaultValue={'DEFAULT'}>
-                                          <option className="form-control" value="DEFAULT" disabled>
-                                            - Chọn đơn vị -
-                                          </option>
-                                          {listDepartments.length > 0 &&
-                                            listDepartments.map((department) => {
-                                              return (
-                                                <option
-                                                  key={department._id}
-                                                  className="form-control"
-                                                  value={department._id}>
-                                                  {department.name}
-                                                </option>
-                                              )
-                                            })}
-                                        </select>
-                                      </div>
-                                    ))}
+                                  {nq.isMoved && !nq.isAnswered ? (
+                                    <>
+                                      <h5 className="text-danger">Câu hỏi chưa được trả lời</h5>
+                                    </>
+                                  ) : nq.isMoved && nq.isAnswered ? (
+                                    <>
+                                      <h5 className="text-success">Câu hỏi đã được trả lời f00c</h5>
+                                      <button
+                                        onClick={() => deleteHandler(nq._id)}
+                                        className="btn btn-danger"
+                                        style={{ marginLeft: 8 }}>
+                                        Xóa
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <button
+                                        onClick={() => deleteHandler(nq._id)}
+                                        className="btn btn-danger"
+                                        style={{ marginLeft: 8 }}>
+                                        Xóa
+                                      </button>
+                                      <button
+                                        onClick={() => clickHandler(nq.question)}
+                                        className="btn btn-primary"
+                                        style={{ marginLeft: 8 }}>
+                                        Chuyển đến
+                                      </button>
+                                      {userInfo.role === 1 &&
+                                        (loadingDepartments ? (
+                                          <Loading />
+                                        ) : (
+                                          <div style={{ marginLeft: '8px' }}>
+                                            <select
+                                              name="by"
+                                              onChange={(e) => setToId(e.target.value)}
+                                              className="form-select"
+                                              defaultValue={'DEFAULT'}>
+                                              <option
+                                                className="form-control"
+                                                value="DEFAULT"
+                                                disabled>
+                                                - Chọn đơn vị -
+                                              </option>
+                                              {listDepartments.length > 0 &&
+                                                listDepartments.map((department) => {
+                                                  return (
+                                                    <option
+                                                      key={department._id}
+                                                      className="form-control"
+                                                      value={department._id}>
+                                                      {department.name}
+                                                    </option>
+                                                  )
+                                                })}
+                                            </select>
+                                          </div>
+                                        ))}
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -116,28 +148,27 @@ const MainNewQuestion = () => {
                         </div>
                       )
                     })}
+                  <nav className="float-end mt-4" aria-label="Page navigation">
+                    <ul className="pagination">
+                      <li className="page-item disabled">
+                        <Link className="page-link" to="#">
+                          Previous
+                        </Link>
+                      </li>
+                      {[...Array(data.pages).keys(0)].map((i) => {
+                        return (
+                          <li key={i} className="page-item active">
+                            <Link className="page-link" to={`?page=${i + 1}`}>
+                              {i + 1}
+                            </Link>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </nav>
                 </>
               )}
             </div>
-
-            <nav className="float-end mt-4" aria-label="Page navigation">
-              <ul className="pagination">
-                <li className="page-item disabled">
-                  <Link className="page-link" to="#">
-                    Previous
-                  </Link>
-                </li>
-                {[...Array(data.pages).keys(0)].map((i) => {
-                  return (
-                    <li key={i} className="page-item active">
-                      <Link className="page-link" to={`?page=${i + 1}`}>
-                        {i + 1}
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </nav>
           </div>
         </div>
       </section>

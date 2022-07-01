@@ -1,7 +1,7 @@
-import React from "react";
-import Sidebar from "../components/sidebar";
-import Header from "../components/Header";
-import AddQnAMain from "../components/qnas/AddQnAMain";
+import React from 'react'
+import Sidebar from '../components/sidebar'
+import Header from '../components/Header'
+import AddQnAMain from '../components/qnas/AddQnAMain'
 
 const AddQnA = () => {
   return (
@@ -12,7 +12,7 @@ const AddQnA = () => {
         <AddQnAMain />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default AddQnA;
+export default AddQnA

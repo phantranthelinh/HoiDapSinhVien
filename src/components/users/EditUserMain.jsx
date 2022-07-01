@@ -8,6 +8,7 @@ import Loading from '../LoadingError/Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { editUser, updateUser } from '../../redux/Slice/user'
 import { getListDepartments } from '../../redux/Slice/department'
+import Message from './../LoadingError/Error'
 
 const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -25,7 +26,7 @@ const EditUserMain = ({ userId }) => {
   const [password, setPassword] = useState('')
 
   const userLogin = useSelector((state) => state.userLogin)
-  const { loading, user, success } = userLogin
+  const { loading, user, error, success } = userLogin
   const { listDepartments, loading: loadingListDepartments } = useSelector(
     (state) => state.departments
   )
@@ -79,6 +80,7 @@ const EditUserMain = ({ userId }) => {
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
                   {loading && <Loading />}
+                  {error && <Message variant="alert-danger">{error}</Message>}
                   <>
                     <div className="mb-4">
                       <label htmlFor="name" className="form-label">

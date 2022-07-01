@@ -2,51 +2,48 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { URL } from '../Url'
 import { logOut } from './user'
-export const newQuestionFromLocalStorage = JSON.parse(localStorage.getItem('newQuestions'))
-  ? JSON.parse(localStorage.getItem('newQuestions'))
+
+export const listMessageFromLocalStorage = localStorage.getItem('listMessage')
+  ? JSON.parse(localStorage.getItem('listMessage'))
   : []
-export const newQuestionSlice = createSlice({
-  name: 'newquestion',
+
+export const messageSlice = createSlice({
+  name: 'message',
   initialState: {
     loading: false,
-    success: false,
     error: false,
-    data: [],
+    listMessage: listMessageFromLocalStorage,
   },
   reducers: {
     Request: (state) => {
       state.loading = true
-      state.success = false
     },
     Fail: (state, action) => {
       state.loading = false
       state.error = action.payload
-      state.success = false
     },
     Reset: (state) => {
       state.success = false
       state.error = false
+      state.deleteMessageSuccess = false
+      state.sendMessageSuccess = false
     },
-    listNewQuestionSuccess: (state, action) => {
-      state.success = true
-      state.data = action.payload
+    getListMessageSuccess: (state, action) => {
       state.loading = false
+      state.listMessage = action.payload
     },
-    addQnASuccess: (state) => {
-      state.success = true
-      state.loading = false
+    deleteMessageSuccess: (state) => {
+      state.deleteMessageSuccess = true
     },
-    deleteNewQuestionSuccess: (state) => {
-      state.actionSuccess = true
+    sendMessageSuccess: (state) => {
+      state.sendMessageSuccess = true
     },
   },
 })
 
-//LIST QNA
-
-export const getListNewQuestion = () => async (dispatch, getState) => {
+export const getListMessage = () => async (dispatch, getState) => {
   try {
-    dispatch({ type: 'newquestion/Request' })
+    dispatch({ type: 'message/Request' })
     const {
       userLogin: { userInfo },
     } = getState()
@@ -56,11 +53,9 @@ export const getListNewQuestion = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-
-    const { data } = await axios.get(`${URL}/api/newquestions`, config)
-    dispatch({ type: 'newquestion/listNewQuestionSuccess', payload: data })
-    localStorage.setItem('newQuestions', JSON.stringify(data))
-    dispatch({ type: 'newquestion/Reset' })
+    const { data } = await axios.get(`${URL}/api/messages/${userInfo._id}`, config)
+    dispatch({ type: 'message/getListMessageSuccess', payload: data.listMessage })
+    localStorage.setItem('listMessage', JSON.stringify(data.listMessage))
   } catch (error) {
     const message =
       error.response && error.response.data.message ? error.response.data.message : error.message
@@ -68,17 +63,15 @@ export const getListNewQuestion = () => async (dispatch, getState) => {
       dispatch(logOut())
     }
     dispatch({
-      type: 'newquestion/Fail',
+      type: 'message/Fail',
       payload: message,
     })
   }
 }
 
-//ADD QNA
-
-export const addQnA = (qna) => async (dispatch, getState) => {
+export const deleteMessage = (id) => async (dispatch, getState) => {
   try {
-    dispatch({ type: 'qna/Request' })
+    dispatch({ type: 'message/Request' })
     const {
       userLogin: { userInfo },
     } = getState()
@@ -88,8 +81,10 @@ export const addQnA = (qna) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.post(`${URL}/api/qnas`, qna, config)
-    dispatch({ type: 'qna/addQnASuccess' })
+    await axios.delete(`${URL}/api/messages/${id}`, config)
+    dispatch({ type: 'message/deleteMessageSuccess' })
+
+    dispatch(getListMessage())
   } catch (error) {
     const message =
       error.response && error.response.data.message ? error.response.data.message : error.message
@@ -97,15 +92,15 @@ export const addQnA = (qna) => async (dispatch, getState) => {
       dispatch(logOut())
     }
     dispatch({
-      type: 'newquestion/Fail',
+      type: 'message/Fail',
       payload: message,
     })
   }
 }
 
-export const deleteNewQuestion = (id) => async (dispatch, getState) => {
+export const sendMessage = (question, toId) => async (dispatch, getState) => {
   try {
-    dispatch({ type: 'newquestion/Request' })
+    dispatch({ type: 'message/Request' })
     const {
       userLogin: { userInfo },
     } = getState()
@@ -115,8 +110,9 @@ export const deleteNewQuestion = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.delete(`${URL}/api/newquestions/${id}`, config)
-    dispatch({ type: 'newquestion/deleteNewQuestionSuccess' })
+    await axios.put(`${URL}/api/messages/send`, { question, toId }, config)
+    dispatch({ type: 'message/sendMessageSuccess' })
+    dispatch(getListMessage())
   } catch (error) {
     const message =
       error.response && error.response.data.message ? error.response.data.message : error.message
@@ -124,10 +120,10 @@ export const deleteNewQuestion = (id) => async (dispatch, getState) => {
       dispatch(logOut())
     }
     dispatch({
-      type: 'newquestion/Fail',
+      type: 'message/Fail',
       payload: message,
     })
   }
 }
 
-export default newQuestionSlice.reducer
+export default messageSlice.reducer

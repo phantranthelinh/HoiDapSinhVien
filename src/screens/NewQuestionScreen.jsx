@@ -1,7 +1,7 @@
-import React from "react";
-import Sidebar from "../components/sidebar";
-import Header from "../components/Header";
-import MainNewQuestion from "../components/newquestions/MainNewQuestion";
+import React from 'react'
+import Sidebar from '../components/sidebar'
+import Header from '../components/Header'
+import MainNewQuestion from '../components/newquestions/MainNewQuestion'
 
 const newQuestionScreen = () => {
   return (
@@ -12,7 +12,7 @@ const newQuestionScreen = () => {
         <MainNewQuestion />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default newQuestionScreen;
+export default newQuestionScreen

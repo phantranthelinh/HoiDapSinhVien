@@ -4,19 +4,19 @@ import SaleStatistics from './SaleStatistics'
 import ProductsStatistics from './ProductsStatistics'
 import { useDispatch, useSelector } from 'react-redux'
 import { getListQnAs } from '../../redux/Slice/qna'
-import { getListNewQuestion } from '../../redux/Slice/newQuestion'
 import { getListDepartments } from '../../redux/Slice/department'
+import { getListMessage } from '../../redux/Slice/newMessage'
 
 const Main = () => {
   const dispatch = useDispatch()
 
   const qnas = useSelector((state) => state.qnas)
+  const { listMessage } = useSelector((state) => state.messages)
   const { data } = qnas
-  const { data: newQuestions } = useSelector((state) => state.newQuestions)
 
   useEffect(() => {
+    dispatch(getListMessage())
     dispatch(getListQnAs())
-    dispatch(getListNewQuestion())
     dispatch(getListDepartments())
   }, [dispatch])
   return (
@@ -26,7 +26,7 @@ const Main = () => {
           <h2 className="content-title"> Dashboard </h2>
         </div>
 
-        <TopTotal listQnAs={data.QAs} newQuestions={newQuestions} />
+        <TopTotal listQnAs={data.QAs} listMessage={listMessage} />
         {/* <div className="row">
           <SaleStatistics />
           <ProductsStatistics />

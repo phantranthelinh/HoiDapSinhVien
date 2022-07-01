@@ -943,3 +943,9 @@ ul.row-sm {
   -webkit-box-orient: vertical;  
   overflow: hidden;
 }
+.accordion-button:focus {
+
+  border-color:none;
+
+}
+

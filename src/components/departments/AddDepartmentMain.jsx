@@ -5,13 +5,21 @@ import Message from '../LoadingError/Error'
 import Loading from '../LoadingError/Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { addDepartment } from '../../redux/Slice/department'
-
+import { toast } from 'react-toastify'
+import Toast from './../LoadingError/Toast'
+const ToastObjects = {
+  pauseOnFocusLoss: false,
+  draggable: false,
+  pauseOnHouver: false,
+  autoClose: 2000,
+  theme: 'colored',
+}
 const AddDepartmentMain = () => {
   const [name, setName] = useState('')
   const dispatch = useDispatch()
 
   const departments = useSelector((state) => state.departments)
-  const { actionSuccess, loading, message } = departments
+  const { actionSuccess, loading, error } = departments
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -21,14 +29,15 @@ const AddDepartmentMain = () => {
   useEffect(() => {
     if (actionSuccess) {
       dispatch({ type: 'department/Reset' })
+      toast.success('Thêm mới thành công!!!', ToastObjects)
       setName('')
     }
   }, [actionSuccess, dispatch])
 
   return (
     <>
+      <Toast />
       <section className="content-main" style={{ maxWidth: '1200px' }}>
-        {message && <Message variant="alert-success">{message}</Message>}
         {loading && <Loading />}
         <form onSubmit={submitHandler}>
           <div className="content-header">
@@ -42,7 +51,7 @@ const AddDepartmentMain = () => {
               </button>
             </div>
           </div>
-
+          {error && <Message variant="alert-danger">{error}</Message>}
           <div className="row mb-4">
             <div className="col-xl-12 col-lg-12">
               <div className="card mb-4 shadow-sm">

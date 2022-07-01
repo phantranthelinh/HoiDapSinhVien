@@ -1,23 +1,19 @@
-import React from "react";
+import React from 'react'
 
 const TopTotal = (props) => {
-  const { newQuestions, listQnAs } = props;
+  const { listMessage, listQnAs } = props
 
   return (
     <div className="row">
       <div className="col-lg-8">
         <div className="card card-body mb-4 shadow-sm">
           <article className="icontext">
-            <span className="icon icon-sm rounded-circle alert-success">
-              <i className="text-success fas fa-bags-shopping"></i>
+            <span className="icon icon-sm rounded-circle alert-danger">
+              <i className="text-danger icon fas fa-comment-plus"></i>
             </span>
-            <div className="text">
-              <h6 className="mb-1">Số câu hỏi mới</h6>
-              {newQuestions ? (
-                <span>{newQuestions.length}</span>
-              ) : (
-                <span>0</span>
-              )}
+            <div className="text-danger">
+              <h6 className="mb-1">Số câu hỏi mới </h6>
+              {listMessage ? <span>{listMessage.length}</span> : <span>0</span>}
             </div>
           </article>
         </div>
@@ -25,10 +21,10 @@ const TopTotal = (props) => {
       <div className="col-lg-4">
         <div className="card card-body mb-4 shadow-sm">
           <article className="icontext">
-            <span className="icon icon-sm rounded-circle alert-warning">
-              <i className="text-warning fas fa-shopping-basket"></i>
+            <span className="icon icon-sm rounded-circle alert-success">
+              <i className="text-sucess icon fas fa-question"></i>
             </span>
-            <div className="text">
+            <div className="text-success">
               <h6 className="mb-1">Số câu hỏi đã có</h6>
               {listQnAs ? <span>{listQnAs.length}</span> : <span>0</span>}
             </div>
@@ -36,7 +32,7 @@ const TopTotal = (props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TopTotal;
+export default TopTotal

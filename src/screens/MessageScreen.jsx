@@ -1,18 +1,18 @@
 import React from 'react'
 import Sidebar from '../components/sidebar'
 import Header from '../components/Header'
-import AddUserMain from '../components/users/AddUserMain'
+import MainMessage from './../components/newquestions/MainMessage'
 
-const AddQnA = () => {
+const MessageScreen = () => {
   return (
     <>
       <Sidebar />
       <main className="main-wrap">
         <Header />
-        <AddUserMain />
+        <MainMessage />
       </main>
     </>
   )
 }
 
-export default AddQnA
+export default MessageScreen

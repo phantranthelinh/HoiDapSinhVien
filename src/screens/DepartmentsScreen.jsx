@@ -1,7 +1,7 @@
-import React from "react";
-import Sidebar from "../components/sidebar";
-import Header from "../components/Header";
-import MainDepartments from "../components/departments/MainDepartments";
+import React from 'react'
+import Sidebar from '../components/sidebar'
+import Header from '../components/Header'
+import MainDepartments from '../components/departments/MainDepartments'
 
 const DepartmentsScreen = () => {
   return (
@@ -12,7 +12,7 @@ const DepartmentsScreen = () => {
         <MainDepartments />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default DepartmentsScreen;
+export default DepartmentsScreen

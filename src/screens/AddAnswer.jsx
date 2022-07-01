@@ -1,18 +1,20 @@
 import React from 'react'
 import Sidebar from '../components/sidebar'
 import Header from '../components/Header'
-import AddUserMain from '../components/users/AddUserMain'
+import AddAnswerMain from './../components/qnas/AddAnswerMain'
 
-const AddQnA = () => {
+const AddAnswer = ({ match }) => {
+  const qnaQuestion = match.params.question
   return (
     <>
       <Sidebar />
+
       <main className="main-wrap">
         <Header />
-        <AddUserMain />
+        <AddAnswerMain qnaQuestion={qnaQuestion} />
       </main>
     </>
   )
 }
 
-export default AddQnA
+export default AddAnswer

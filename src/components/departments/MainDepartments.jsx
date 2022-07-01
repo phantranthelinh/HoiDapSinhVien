@@ -1,22 +1,21 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
-import Loading from "../LoadingError/Loading";
-import Message from "../LoadingError/Error";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteDepartment } from "../../redux/Slice/department";
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import Loading from '../LoadingError/Loading'
+import Message from '../LoadingError/Error'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteDepartment } from '../../redux/Slice/department'
 
 const MainDepartments = () => {
-  const dispatch = useDispatch();
-  const list = useSelector((state) => state.departments);
-  const { loading, listDepartments: data, error, messageDelete } = list;
+  const dispatch = useDispatch()
+  const list = useSelector((state) => state.departments)
+  const { loading, listDepartments: data, error, messageDelete } = list
 
-  useEffect(() => {}, [data.length, dispatch]);
+  useEffect(() => {}, [data.length, dispatch])
   const handleDeleteDepartment = (id) => {
-    if (window.confirm("Are you sure you want to delete?")) {
-      dispatch(deleteDepartment(id));
+    if (window.confirm('Are you sure you want to delete?')) {
+      dispatch(deleteDepartment(id))
     }
-  };
+  }
   return (
     <section className="content-main">
       <div className="content-header">
@@ -27,39 +26,9 @@ const MainDepartments = () => {
           </Link>
         </div>
       </div>
-      {messageDelete && (
-        <Message variant="alert-success">{messageDelete}</Message>
-      )}
+      {messageDelete && <Message variant="alert-success">{messageDelete}</Message>}
       <div className="card mb-4">
-        <header className="card-header">
-          <div className="row gx-3">
-            <div className="col-lg-4 col-md-6 me-auto">
-              <input
-                type="text"
-                placeholder="Tìm kiếm"
-                className="form-control"
-              />
-            </div>
-            <div className="col-lg-2 col-6 col-md-3">
-              <select className="form-select">
-                <option>Show 20</option>
-                <option>Show 30</option>
-                <option>Show 40</option>
-                <option>Show all</option>
-              </select>
-            </div>
-            <div className="col-lg-2 col-6 col-md-3">
-              <select className="form-select">
-                <option>Status: all</option>
-                <option>Active only</option>
-                <option>Disabled</option>
-              </select>
-            </div>
-          </div>
-        </header>
-
         {/* Card */}
-
         <div className="card-body">
           <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4">
             {loading ? (
@@ -81,22 +50,16 @@ const MainDepartments = () => {
                             />
                           </div>
                           <div className="card-body">
-                            <h5 className="card-title mt-5">
-                              {department.name}
-                            </h5>
+                            <h5 className="card-title mt-5">{department.name}</h5>
                             <div className="row">
                               <Link
                                 to={`/department/${department._id}/edit`}
-                                className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6"
-                              >
+                                className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6">
                                 <i className="fas fa-pen"></i>
                               </Link>
                               <div
-                                onClick={() =>
-                                  handleDeleteDepartment(department._id)
-                                }
-                                className="btn btn-sm btn-outline-danger p-2 pb-3 col-md-6"
-                              >
+                                onClick={() => handleDeleteDepartment(department._id)}
+                                className="btn btn-sm btn-outline-danger p-2 pb-3 col-md-6">
                                 <i className="fas fa-trash-alt"></i>
                               </div>
                             </div>
@@ -109,7 +72,7 @@ const MainDepartments = () => {
                           </div>
                         </div>
                       </div>
-                    );
+                    )
                   })}
               </>
             )}
@@ -138,7 +101,7 @@ const MainDepartments = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default MainDepartments;
+export default MainDepartments
