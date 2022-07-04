@@ -160,7 +160,7 @@ const QnAController = {
   }),
   addWithFile: asyncHandler(async (req, res) => {
     try {
-      const byId = req.user.from || ''
+      const byId = req.user.from || req.body.by
 
       const filePath = './uploads/import_data.csv'
 
@@ -184,6 +184,13 @@ const QnAController = {
         })
         await QnA.create({ question, answer, by: byId, keywords })
       })
+      if (data) {
+        // delete file import_data.csv
+        fs.unlink(filePath, (err) => {
+          if (err) throw err
+          console.log('File deleted!')
+        })
+      }
       res.status(200).json({ message: 'Thêm mới thành công' })
     } catch (err) {
       res.status(500).json(err)
