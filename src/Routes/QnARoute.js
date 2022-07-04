@@ -2,7 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '/export')
+    cb(null, './public/')
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname)
