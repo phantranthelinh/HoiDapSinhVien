@@ -189,6 +189,7 @@ const QnAController = {
           console.log('File deleted!')
         })
       }
+
       res.status(200).json({ message: 'Thêm mới thành công' })
     } catch (err) {
       res.status(500).json(err)
