@@ -1,6 +1,5 @@
 const express = require('express')
 const multer = require('multer')
-const path = require('path')
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads')
@@ -28,7 +27,7 @@ router.put('/:id', protect, QnAController.edit)
 router.delete('/:id', protect, QnAController.delete)
 
 router.post('/', protect, QnAController.add)
-router.post('/file', protect, upload.single('import_data'), QnAController.addWithFile)
+router.post('/file', upload.single('import_data'), QnAController.addWithFile)
 
 router.post('/extract', QnAController.extractKeywordFromQuestion)
 
