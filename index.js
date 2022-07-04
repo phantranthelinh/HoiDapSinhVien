@@ -8,6 +8,11 @@ const userRoute = require('./src/Routes/userRoute')
 const bodyParser = require('body-parser')
 const path = require('path')
 const cors = require('cors')
+const fs = require('fs')
+
+var temp_dir = path.join(process.cwd(), '/public')
+
+if (!fs.existsSync(temp_dir)) fs.mkdirSync(temp_dir)
 
 const { notFound, errorHandler } = require('./src/middleware/Error')
 
