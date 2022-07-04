@@ -161,7 +161,7 @@ const QnAController = {
     try {
       const byId = req.user.from || req.body.by
 
-      const filePath = './public/export/import_data.csv'
+      const filePath = './export/import_data.csv'
 
       const data = await csvtojson().fromFile(filePath)
 
