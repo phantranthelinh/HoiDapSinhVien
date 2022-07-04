@@ -164,24 +164,23 @@ const QnAController = {
       const filePath = './uploads/import_data.csv'
 
       const data = await csvtojson().fromFile(filePath)
-      if (data) {
-        // delete file import_data.csv
-        fs.unlink(filePath, (err) => {
-          if (err) throw err
-          console.log('File deleted!')
-        })
-      }
-      // console.log({ data })
+
       data.map(async (item) => {
         const { question, answer } = item
-        const arrayKeywords = pos_tag.tag(question)
-        const keywords = []
-        arrayKeywords.map((word) => {
-          if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
-            keywords.push(word[0].toLowerCase())
-          }
-        })
-        await QnA.create({ question, answer, by: byId, keywords })
+
+        const questionExits = await QnA.findOne({ question })
+        if (questionExits) {
+          return
+        } else {
+          const arrayKeywords = pos_tag.tag(question)
+          const keywords = []
+          arrayKeywords.map((word) => {
+            if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
+              keywords.push(word[0].toLowerCase())
+            }
+          })
+          await QnA.create({ question, answer, by: byId, keywords })
+        }
       })
       if (data) {
         // delete file import_data.csv
