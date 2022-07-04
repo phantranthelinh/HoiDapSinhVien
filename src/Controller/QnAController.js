@@ -3,9 +3,11 @@ const asyncHandler = require('express-async-handler')
 var vntk = require('vntk')
 const commonWords = require('../utils/commonWords')
 var pos_tag = vntk.posTag()
-const csv = require('csvtojson')
+const csv = require('csv-parser')
+const csvtojson = require('csvtojson')
 const Messages = require('../Model/Message')
 const fs = require('fs')
+
 const QnAController = {
   add: asyncHandler(async (req, res) => {
     try {
@@ -158,37 +160,31 @@ const QnAController = {
   }),
   addWithFile: asyncHandler(async (req, res) => {
     try {
-      // const csv = fs.readFileSync('../../public/uploads/import_data.csv')
-      // const array = csv.toString().split('\n')
-      // const csvToJsonResult = []
-      // const headers = array[0].split(',')
-      // for (let i = 0; i < array.lenght - 1; i++) {
-      //   const jsonObject = {}
-      //   const currentArrayString = array[i]
-      //   let string = ''
-      //   let quoteFlag = 0
-      //   for (let character of currentArrayString) {
-      //     if (character === '"' && quoteFlag === 0) {
-      //       quoteFlag = 1
-      //     } else if (character === '"' && quoteFlag === 1) quoteFlag = 0
-      //     if (character === ', ' && quoteFlag === 0) character = '|'
-      //     if (character !== '"') string += character
-      //   }
-      //   let jsonProperties = string.split('|')
-      //   for (let j in headers) {
-      //     if (jsonProperties[j].includes(', ')) {
-      //       jsonObject[headers[j]] = jsonProperties[j].split(', ').map((item) => item.trim())
-      //     } else {
-      //       jsonObject[headers[j]] = jsonProperties[j]
-      //     }
-      //   }
-      //   csvToJsonResult.push(jsonObject)
-      //   const json = JSON.stringify(csvToJsonResult)
-      //   res.status(200).json(json)
-      // }
-      csv()
-        .fromFile('localhost:5000/uploads/import.data.csv')
-        .then((c) => console.log(c))
+      const byId = req.user.from || ''
+
+      const filePath = './uploads/import_data.csv'
+
+      const data = await csvtojson().fromFile(filePath)
+      if (data) {
+        // delete file import_data.csv
+        fs.unlink(filePath, (err) => {
+          if (err) throw err
+          console.log('File deleted!')
+        })
+      }
+      // console.log({ data })
+      data.map(async (item) => {
+        const { question, answer } = item
+        const arrayKeywords = pos_tag.tag(question)
+        const keywords = []
+        arrayKeywords.map((word) => {
+          if (commonWords.indexOf(word[0].toLowerCase()) === -1) {
+            keywords.push(word[0].toLowerCase())
+          }
+        })
+        await QnA.create({ question, answer, by: byId, keywords })
+      })
+      res.status(200).json({ message: 'Thêm mới thành công' })
     } catch (err) {
       res.status(500).json(err)
     }

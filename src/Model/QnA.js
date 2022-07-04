@@ -17,8 +17,7 @@ const QnASchema = mongoose.Schema(
     },
     slug: {
       type: String,
-      slug: 'question',
-      unique: true,
+      slug: ['question', 'id'],
     },
     by: {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,14 +27,12 @@ const QnASchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        unique: true,
       },
     ],
     unhappies: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        unique: true,
       },
     ],
   },
