@@ -182,13 +182,13 @@ const QnAController = {
           await QnA.create({ question, answer, by: byId, keywords })
         }
       })
-      if (data) {
-        // delete file import_data.csv
-        fs.unlink(filePath, (err) => {
-          if (err) throw err
-          console.log('File deleted!')
-        })
-      }
+      // if (data) {
+      //   // delete file import_data.csv
+      //   fs.unlink(filePath, (err) => {
+      //     if (err) throw err
+      //     console.log('File deleted!')
+      //   })
+      // }
 
       res.status(200).json({ message: 'Thêm mới thành công' })
     } catch (err) {
