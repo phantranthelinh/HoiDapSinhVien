@@ -1,7 +1,7 @@
-import React from "react";
-import Sidebar from "../components/sidebar";
-import Header from "../components/Header";
-import AddQnAsFileMain from "../components/qnas/AddQnAsFileMain";
+import React from 'react'
+import Sidebar from '../components/sidebar'
+import Header from '../components/Header'
+import AddQnAsFileMain from '../components/qnas/AddQnAsFileMain'
 
 const AddQnAsFile = () => {
   return (
@@ -12,7 +12,7 @@ const AddQnAsFile = () => {
         <AddQnAsFileMain />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default AddQnAsFile;
+export default AddQnAsFile

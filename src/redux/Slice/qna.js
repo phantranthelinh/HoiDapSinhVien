@@ -17,6 +17,10 @@ export const qnaSlice = createSlice({
       state.loading = true
       state.success = false
     },
+    RequestUploadFile: (state) => {
+      state.loadingUploadFile = true
+      state.success = false
+    },
     Fail: (state, action) => {
       state.loading = false
       state.error = action.payload
@@ -51,7 +55,7 @@ export const qnaSlice = createSlice({
     },
     addWithFileSuccess: (state) => {
       state.addWithFileSuccess = true
-      state.loading = false
+      state.loadingUploadFile = false
     },
   },
 })
@@ -203,19 +207,19 @@ export const updateQnA = (qna) => async (dispatch, getState) => {
   }
 }
 
-export const addWithFile = (file) => async (dispatch, getState) => {
+export const addWithFile = (data, by) => async (dispatch, getState) => {
   try {
-    dispatch({ type: 'qna/Request' })
+    dispatch({ type: 'qna/RequestUploadFile' })
     const {
       userLogin: { userInfo },
     } = getState()
     const config = {
       headers: {
-        'Context-Type': 'application/json',
+        'content-type': 'application/x-www-form-urlencoded',
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.post(`${URL}/api/qnas/file`, { file }, config)
+    await axios.post(`${URL}/api/qnas/file`, data, config)
     dispatch({ type: 'qna/addWithFileSuccess' })
     dispatch(getListQnAs())
   } catch (error) {
