@@ -18,8 +18,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-
-app.use(express.static(path.join(__dirname, 'uploads')))
+app.use('/uploads', express.static('uploads'))
+app.use(express.static(__dirname))
 
 //ROUTES
 
