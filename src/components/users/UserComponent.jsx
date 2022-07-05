@@ -27,11 +27,11 @@ const UserComponent = () => {
     }
   }
   useEffect(() => {
-    // dispatch(getListUsers())
     if (deleteSuccess) {
       dispatch({ type: 'user/Reset' })
       toast.success('Xóa thành công!', ToastObjects)
     }
+    dispatch(getListUsers())
   }, [dispatch, deleteSuccess])
   return (
     <>
@@ -47,29 +47,6 @@ const UserComponent = () => {
         </div>
 
         <div className="card mb-4">
-          {/* <header className="card-header">
-          <div className="row gx-3">
-            <div className="col-lg-4 col-md-6 me-auto">
-              <input type="text" placeholder="Tìm kiếm" className="form-control" />
-            </div>
-            <div className="col-lg-2 col-6 col-md-3">
-              <select className="form-select">
-                <option>Show 20</option>
-                <option>Show 30</option>
-                <option>Show 40</option>
-                <option>Show all</option>
-              </select>
-            </div>
-            <div className="col-lg-2 col-6 col-md-3">
-              <select className="form-select">
-                <option>Status: all</option>
-                <option>Active only</option>
-                <option>Disabled</option>
-              </select>
-            </div>
-          </div>
-        </header> */}
-
           {/* Card */}
           <div className="card-body">
             {loading ? (
@@ -117,25 +94,6 @@ const UserComponent = () => {
             )}
 
             {/* nav */}
-            <nav className="float-end mt-4" aria-label="Page navigation">
-              <ul className="pagination">
-                <li className="page-item disabled">
-                  <Link className="page-link" to="#">
-                    Previous
-                  </Link>
-                </li>
-                <li className="page-item active">
-                  <Link className="page-link" to="#">
-                    1
-                  </Link>
-                </li>
-                <li className="page-item">
-                  <Link className="page-link" to="#">
-                    Next
-                  </Link>
-                </li>
-              </ul>
-            </nav>
           </div>
         </div>
       </section>

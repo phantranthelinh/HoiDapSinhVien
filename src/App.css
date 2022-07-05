@@ -949,3 +949,6 @@ ul.row-sm {
 
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}

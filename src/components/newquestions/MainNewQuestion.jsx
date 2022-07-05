@@ -148,24 +148,6 @@ const MainNewQuestion = () => {
                         </div>
                       )
                     })}
-                  <nav className="float-end mt-4" aria-label="Page navigation">
-                    <ul className="pagination">
-                      <li className="page-item disabled">
-                        <Link className="page-link" to="#">
-                          Previous
-                        </Link>
-                      </li>
-                      {[...Array(data.pages).keys(0)].map((i) => {
-                        return (
-                          <li key={i} className="page-item active">
-                            <Link className="page-link" to={`?page=${i + 1}`}>
-                              {i + 1}
-                            </Link>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  </nav>
                 </>
               )}
             </div>

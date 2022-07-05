@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { deleteQnA, getListQnAs } from '../../redux/Slice/qna'
 import Loading from '../LoadingError/Loading'
 import Message from '../LoadingError/Error'
@@ -12,18 +12,24 @@ import { useState } from 'react'
 const MainQnAs = () => {
   const dispatch = useDispatch()
   const [inputSearch, setInputSearch] = useState('')
-  let { search } = useLocation()
-  const page = search.split('?page=')[1]
   const qnas = useSelector((state) => state.qnas)
   const { data, loading, error, deleteQnAsuccess } = qnas
 
+  const [currentPage, setCurrentPage] = useState(1)
+
   useEffect(() => {
+    if (currentPage <= 1) {
+      setCurrentPage(1)
+    }
+    if (currentPage >= data?.pages) {
+      setCurrentPage(data?.pages)
+    }
     if (deleteQnAsuccess) {
       toast.success('Xóa thành công', ToastObjects)
       dispatch({ type: 'qna/Reset' })
     }
-    dispatch(getListQnAs(page, inputSearch))
-  }, [dispatch, page, deleteQnAsuccess, inputSearch])
+    dispatch(getListQnAs(currentPage, inputSearch))
+  }, [dispatch, currentPage, deleteQnAsuccess, inputSearch, data?.pages])
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete?')) {
@@ -106,25 +112,40 @@ const MainQnAs = () => {
                 </>
               )}
             </div>
-
-            <nav className="float-end mt-4" aria-label="Page navigation">
-              <ul className="pagination">
-                <li className="page-item disabled">
-                  <Link className="page-link" to="#">
-                    Previous
-                  </Link>
-                </li>
-                {[...Array(data.pages).keys(0)].map((i) => {
-                  return (
-                    <li key={i} className="page-item active">
-                      <Link className="page-link" to={`?page=${i + 1}`}>
-                        {i + 1}
-                      </Link>
+            {loading ? (
+              <></>
+            ) : (
+              <>
+                <nav className="float-end mt-4" aria-label="Page navigation">
+                  <ul className="pagination">
+                    <li
+                      className="page-item cursor-pointer"
+                      onClick={() => setCurrentPage(currentPage - 1)}>
+                      <div className="page-link">Previous</div>
                     </li>
-                  )
-                })}
-              </ul>
-            </nav>
+                    {[...Array(data.pages).keys(0)].map((i) => {
+                      return (
+                        <li
+                          key={i}
+                          onClick={() => setCurrentPage(i + 1)}
+                          className={`page-item cursor-pointer ${
+                            currentPage === i + 1 ? 'active' : ''
+                          }`}>
+                          <div className="page-link ">{i + 1}</div>
+                        </li>
+                      )
+                    })}
+                    <li
+                      className={`page-item cursor-pointer ${
+                        currentPage === data.pages ? 'disabled' : ''
+                      } `}
+                      onClick={() => setCurrentPage(currentPage + 1)}>
+                      <div className="page-link">Next</div>
+                    </li>
+                  </ul>
+                </nav>
+              </>
+            )}
           </div>
         </div>
       </section>
