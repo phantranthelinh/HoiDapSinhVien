@@ -82,7 +82,7 @@ const QnAController = {
             },
           }
         : {}
-      const pageSize = 12
+      const pageSize = 4
       const page = Number(req.query.page) || 1
 
       const count = await QnA.countDocuments({})
