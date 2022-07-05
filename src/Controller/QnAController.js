@@ -105,18 +105,18 @@ const QnAController = {
         return
       }
 
-      const qnas = await QnA.find({
-        'question.normalize()': {
-          $regex: req.query.question,
-          $options: 'gi',
-        },
-      })
-      // const qnas = await QnA.find(
-      //   { $text: { $search: req.query.question } },
-      //   { score: { $meta: 'textScore' } }
-      // ).sort({
-      //   createdAt: -1,
+      // const qnas = await QnA.find({
+      //   'question.normalize()': {
+      //     $regex: req.query.question,
+      //     $options: 'ui',
+      //   },
       // })
+      const qnas = await QnA.find(
+        { $text: { $search: req.query.question } },
+        { score: { $meta: 'textScore' } }
+      ).sort({
+        createdAt: -1,
+      })
 
       res.status(200).json(qnas)
     } catch (err) {
