@@ -12,15 +12,15 @@
 
 // const  commonWords =require("./src/data/commonWord.js")
 
-// var text = "Tôi là học sinh bị  thôi học  "
+// var text = 'Tôi là học sinh bị  thôi học  '
 
 // text = text.trim()
-// text = text.toLowerCase();
+// text = text.toLowerCase()
 
-// var unsignedText = text.normalize("NFD")
+// var unsignedText = text.normalize('NFD')
 // unsignedText = unsignedText.replace(/[^\w\d ]/g, '')
 
-// console.log({unsignedText})
+// console.log({ unsignedText })
 
 // var result = unsignedText.split(' ');
 
@@ -35,8 +35,5 @@
 
 // console.log({keywords});
 
-const sentence =
-  'Trường mình có dự định lập thư viện bài giảng online hay thư viện Silde bài giảng không ạ?'
-
-  
-
+// const sentence =
+//   'Trường mình có dự định lập thư viện bài giảng online hay thư viện Silde bài giảng không ạ?
