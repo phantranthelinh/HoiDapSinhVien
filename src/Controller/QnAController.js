@@ -89,7 +89,7 @@ const QnAController = {
 
       const QAs = await QnA.find({ ...inputSearch })
         .populate({ path: 'by', select: 'name' })
-        .skip(pageSize * (page - 1))
+        .skip(pageSize * page)
         .sort({ createdAt: -1 })
 
       res.status(200).json({ QAs, page, pages: Math.ceil(count / pageSize) })
