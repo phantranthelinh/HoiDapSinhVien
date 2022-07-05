@@ -40,4 +40,5 @@ const QnASchema = mongoose.Schema(
 )
 
 const QnA = mongoose.model('QnA', QnASchema)
+QnASchema.index({ question: 'text' })
 module.exports = QnA
