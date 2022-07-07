@@ -115,9 +115,11 @@ const QnAController = {
       const qnas = await QnA.find(
         { $text: { $search: req.query.question } },
         { score: { $meta: 'textScore' } }
-      ).sort({
-        createdAt: -1,
-      })
+      )
+        .sort({
+          createdAt: -1,
+        })
+        .populate({ path: 'by', select: 'name _id' })
 
       res.status(200).json(qnas)
     } catch (err) {
