@@ -50,6 +50,7 @@ const Main = () => {
 
   const clickHandler = (keywords) => {
     dispatch(getByKeyword(keywords));
+    setShow(false);
   };
 
   const sendQuestion = () => {
@@ -179,6 +180,9 @@ const Main = () => {
             ) : (
               <>
                 {actionSuccess && (
+                  <h3 className="relate-question">Các câu hỏi có liên quan</h3>
+                )}
+                {show && (
                   <h3 className="relate-question">Các câu hỏi có liên quan</h3>
                 )}
 
