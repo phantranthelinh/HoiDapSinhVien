@@ -84,6 +84,7 @@ a {
 }
 
 .input {
+  border: 2px solid transparent;
   border-radius: 10px;
   padding: 15px;
   height: 60px;
@@ -91,6 +92,12 @@ a {
   outline: none;
   font-size: 18px;
   font-style: italic;
+  background-color: #ebe7e7;
+  transition: all 0.1s ease-in-out 0.1s;
+}
+
+.input:focus {
+  background-color: white;
 }
 
 .ask {
@@ -126,7 +133,7 @@ a {
   position: absolute;
   top: 0;
   right: 0;
-  transform: translate(-100%, 0%);
+  transform: translate(-50%, 0%);
   font-size: 32px;
   cursor: pointer;
 }
@@ -984,7 +991,7 @@ mask {
   }
 
   .search-voice {
-    transform: translate(-75%, 0%);
+    transform: translate(-35%, 0%);
   }
 
   .menu-main__content > li {
