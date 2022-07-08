@@ -97,8 +97,8 @@ const Main = () => {
     <>
       <div className="container">
         <div className="title">
-          <span className="text-heading">HỆ THỐNG TỰ ĐỘNG</span>
-          <span className="text-heading">GIẢI ĐÁP THẮC MẮC SINH VIÊN</span>
+          <span className="text-heading">HỆ THỐNG</span>
+          <span className="text-heading">GIẢI ĐÁP TỰ ĐỘNG</span>
           <span className="text-heading text-heading__sub">
             TRƯỜNG ĐẠI HỌC Y DƯỢC CẦN THƠ
           </span>
@@ -107,7 +107,7 @@ const Main = () => {
           <div className="main">
             <div className="text-show">
               <p className="line-1 anim-typewriter">
-                Nhập thắc mắc của bạn vào ô bên dưới
+                Nhập vấn đề của bạn vào ô bên dưới
               </p>
             </div>
             <form onSubmit={submitHandler}>
@@ -116,18 +116,16 @@ const Main = () => {
                   <div className="search-input">
                     <input
                       className="input"
-                      placeholder="Bạn thắc mắc điều gì?"
+                      placeholder="Bạn cần giải đáp điều gì?"
                       type="text"
                       name="question"
                       defaultValue={input}
-                      // onChange={(e) => setInput(e.target.value)}
                       onChange={handleUpdate}
                     />
-                    <div className="search-voice">
-                      {/* <MdSettingsVoice /> */}
-                      {/* setInput={setInput}  */}
+                    {/* <div className="search-voice">
+                    
                       <SpeechToText />
-                    </div>
+                    </div> */}
                     <div className="search-check">
                       {/* {!loading && <p>Ý của bạn là...</p>} */}
                       <div className="search-check__output">
