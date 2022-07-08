@@ -2,6 +2,16 @@ var slug = require('mongoose-slug-generator')
 const mongoose = require('mongoose')
 mongoose.plugin(slug)
 
+const emojiSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  },
+  { timestamps: true }
+)
+
 const QnASchema = mongoose.Schema(
   {
     question: {
@@ -23,18 +33,8 @@ const QnASchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Department',
     },
-    happies: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
-    unhappies: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
+    happies: [emojiSchema],
+    unhappies: [emojiSchema],
   },
   { timestamps: true }
 )

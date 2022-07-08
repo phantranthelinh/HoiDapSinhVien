@@ -6,6 +6,7 @@ var pos_tag = vntk.posTag()
 const csvtojson = require('csvtojson')
 const Messages = require('../Model/Message')
 const fs = require('fs')
+const e = require('express')
 
 const QnAController = {
   add: asyncHandler(async (req, res) => {
@@ -209,14 +210,23 @@ const QnAController = {
   happy: asyncHandler(async (req, res) => {
     try {
       const { idUser } = req.body
-      const userChoosedHappy = await QnA.findOne({ happies: idUser })
-      if (userChoosedHappy) {
-        res.status(300).json({ message: 'Bạn bình chọn rồi' })
+      const qna = await QnA.findById(req.params.id)
+      if (qna) {
+        const alreadyHappies = qna.happies.find((h) => h.user.toString() === idUser.toString())
+        const newArrayUnhappies = qna.unhappies.filter(
+          (un) => un.user.toString() !== idUser.toString()
+        )
+        if (alreadyHappies) {
+          res.status(400).json({ message: 'Bạn đã bình chọn rồi' })
+        } else {
+          qna.happies.push({ user: idUser })
+          qna.unhappies = newArrayUnhappies
+          await qna.save()
+          res.status(200).json({ message: 'Bạn đã bình chọn thành công' })
+        }
       }
-
-      await QnA.findByIdAndUpdate(req.params.id, { $push: { happies: idUser } }, { new: true })
-      await QnA.findByIdAndUpdate(req.params.id, { $pull: { unhappies: idUser } })
-      res.status(200).json({ message: 'Thành công' })
+      res.status(400)
+      throw new Error('Q&A không tìm thấy')
     } catch (err) {
       res.status(500).json(err)
     }
@@ -224,10 +234,23 @@ const QnAController = {
   unhappy: asyncHandler(async (req, res) => {
     try {
       const { idUser } = req.body
-      await QnA.findByIdAndUpdate(req.params.id, { $push: { unhappies: idUser } }, { new: true })
-      await QnA.findByIdAndUpdate(req.params.id, { $pull: { happies: idUser } }, { new: true })
-
-      res.status(200).json('Thành công')
+      const qna = await QnA.findById(req.params.id)
+      if (qna) {
+        const alreadyUnhappies = qna.unhappies.find(
+          (un) => un.user.toString() === idUser.toString()
+        )
+        const newArrayHappies = qna.happies.filter((h) => h.user.toString() !== idUser.toString())
+        if (alreadyUnhappies) {
+          res.status(400).json({ message: 'Bạn đã bình chọn rồi' })
+        } else {
+          qna.unhappies.push({ user: idUser })
+          qna.happies = [...newArrayHappies]
+          await qna.save()
+          res.status(200).json({ message: 'Bạn đã bình chọn thành công' })
+        }
+      }
+      res.status(400)
+      throw new Error('Q&A không tìm thấy')
     } catch (err) {
       res.status(500).json(err)
     }
