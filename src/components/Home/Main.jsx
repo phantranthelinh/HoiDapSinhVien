@@ -175,11 +175,11 @@ const Main = () => {
 
         <div className="container-child">
           <div id="accordion">
-            {loadingQnAs ? (
+            {loadingQnAs || loading ? (
               <Loading />
             ) : (
               <>
-                {actionSuccess && (
+                {!show && actionSuccess && (
                   <h3 className="relate-question">Các câu hỏi có liên quan</h3>
                 )}
                 {show && (
