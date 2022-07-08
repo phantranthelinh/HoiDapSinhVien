@@ -28,6 +28,8 @@ function App() {
     <>
       <BrowserRouter>
         <Switch>
+          <Route path="/login" component={Login} />
+
           <PrivateRouter path="/" component={HomeScreen} exact />
           <PrivateRouter path="/qnas" component={QnAScreen} />
           <PrivateRouter path="/messages" component={MessageScreen} />
@@ -47,7 +49,6 @@ function App() {
 
           <AdminRouter path="/user/:id/edit" component={UserEditScreen} />
 
-          <Route path="/login" component={Login} />
           <Route path="*" component={NotFound} />
         </Switch>
       </BrowserRouter>

@@ -119,8 +119,8 @@ const MainQnAs = () => {
                 <nav className="float-end mt-4" aria-label="Page navigation">
                   <ul className="pagination">
                     <li
-                      className="page-item cursor-pointer"
-                      onClick={() => setCurrentPage(currentPage - 1)}>
+                      className={`page-item cursor-pointer ${currentPage === 1 ? 'disabled' : ''} `}
+                      onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}>
                       <div className="page-link">Previous</div>
                     </li>
                     {[...Array(data.pages).keys(0)].map((i) => {
@@ -139,7 +139,7 @@ const MainQnAs = () => {
                       className={`page-item cursor-pointer ${
                         currentPage === data.pages ? 'disabled' : ''
                       } `}
-                      onClick={() => setCurrentPage(currentPage + 1)}>
+                      onClick={() => currentPage < data.pages && setCurrentPage(currentPage + 1)}>
                       <div className="page-link">Next</div>
                     </li>
                   </ul>

@@ -42,7 +42,7 @@ export const userSlice = createSlice({
       localStorage.removeItem('listDepartmets')
       state.loginSuccess = false
       state.userInfo = null
-      document.location.href = '/login'
+      window.location.href = '/login'
     },
     loginSuccess: (state, action) => {
       state.loginSuccess = true
