@@ -120,14 +120,12 @@ const Main = () => {
                       type="text"
                       name="question"
                       defaultValue={input}
-                      // onChange={(e) => setInput(e.target.value)}
                       onChange={handleUpdate}
                     />
-                    <div className="search-voice">
-                      {/* <MdSettingsVoice /> */}
-                      {/* setInput={setInput}  */}
+                    {/* <div className="search-voice">
+                    
                       <SpeechToText />
-                    </div>
+                    </div> */}
                     <div className="search-check">
                       {/* {!loading && <p>Ý của bạn là...</p>} */}
                       <div className="search-check__output">
