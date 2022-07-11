@@ -1001,6 +1001,10 @@ mask {
   .form-done {
     padding: 20px;
   }
+
+  .relate-question {
+    font-size: 24px;
+  }
 }
 
 .emoji button {
@@ -1031,6 +1035,17 @@ mask {
 
   .emoji + .emoji {
     left: 12px;
+  }
+
+  .footer-online {
+    background-color: #e9ecef;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .footer {
+    flex-direction: column;
   }
 }
 
