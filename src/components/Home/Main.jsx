@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import lodash from "lodash";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
   getByKeyword,
-  getSingleQnA,
   searchQnA,
   sendHappy,
   sendUnhappy,
@@ -28,10 +27,9 @@ const Main = () => {
   const [show, setShow] = useState(false);
   const handleUpdate = lodash.debounce((e) => {
     setInput(e.target.value);
-  }, 1000);
+  }, 500);
 
   const [isMobile, setisMobile] = useState(false);
-  const [len, setLen] = useState(0);
 
   const {
     sendNewQuestionSuccess,
@@ -41,7 +39,6 @@ const Main = () => {
     loadingQnAs,
     loading,
   } = useSelector((state) => state.qnas);
-  const { QnA } = useSelector((state) => state.qnas);
   const dispatch = useDispatch();
   let screenWidth = window.innerWidth;
 
@@ -69,12 +66,20 @@ const Main = () => {
 
   const happyHandler = (id) => {
     dispatch(sendHappy(id));
-    dispatch(getSingleQnA(id));
+    console.log(happyRef.current);
+    // dispatch({
+    //   type: "qna/reactionAdded",
+    //   payload: { qnaId: id, reaction: "happies" },
+    // });
   };
 
   const unhappyHandler = (id) => {
     dispatch(sendUnhappy(id));
-    dispatch(getSingleQnA(id));
+    // dispatch({
+    //   type: "qna/reactionAdded",
+    //   payload: { qnaId: id, reaction: "happies" },
+    // });
+    console.log(unhappyRef.current);
   };
 
   useEffect(() => {
@@ -88,14 +93,10 @@ const Main = () => {
     if (sendNewQuestionSuccess) {
       toast.success("Gửi câu hỏi thành công", ToastObjects);
     }
-  }, [
-    screenWidth,
-    dispatch,
-    input,
-    actionSuccess,
-    QnA,
-    sendNewQuestionSuccess,
-  ]);
+  }, [screenWidth, dispatch, input, actionSuccess, sendNewQuestionSuccess]);
+
+  const happyRef = useRef(null);
+  const unhappyRef = useRef(null);
   return (
     <>
       <div className="container">
@@ -122,6 +123,7 @@ const Main = () => {
                       placeholder="Bạn cần giải đáp điều gì?"
                       type="text"
                       name="question"
+                      autoComplete="off"
                       defaultValue={input}
                       onChange={handleUpdate}
                     />
@@ -224,11 +226,7 @@ const Main = () => {
                                     alt="happ-icon"
                                   />
                                 </button>
-                                <span>
-                                  {qna.happies &&
-                                    qna.happies.length > 0 &&
-                                    qna.happies.length}
-                                </span>
+                                <span>{qna.happies.length}</span>
                               </div>
                               <div className="emoji">
                                 <button
@@ -240,14 +238,14 @@ const Main = () => {
                                     alt="unhappy-icon"
                                   />
                                 </button>
-                                <span>
-                                  {qna.unhappies &&
-                                    qna.unhappies.length > 0 &&
-                                    qna.unhappies.length}
-                                </span>
+                                <span>{qna.unhappies.length}</span>
                               </div>
                             </div>
-                            <span> Đơn vị trả lời: {qna.by?.name}</span>
+                            <span>
+                              {" "}
+                              Đơn vị trả lời:{" "}
+                              {qna.by?.name ? qna.by.name : "P.CTSV"}
+                            </span>
                           </div>
                         </div>
                       </div>

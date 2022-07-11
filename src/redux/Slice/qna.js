@@ -9,6 +9,7 @@ export const qnaSlice = createSlice({
     loading: false,
     error: false,
     QnA: {},
+    listQnAs: null,
   },
   reducers: {
     Request: (state) => {
@@ -28,6 +29,12 @@ export const qnaSlice = createSlice({
     },
     ResetSendNewQuestion: (state) => {
       state.sendNewQuestionSuccess = false;
+    },
+    reactionAdded(state, action) {
+      const { qnaId, reaction } = action.payload;
+      console.log(state.listQnAs);
+      const existingQnA = state.listQnAs.find((qna) => qna.id === qnaId);
+      console.log(existingQnA);
     },
     getByKeywordSuccess: (state, action) => {
       state.actionSuccess = true;
@@ -90,7 +97,6 @@ export const getSingleQnA = (id) => async (dispatch, getState) => {
 
 export const searchQnA = (question) => async (dispatch, getState) => {
   try {
-    dispatch({ type: "qna/Request" });
     const {
       userLogin: { userInfo },
     } = getState();
