@@ -1073,3 +1073,33 @@ mask {
   border-radius: 50%;
   align-items: baseline;
 }
+
+.menu-link {
+  position: relative;
+}
+
+.menu-link__sub {
+  position: absolute;
+  top: 130%;
+  left: 30%;
+  width: 110px;
+  background-color: white;
+  padding: 0px 10px;
+  display: none;
+  /* border: 1px solid blue; */
+  font-size: 16px;
+  text-align: center;
+  box-shadow: 1px 2px rgb(146, 146, 146);
+}
+
+/* .menu-item > .menu-link:last-child > .menu-link__sub:hover {
+  display: block !important;
+} */
+
+/* .menu-link:hover > .menu-link__sub:last-child {
+  display: block;
+} */
+
+.menu-item:last-child:hover > .menu-link > .menu-link__sub {
+  display: block !important;
+}
