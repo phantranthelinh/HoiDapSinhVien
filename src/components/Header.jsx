@@ -66,6 +66,11 @@ const Header = () => {
                       onClick={() => clickHandler(item.path)}
                     >
                       {item.display}
+                      {userInfo ? (
+                        <div className="menu-link__sub">Đăng xuất</div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </li>
                 );
