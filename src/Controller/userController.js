@@ -56,6 +56,29 @@ const userController = {
       throw new Error(err)
     }
   }),
+
+  addAdmin: asyncHandler(async (req, res) => {
+    try {
+      const { name, email, password, role } = req.body
+      const user = await User.create({
+        name,
+        email,
+        password,
+        role,
+      })
+      if (user) {
+        res.status(201).json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          password: user.password,
+        })
+      }
+    } catch (err) {
+      throw new Error(err)
+    }
+  }),
   getAll: asyncHandler(async (req, res) => {
     try {
       const user = await User.find({ role: { $lt: 1 } }).populate({ path: 'from', select: 'name' })

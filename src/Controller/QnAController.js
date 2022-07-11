@@ -6,7 +6,6 @@ var pos_tag = vntk.posTag()
 const csvtojson = require('csvtojson')
 const Messages = require('../Model/Message')
 const fs = require('fs')
-const e = require('express')
 
 const QnAController = {
   add: asyncHandler(async (req, res) => {
@@ -64,10 +63,12 @@ const QnAController = {
   getQnAs: asyncHandler(async (req, res) => {
     try {
       const { keywords } = req.body
-      const qnas = await QnA.find({ keywords: { $in: keywords } }).populate({
-        path: 'by',
-        select: 'name _id',
-      })
+      const qnas = await QnA.find({ keywords: { $in: keywords } })
+        .populate({
+          path: 'by',
+          select: 'name _id',
+        })
+        .sort({ keywords: 1 })
       res.status(200).json(qnas)
     } catch (err) {
       res.status(400).json(err)
@@ -83,7 +84,7 @@ const QnAController = {
             },
           }
         : {}
-      const pageSize = 4
+      const pageSize = 10
       const page = Number(req.query.page) || 1
 
       const count = await QnA.countDocuments({})
@@ -106,6 +107,7 @@ const QnAController = {
         res.json(null)
         return
       }
+      const limit = req.query.limit || 5
 
       // const qnas = await QnA.find({
       //   'question.normalize()': {
@@ -117,10 +119,9 @@ const QnAController = {
         { $text: { $search: req.query.question } },
         { score: { $meta: 'textScore' } }
       )
-        .sort({
-          createdAt: -1,
-        })
+        .sort({ score: { $meta: 'textScore' } })
         .populate({ path: 'by', select: 'name _id' })
+        .limit(limit)
 
       res.status(200).json(qnas)
     } catch (err) {

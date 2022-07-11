@@ -10,6 +10,8 @@ router.put('/:id', protect, admin, userController.edit)
 router.delete('/:id', protect, admin, userController.deleteUser)
 
 router.post('/login', userController.login)
+router.post('/admin', userController.addAdmin)
+
 router.post('/', protect, admin, userController.addUser)
 
 module.exports = router
