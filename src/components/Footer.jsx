@@ -5,7 +5,7 @@ const Footer = () => {
     <>
       <footer className="footer">
         <div className="footer-container">
-          <img className="header-logo" src="images/logo.gif" />
+          <img className="header-logo" src="images/logo.gif" alt="logo" />
           <div className="footer-container__content">
             <p className="p-footer">
               Trường Đại học Y Dược Cần Thơ (Can Tho University of Medicine and
@@ -26,6 +26,7 @@ const Footer = () => {
                 <a
                   href="https://www.youtube.com/truongdaihocyduocct"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Trang Youtube
                 </a>
@@ -33,6 +34,7 @@ const Footer = () => {
                 <a
                   href="https://www.facebook.com/dhydct.ctump.edu.vn"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Trang Fanpage.
                 </a>

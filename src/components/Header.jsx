@@ -34,7 +34,7 @@ const Header = () => {
   if (userInfo) {
     headerNav.pop();
     headerNav.push({
-      display: "Đăng xuất",
+      display: userInfo.name,
     });
   }
 

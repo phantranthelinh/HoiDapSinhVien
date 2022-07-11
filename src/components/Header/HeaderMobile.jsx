@@ -35,7 +35,7 @@ function HeaderMobile() {
   if (userInfo) {
     headerNav.pop();
     headerNav.push({
-      display: "Đăng xuất",
+      display: userInfo.name,
     });
   }
   const dispatch = useDispatch();

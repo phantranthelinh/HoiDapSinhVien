@@ -170,7 +170,7 @@ export const sendHappy = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.put(`${URL}/api/qnas/happy/${id}`, { idUser }, config);
+    await axios.post(`${URL}/api/qnas/happy/${id}`, { idUser }, config);
     dispatch({ type: "qna/sendHappySucces" });
   } catch (error) {
     const message =
@@ -201,7 +201,7 @@ export const sendUnhappy = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.put(`${URL}/api/qnas/unhappy/${id}`, { idUser }, config);
+    await axios.post(`${URL}/api/qnas/unhappy/${id}`, { idUser }, config);
 
     dispatch({ type: "qna/sendUnhappySucces" });
   } catch (error) {

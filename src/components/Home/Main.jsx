@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import lodash from "lodash";
 
-import { MdSettingsVoice } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getByKeyword,
@@ -15,7 +14,6 @@ import { sendNewQuesiton } from "./../../redux/Slice/qna";
 import { toast } from "react-toastify";
 import Toast from "./../LoadingError/Toast";
 import "react-toastify/dist/ReactToastify.css";
-import SpeechToText from "./../SpeechToText/SpeechToText";
 
 export const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -33,6 +31,7 @@ const Main = () => {
   }, 1000);
 
   const [isMobile, setisMobile] = useState(false);
+  const [len, setLen] = useState(0);
 
   const {
     sendNewQuestionSuccess,
@@ -43,8 +42,6 @@ const Main = () => {
     loading,
   } = useSelector((state) => state.qnas);
   const { QnA } = useSelector((state) => state.qnas);
-  const { happies, unhappies } = QnA;
-
   const dispatch = useDispatch();
   let screenWidth = window.innerWidth;
 
@@ -91,8 +88,14 @@ const Main = () => {
     if (sendNewQuestionSuccess) {
       toast.success("Gửi câu hỏi thành công", ToastObjects);
     }
-  }, [screenWidth, dispatch, input, actionSuccess, sendNewQuestionSuccess]);
-
+  }, [
+    screenWidth,
+    dispatch,
+    input,
+    actionSuccess,
+    QnA,
+    sendNewQuestionSuccess,
+  ]);
   return (
     <>
       <div className="container">
