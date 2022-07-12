@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { URL } from "../url";
 import { logout } from "./user";
 
 export const qnaSlice = createSlice({
@@ -9,7 +8,7 @@ export const qnaSlice = createSlice({
     loading: false,
     error: false,
     QnA: {},
-    listQnAs: null,
+    qnas: [],
   },
   reducers: {
     Request: (state) => {
@@ -30,12 +29,6 @@ export const qnaSlice = createSlice({
     ResetSendNewQuestion: (state) => {
       state.sendNewQuestionSuccess = false;
     },
-    reactionAdded(state, action) {
-      const { qnaId, reaction } = action.payload;
-      console.log(state.listQnAs);
-      const existingQnA = state.listQnAs.find((qna) => qna.id === qnaId);
-      console.log(existingQnA);
-    },
     getByKeywordSuccess: (state, action) => {
       state.actionSuccess = true;
       state.listQnAs = action.payload;
@@ -51,7 +44,6 @@ export const qnaSlice = createSlice({
     },
     sendUnhappySuccess: (state) => {
       state.loading = false;
-
       state.sendUnhappySucess = true;
     },
     getSingleQnA: (state, action) => {
@@ -60,6 +52,23 @@ export const qnaSlice = createSlice({
     },
     sendNewQuestionSuccess: (state) => {
       state.sendNewQuestionSuccess = true;
+    },
+    updateHappy: (state, action) => {
+      const { data, id } = action.payload;
+
+      if (state.qnas) {
+        state.qnas = state.qnas.map((qna) =>
+          qna.id === id ? qna.happies.push(data) : qna
+        );
+      }
+    },
+    updateUnhappy: (state, action) => {
+      const { data, id } = action.payload;
+      if (state.qnas) {
+        state.qnas = state.qnas.map((qna) =>
+          qna.id === id ? qna.unhappies.push(data) : qna
+        );
+      }
     },
   },
 });
@@ -77,7 +86,7 @@ export const getSingleQnA = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`${URL}/api/qnas/${id}`, config);
+    const { data } = await axios.get(`/api/qnas/${id}`, config);
     dispatch({ type: "qna/getSingleQnA", payload: data });
   } catch (error) {
     const message =
@@ -108,7 +117,7 @@ export const searchQnA = (question) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `${URL}/api/qnas/search?question=${question}`,
+      `/api/qnas/search?question=${question}`,
       config
     );
     dispatch({ type: "qna/searchQnASuccess", payload: data });
@@ -128,44 +137,43 @@ export const searchQnA = (question) => async (dispatch, getState) => {
   }
 };
 
-export const getByKeyword = (keywords) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: "qna/RequestGetByKeyword" });
-    const {
-      userLogin: { userInfo },
-    } = getState();
-    const config = {
-      headers: {
-        "Context-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    const { data } = await axios.post(
-      `${URL}/api/qnas/keywords`,
-      { keywords },
-      config
-    );
+// export const getByKeyword = (keywords) => async (dispatch, getState) => {
+//   try {
+//     dispatch({ type: "qna/RequestGetByKeyword" });
+//     const {
+//       userLogin: { userInfo },
+//     } = getState();
+//     const config = {
+//       headers: {
+//         "Context-Type": "application/json",
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     };
+//     const { data } = await axios.post(
+//       `/api/qnas/keywords`,
+//       { keywords },
+//       config
+//     );
 
-    dispatch({ type: "qna/getByKeywordSuccess", payload: data });
-  } catch (error) {
-    const message =
-      error.reponse && error.reponse.data.message
-        ? error.reponse.data.message
-        : error.message;
+//     dispatch({ type: "qna/getByKeywordSuccess", payload: data });
+//   } catch (error) {
+//     const message =
+//       error.reponse && error.reponse.data.message
+//         ? error.reponse.data.message
+//         : error.message;
 
-    if (message === "Not authorized, token failed") {
-      dispatch(logout());
-    }
-    dispatch({
-      type: "qna/Fail",
-      payload: message,
-    });
-  }
-};
+//     if (message === "Not authorized, token failed") {
+//       dispatch(logout());
+//     }
+//     dispatch({
+//       type: "qna/Fail",
+//       payload: message,
+//     });
+//   }
+// };
 
 export const sendHappy = (id) => async (dispatch, getState) => {
   try {
-    dispatch({ type: "qna/Request" });
     const {
       userLogin: { userInfo },
     } = getState();
@@ -176,7 +184,12 @@ export const sendHappy = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.post(`${URL}/api/qnas/happy/${id}`, { idUser }, config);
+    const { data } = await axios.put(
+      `/api/qnas/happy/${id}`,
+      { idUser },
+      config
+    );
+    dispatch({ type: "qna/updateHappy", payload: { data, id } });
     dispatch({ type: "qna/sendHappySucces" });
   } catch (error) {
     const message =
@@ -195,7 +208,6 @@ export const sendHappy = (id) => async (dispatch, getState) => {
 };
 export const sendUnhappy = (id) => async (dispatch, getState) => {
   try {
-    dispatch({ type: "qna/Request" });
     const {
       userLogin: { userInfo },
     } = getState();
@@ -207,8 +219,12 @@ export const sendUnhappy = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.post(`${URL}/api/qnas/unhappy/${id}`, { idUser }, config);
-
+    const { data } = await axios.put(
+      `/api/qnas/unhappy/${id}`,
+      { idUser },
+      config
+    );
+    dispatch({ type: "qna/updateUnhappies", payload: { data, id } });
     dispatch({ type: "qna/sendUnhappySucces" });
   } catch (error) {
     const message =
@@ -239,7 +255,7 @@ export const sendNewQuesiton = (question) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.post(`${URL}/api/messages/`, { question }, config);
+    await axios.post(`/api/messages/`, { question }, config);
     dispatch({ type: "qna/sendNewQuestionSuccess" });
     dispatch({ type: "qna/ResetSendNewQuestion" });
   } catch (error) {

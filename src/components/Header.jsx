@@ -18,10 +18,6 @@ const headerNav = [
     display: "Q&A",
     path: "/qna",
   },
-  {
-    display: "Đăng nhập",
-    path: "/login",
-  },
 ];
 const Header = () => {
   const { pathname } = useLocation();
@@ -30,13 +26,6 @@ const Header = () => {
   const { userInfo } = useSelector((state) => state.userLogin);
   const dispatch = useDispatch();
   let navigate = useNavigate();
-
-  if (userInfo) {
-    headerNav.pop();
-    headerNav.push({
-      display: userInfo.name,
-    });
-  }
 
   const clickHandler = (path) => {
     if (path) {
@@ -66,15 +55,43 @@ const Header = () => {
                       onClick={() => clickHandler(item.path)}
                     >
                       {item.display}
-                      {userInfo ? (
-                        <div className="menu-link__sub">Đăng xuất</div>
-                      ) : (
-                        ""
-                      )}
                     </div>
                   </li>
                 );
               })}
+            {userInfo ? (
+              <li className={`menu-item `}>
+                <div class="dropdown">
+                  <div className="menu-link">
+                    <button
+                      class="menu-link"
+                      type="button"
+                      id="dropdownMenuButton"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      {userInfo.name}
+                    </button>
+                    <div
+                      class="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton"
+                    >
+                      <div
+                        class="dropdown-item"
+                        onClick={() => dispatch(logout())}
+                      >
+                        Đăng xuất
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ) : (
+              <li className={`menu-item `}>
+                <div className="menu-link">Đăng nhập</div>
+              </li>
+            )}
           </ul>
         </div>
       </div>

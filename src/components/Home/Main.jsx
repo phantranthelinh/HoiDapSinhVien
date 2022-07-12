@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import lodash from "lodash";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getByKeyword,
-  searchQnA,
-  sendHappy,
-  sendUnhappy,
-} from "../../redux/Slice/qna";
+import { searchQnA, sendHappy, sendUnhappy } from "../../redux/Slice/qna";
 import Loading from "./../LoadingError/Loading";
 import { sendNewQuesiton } from "./../../redux/Slice/qna";
 import { toast } from "react-toastify";
@@ -31,20 +26,15 @@ const Main = () => {
 
   const [isMobile, setisMobile] = useState(false);
 
-  const {
-    sendNewQuestionSuccess,
-    qnas,
-    actionSuccess,
-    listQnAs,
-    loadingQnAs,
-    loading,
-  } = useSelector((state) => state.qnas);
+  const { sendNewQuestionSuccess, qnas, actionSuccess, loading } = useSelector(
+    (state) => state.qnas
+  );
   const dispatch = useDispatch();
   let screenWidth = window.innerWidth;
 
-  const clickHandler = (keywords) => {
-    dispatch(getByKeyword(keywords));
-    setShow(false);
+  const clickHandler = (q) => {
+    dispatch(searchQnA(q));
+    setShow(true);
   };
 
   const sendQuestion = () => {
@@ -61,25 +51,14 @@ const Main = () => {
   };
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(searchQnA(input));
     setShow(true);
   };
-
   const happyHandler = (id) => {
     dispatch(sendHappy(id));
-    console.log(happyRef.current);
-    // dispatch({
-    //   type: "qna/reactionAdded",
-    //   payload: { qnaId: id, reaction: "happies" },
-    // });
   };
-
-  const unhappyHandler = (id) => {
+  const UnhappyHandler = (id) => {
     dispatch(sendUnhappy(id));
-    // dispatch({
-    //   type: "qna/reactionAdded",
-    //   payload: { qnaId: id, reaction: "happies" },
-    // });
-    console.log(unhappyRef.current);
   };
 
   useEffect(() => {
@@ -93,10 +72,15 @@ const Main = () => {
     if (sendNewQuestionSuccess) {
       toast.success("Gửi câu hỏi thành công", ToastObjects);
     }
-  }, [screenWidth, dispatch, input, actionSuccess, sendNewQuestionSuccess]);
+  }, [
+    screenWidth,
+    dispatch,
+    input,
+    actionSuccess,
+    sendNewQuestionSuccess,
+    qnas,
+  ]);
 
-  const happyRef = useRef(null);
-  const unhappyRef = useRef(null);
   return (
     <>
       <div className="container">
@@ -143,7 +127,7 @@ const Main = () => {
                               <li
                                 className="search-check__content "
                                 key={item._id}
-                                onClick={() => clickHandler(item.keywords)}
+                                onClick={() => clickHandler(item.question)}
                               >
                                 {item.question}
                               </li>
@@ -178,17 +162,13 @@ const Main = () => {
 
         <div className="container-child">
           <div id="accordion">
-            {loadingQnAs || loading ? (
+            {loading ? (
               <Loading />
             ) : (
               <>
-                {!show && actionSuccess && (
-                  <h3 className="relate-question">Các câu hỏi có liên quan</h3>
-                )}
                 {show && (
                   <h3 className="relate-question">Các câu hỏi có liên quan</h3>
                 )}
-
                 {show &&
                   qnas?.length > 0 &&
                   qnas.map((qna, i) => {
@@ -219,7 +199,9 @@ const Main = () => {
                               <div className="emoji">
                                 <button
                                   className={""}
-                                  onClick={() => happyHandler(qna._id)}
+                                  onClick={() =>
+                                    happyHandler(qna._id, qna.happies.length)
+                                  }
                                 >
                                   <img
                                     src="/images/emoji/happy.svg"
@@ -231,7 +213,12 @@ const Main = () => {
                               <div className="emoji">
                                 <button
                                   className={""}
-                                  onClick={() => unhappyHandler(qna._id)}
+                                  onClick={() =>
+                                    UnhappyHandler(
+                                      qna._id,
+                                      qna.unhappies.length
+                                    )
+                                  }
                                 >
                                   <img
                                     src="/images/emoji/sad.svg"
@@ -246,71 +233,6 @@ const Main = () => {
                               Đơn vị trả lời:{" "}
                               {qna.by?.name ? qna.by.name : "P.CTSV"}
                             </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                {listQnAs?.length > 0 &&
-                  listQnAs.map((qna, i) => {
-                    return (
-                      <div key={i} className="card">
-                        <div className="card-header" id={`heading${i}`}>
-                          <h5 className="mb-0">
-                            <button
-                              className="btn btn-link"
-                              data-toggle="collapse"
-                              data-target={`#collapse${i}`}
-                              aria-expanded="true"
-                              aria-controls={`#collapse${i}`}
-                            >
-                              {qna.question}
-                            </button>
-                          </h5>
-                        </div>
-                        <div
-                          id={`collapse${i}`}
-                          className={`collapse`}
-                          aria-labelledby={`heading${i}`}
-                          data-parent="#accordion"
-                        >
-                          <div className="card-body">{qna.answer}</div>
-                          <div className="card-footer">
-                            <div className="emoji-wrapper">
-                              <div className="emoji">
-                                <button
-                                  className={""}
-                                  onClick={() => happyHandler(qna._id)}
-                                >
-                                  <img
-                                    src="/images/emoji/happy.svg"
-                                    alt="happ-icon"
-                                  />
-                                </button>
-                                <span>
-                                  {qna.happies &&
-                                    qna.happies.length > 0 &&
-                                    qna.happies.length}
-                                </span>
-                              </div>
-                              <div className="emoji">
-                                <button
-                                  className={""}
-                                  onClick={() => unhappyHandler(qna._id)}
-                                >
-                                  <img
-                                    src="/images/emoji/sad.svg"
-                                    alt="unhappy-icon"
-                                  />
-                                </button>
-                                <span>
-                                  {qna.unhappies &&
-                                    qna.unhappies.length > 0 &&
-                                    qna.unhappies.length}
-                                </span>
-                              </div>
-                            </div>
-                            <span> Đơn vị trả lời: {qna.by?.name}</span>
                           </div>
                         </div>
                       </div>
