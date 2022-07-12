@@ -19,8 +19,8 @@ router.get('/all', QnAController.getAllQnAs)
 router.post('/keywords', QnAController.getQnAs)
 router.get('/search', QnAController.searchQnA)
 
-router.post('/happy/:id', QnAController.happy)
-router.post('/unhappy/:id', QnAController.unhappy)
+router.put('/happy/:id', QnAController.happy)
+router.put('/unhappy/:id', QnAController.unhappy)
 router.get('/:id', QnAController.getSingleQnA)
 router.put('/:id', protect, QnAController.edit)
 

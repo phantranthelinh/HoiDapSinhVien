@@ -218,12 +218,12 @@ const QnAController = {
           (un) => un.user.toString() !== idUser.toString()
         )
         if (alreadyHappies) {
-          res.status(400).json({ message: 'Bạn đã bình chọn rồi' })
+          return res.status(400).json({ message: 'Bạn đã bình chọn rồi' })
         } else {
           qna.happies.push({ user: idUser })
           qna.unhappies = newArrayUnhappies
           await qna.save()
-          res.status(200).json({ message: 'Bạn đã bình chọn thành công' })
+          res.status(200).json(qna.happies)
         }
       }
       res.status(400)
@@ -232,6 +232,7 @@ const QnAController = {
       res.status(500).json(err)
     }
   }),
+
   unhappy: asyncHandler(async (req, res) => {
     try {
       const { idUser } = req.body
@@ -242,12 +243,12 @@ const QnAController = {
         )
         const newArrayHappies = qna.happies.filter((h) => h.user.toString() !== idUser.toString())
         if (alreadyUnhappies) {
-          res.status(400).json({ message: 'Bạn đã bình chọn rồi' })
+          return res.status(400).json({ message: 'Bạn đã bình chọn rồi' })
         } else {
           qna.unhappies.push({ user: idUser })
           qna.happies = [...newArrayHappies]
           await qna.save()
-          res.status(200).json({ message: 'Bạn đã bình chọn thành công' })
+          res.status(200).json(qna.unhappies)
         }
       }
       res.status(400)
