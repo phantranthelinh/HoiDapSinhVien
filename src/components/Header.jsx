@@ -4,9 +4,10 @@ import $ from 'jquery'
 import { logOut } from '../redux/Slice/user'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import { getListMessage } from '../redux/Slice/newMessage'
 const Header = () => {
   const dispatch = useDispatch()
-
+  const { userInfo } = useSelector((state) => state.userLogin)
   const { listMessage } = useSelector((state) => state.messages)
   useEffect(() => {
     $('[data-trigger]').on('click', function (e) {
@@ -25,42 +26,16 @@ const Header = () => {
         $('body').toggleClass('aside-mini')
       }
     })
-  }, [])
+    dispatch(getListMessage())
+  }, [dispatch])
 
   return (
     <header className="main-header navbar justify-content-end">
-      {/* <div className="col-search">
-        <form className="searchform">
-          <div className="input-group">
-            <input
-              list="search_terms"
-              type="text"
-              className="form-control"
-              placeholder="Tìm kiếm câu hỏi"
-            />
-            <button className="btn btn-light bg" type="button">
-              <i className="far fa-search"></i>
-            </button>
-          </div>
-          <datalist id="search_terms">
-            <option value="Products" />
-            <option value="New orders" />
-            <option value="Apple iphone" />
-            <option value="Ahmed Hassan" />
-          </datalist>
-        </form>
-      </div> */}
       <div className="col-nav ">
         <button className="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside">
           <i className="md-28 fas fa-bars"></i>
         </button>
         <ul className="nav">
-          {/* <li className="nav-item">
-            <Link className={`nav-link btn-icon `} title="Dark mode" to="#">
-              <i className="fas fa-moon"></i>
-            </Link>
-          </li> */}
-
           <li className="dropdown nav-item" style={{ marginRight: 24 }}>
             <Link className=" nav-link btn-icon" data-bs-toggle="dropdown" to="#">
               <i className={`fas fa-bell ${listMessage?.length > 0 ? 'text-danger' : ''}`}>
@@ -86,6 +61,7 @@ const Header = () => {
           <li className="dropdown nav-item">
             <Link className="dropdown-toggle" data-bs-toggle="dropdown" to="#">
               <img className="img-xs rounded-circle" src="/images/logo.gif" alt="User" />
+              <span className="text-primary">{userInfo.name}</span>
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
               <div
@@ -94,6 +70,12 @@ const Header = () => {
                 onClick={() => dispatch(logOut())}>
                 Đăng xuất
               </div>
+              <Link
+                className="dropdown-item text-danger"
+                style={{ cursor: 'pointer' }}
+                to={`/user/${userInfo._id}/edit`}>
+                Chỉnh sửa thông tin
+              </Link>
             </div>
           </li>
         </ul>

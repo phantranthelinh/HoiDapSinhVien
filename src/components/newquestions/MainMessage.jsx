@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Loading from '../LoadingError/Loading'
 import Message from '../LoadingError/Error'
 import { useDispatch } from 'react-redux'
@@ -16,9 +16,6 @@ export const ToastObjects = {
   theme: 'colored',
 }
 const MainMessage = () => {
-  let { search } = useLocation()
-
-  const page = search.split('?page=')[1]
   const {
     listMessage: data,
     loading,

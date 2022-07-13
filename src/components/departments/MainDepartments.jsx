@@ -79,25 +79,6 @@ const MainDepartments = () => {
           </div>
 
           {/* nav */}
-          <nav className="float-end mt-4" aria-label="Page navigation">
-            <ul className="pagination">
-              <li className="page-item disabled">
-                <Link className="page-link" to="#">
-                  Previous
-                </Link>
-              </li>
-              <li className="page-item active">
-                <Link className="page-link" to="#">
-                  1
-                </Link>
-              </li>
-              <li className="page-item">
-                <Link className="page-link" to="#">
-                  Next
-                </Link>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
     </section>

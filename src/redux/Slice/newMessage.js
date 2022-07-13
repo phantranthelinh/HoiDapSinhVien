@@ -1,18 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { URL } from '../Url'
 import { logOut } from './user'
-
-export const listMessageFromLocalStorage = localStorage.getItem('listMessage')
-  ? JSON.parse(localStorage.getItem('listMessage'))
-  : []
 
 export const messageSlice = createSlice({
   name: 'message',
   initialState: {
     loading: false,
     error: false,
-    listMessage: listMessageFromLocalStorage,
+    listMessage: [],
   },
   reducers: {
     Request: (state) => {
@@ -53,9 +48,8 @@ export const getListMessage = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${URL}/api/messages/${userInfo._id}`, config)
+    const { data } = await axios.get(`/api/messages/${userInfo._id}`, config)
     dispatch({ type: 'message/getListMessageSuccess', payload: data.listMessage })
-    localStorage.setItem('listMessage', JSON.stringify(data.listMessage))
   } catch (error) {
     const message =
       error.response && error.response.data.message ? error.response.data.message : error.message
@@ -81,7 +75,7 @@ export const deleteMessage = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.delete(`${URL}/api/messages/${id}`, config)
+    await axios.delete(`/api/messages/${id}`, config)
     dispatch({ type: 'message/deleteMessageSuccess' })
 
     dispatch(getListMessage())
@@ -110,7 +104,7 @@ export const sendMessage = (question, toId) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.put(`${URL}/api/messages/send`, { question, toId }, config)
+    await axios.put(`/api/messages/send`, { question, toId }, config)
     dispatch({ type: 'message/sendMessageSuccess' })
     dispatch(getListMessage())
   } catch (error) {

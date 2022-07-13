@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 const Sidebar = () => {
   const token = JSON.parse(window.localStorage.getItem('userInfo'))

@@ -9,6 +9,7 @@ import { addQnA } from '../../redux/Slice/qna'
 
 import { useEffect } from 'react'
 import Message from './../LoadingError/Error'
+import { getListDepartments } from '../../redux/Slice/department'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -19,7 +20,6 @@ const AddQnAMain = () => {
   const [question, setQuestion] = useState('')
 
   const [answer, setAnswer] = useState('')
-  const [file, setFile] = useState('')
   const { userInfo } = useSelector((state) => state.userLogin)
   const [by, setBy] = useState('')
 
@@ -38,7 +38,10 @@ const AddQnAMain = () => {
     if (actionSuccess) {
       dispatch({ type: 'qna/Reset' })
       toast.success('Thêm mới thành công!!!', ToastObjects)
+      setAnswer('')
+      setQuestion('')
     }
+    dispatch(getListDepartments())
   }, [dispatch, actionSuccess])
   return (
     <>

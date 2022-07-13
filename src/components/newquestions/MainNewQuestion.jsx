@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
 import Loading from '../LoadingError/Loading'
 import Message from '../LoadingError/Error'
 import { useDispatch } from 'react-redux'
@@ -8,6 +7,7 @@ import { toast } from 'react-toastify'
 import Toast from '../LoadingError/Toast'
 import { deleteMessage } from '../../redux/Slice/newMessage'
 import { sendMessage } from './../../redux/Slice/newMessage'
+import { getListDepartments } from '../../redux/Slice/department'
 const ToastObjects = {
   pauseOnFocusLoss: false,
   draggable: false,
@@ -17,8 +17,7 @@ const ToastObjects = {
 }
 const MainNewQuestion = () => {
   const [toId, setToId] = useState('')
-  let { search } = useLocation()
-  const page = search.split('?page=')[1]
+
   const { userInfo } = useSelector((state) => state.userLogin)
   const {
     listMessage: data,
@@ -45,6 +44,7 @@ const MainNewQuestion = () => {
       toast.success('Xoá câu hỏi thành công', ToastObjects)
       dispatch({ type: 'message/Reset' })
     }
+    dispatch(getListDepartments())
   }, [dispatch, deleteMessageSuccess, sendMessageSuccess, data.isMoved])
   return (
     <>
@@ -52,11 +52,6 @@ const MainNewQuestion = () => {
       <section className="content-main">
         <div className="content-header">
           <h2 className="content-title">Các câu hỏi có thể chuyển</h2>
-          <div>
-            <Link to="/add-qna" className="btn btn-primary">
-              Thêm mới
-            </Link>
-          </div>
         </div>
 
         <div className="card mb-4 shadow-sm">

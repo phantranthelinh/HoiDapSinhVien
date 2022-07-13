@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { URL } from '../Url'
 export const userLoginFromLocalStorage = JSON.parse(localStorage.getItem('userInfo'))
   ? JSON.parse(localStorage.getItem('userInfo'))
   : null
@@ -88,7 +87,7 @@ export const logIn = (email, password) => async (dispatch) => {
         'Context-Type': 'application/json',
       },
     }
-    const { data } = await axios.post(`${URL}/api/users/login`, { email, password }, config)
+    const { data } = await axios.post(`/api/users/login`, { email, password }, config)
     dispatch({ type: 'user/loginSuccess', payload: data })
     localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
@@ -118,7 +117,7 @@ export const addUser = (user) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.post(`${URL}/api/users`, user, config)
+    await axios.post(`/api/users`, user, config)
     dispatch({ type: 'user/addUserSuccess' })
     dispatch(getListUsers())
   } catch (error) {
@@ -147,7 +146,7 @@ export const getListUsers = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${URL}/api/users`, config)
+    const { data } = await axios.get(`/api/users`, config)
     dispatch({ type: 'user/listUsersSuccess', payload: data })
     localStorage.setItem('listUsers', JSON.stringify(data))
   } catch (error) {
@@ -176,7 +175,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.delete(`${URL}/api/users/${id}`, config)
+    await axios.delete(`/api/users/${id}`, config)
     dispatch({ type: 'user/deleteUserSuccess' })
     dispatch(getListUsers())
   } catch (error) {
@@ -206,7 +205,7 @@ export const editUser = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${URL}/api/users/${id}`, config)
+    const { data } = await axios.get(`/api/users/${id}`, config)
     dispatch({ type: 'user/editUserSuccess', payload: data })
   } catch (error) {
     const message =
@@ -232,7 +231,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.put(`${URL}/api/users/${user._id}`, user, config)
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config)
     dispatch({ type: 'user/updateUserSuccess', payload: data })
     dispatch({ type: 'user/Reset' })
   } catch (error) {

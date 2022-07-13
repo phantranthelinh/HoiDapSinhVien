@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addWithFile } from '../../redux/Slice/qna'
 import { toast } from 'react-toastify'
 import { ToastObjects } from '../newquestions/MainMessage'
+import { getListDepartments } from '../../redux/Slice/department'
 
 const AddQnAsFileMain = () => {
   const [by, setBy] = useState('')
@@ -36,6 +37,7 @@ const AddQnAsFileMain = () => {
       toast.success('Thêm câu hỏi thành công', ToastObjects)
       dispatch({ type: 'qna/Reset' })
     }
+    dispatch(getListDepartments())
   }, [dispatch, addWithFileSuccess])
 
   return (
@@ -64,6 +66,7 @@ const AddQnAsFileMain = () => {
                 <div className="col-xl-12 col-lg-12">
                   <div className="card mb-4 shadow-sm">
                     <div className="card-body">
+                      <h6 className="text">Vui lòng tải file mẫu dưới đây</h6>
                       <a href="./uploads/import_data.csv" className="btn btn-success mb-4" download>
                         Tải file mẫu
                       </a>

@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { URL } from '../Url'
 import { logOut } from './user'
 
 export const qnaSlice = createSlice({
@@ -73,10 +72,7 @@ export const getListQnAs =
           'Context-Type': 'application/json',
         },
       }
-      const { data } = await axios.get(
-        `${URL}/api/qnas/all?page=${page}&search=${inputSearch}`,
-        config
-      )
+      const { data } = await axios.get(`/api/qnas/all?page=${page}&search=${inputSearch}`, config)
       dispatch({ type: 'qna/listQnAsSuccess', payload: data })
       dispatch({ type: 'qna/Reset' })
     } catch (error) {
@@ -106,7 +102,7 @@ export const addQnA = (qna) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.post(`${URL}/api/qnas`, qna, config)
+    await axios.post(`/api/qnas`, qna, config)
     dispatch({ type: 'qna/addQnASuccess' })
   } catch (error) {
     const message =
@@ -135,7 +131,7 @@ export const deleteQnA = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.delete(`${URL}/api/qnas/${id}`, config)
+    await axios.delete(`/api/qnas/${id}`, config)
     dispatch({ type: 'qna/deleteQnASuccess' })
     dispatch(getListQnAs())
   } catch (error) {
@@ -164,7 +160,7 @@ export const editQnA = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${URL}/api/qnas/${id}`, config)
+    const { data } = await axios.get(`/api/qnas/${id}`, config)
     dispatch({ type: 'qna/editQnASuccess', payload: data })
     dispatch(getListQnAs())
   } catch (error) {
@@ -191,7 +187,7 @@ export const updateQnA = (qna) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.put(`${URL}/api/qnas/${qna._id}`, qna, config)
+    const { data } = await axios.put(`/api/qnas/${qna._id}`, qna, config)
     dispatch({ type: 'qna/updateQnASuccess', payload: data })
     dispatch(getListQnAs())
   } catch (error) {
@@ -219,7 +215,7 @@ export const addWithFile = (data, by) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    await axios.post(`${URL}/api/qnas/file`, data, config)
+    await axios.post(`/api/qnas/file`, data, config)
     dispatch({ type: 'qna/addWithFileSuccess' })
     dispatch(getListQnAs())
   } catch (error) {

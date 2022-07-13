@@ -72,7 +72,6 @@ const AddUserMain = () => {
             <div className="col-xl-12 col-lg-12">
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
-                  {error && <Message variant="alert-danger">{error}</Message>}
                   {loading && <Loading />}
                   <div className="mb-4">
                     <label className="form-label">Tên</label>

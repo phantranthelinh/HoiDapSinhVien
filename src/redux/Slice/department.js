@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { logOut } from './user'
-import { URL } from '../Url'
-
-export const listDepartmentsFromLocalStorage = localStorage.getItem('listDepartmets')
-  ? JSON.parse(localStorage.getItem('listDepartmets'))
-  : []
 
 const departmentSlice = createSlice({
   name: 'department',
@@ -15,7 +10,7 @@ const departmentSlice = createSlice({
     error: false,
     department: {},
     messageDelete: null,
-    listDepartments: listDepartmentsFromLocalStorage,
+    listDepartments: [],
   },
   reducers: {
     Request: (state) => {
@@ -72,7 +67,7 @@ export const addDepartment = (name) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.post(`${URL}/api/departments`, { name }, config)
+    const { data } = await axios.post(`/api/departments`, { name }, config)
     dispatch({ type: 'department/addDepartmentSuccess', payload: data })
     dispatch(getListDepartments())
   } catch (error) {
@@ -101,9 +96,8 @@ export const getListDepartments = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${URL}/api/departments/all`, config)
+    const { data } = await axios.get(` /api/departments/all`, config)
     dispatch({ type: 'department/listDepartmentsSuccess', payload: data })
-    localStorage.setItem('listDepartmets', JSON.stringify(data))
     dispatch({ type: 'department/Reset' })
   } catch (error) {
     const message =
@@ -133,7 +127,7 @@ export const deleteDepartment = (id) => async (dispatch, getState) => {
       },
     }
 
-    await axios.delete(`${URL}/api/departments/${id}`, config)
+    await axios.delete(` /api/departments/${id}`, config)
     dispatch({ type: 'department/deleteDepartmentSuccess' })
     dispatch(getListDepartments())
   } catch (error) {
@@ -163,7 +157,7 @@ export const editDepartment = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`${URL}/api/departments/${id}`, config)
+    const { data } = await axios.get(`/api/departments/${id}`, config)
     dispatch({ type: 'department/editDepartmentSuccess', payload: data })
   } catch (error) {
     const message =
@@ -190,7 +184,7 @@ export const updateDepartment = (department) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.put(`${URL}/api/departments/${department._id}`, department, config)
+    const { data } = await axios.put(`/api/departments/${department._id}`, department, config)
     dispatch({ type: 'department/updateDepartmentsSuccess', payload: data })
   } catch (error) {
     const message =

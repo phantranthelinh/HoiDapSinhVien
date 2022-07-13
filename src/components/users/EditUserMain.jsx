@@ -21,7 +21,7 @@ const EditUserMain = ({ userId }) => {
   const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState('')
+  const [from, setFrom] = useState('')
 
   const [password, setPassword] = useState('')
 
@@ -42,7 +42,7 @@ const EditUserMain = ({ userId }) => {
       setName(user.name)
       setEmail(user.email)
       setPassword(user.password)
-      setRole(user.role)
+      setFrom(user.from)
     }
   }, [dispatch, userId, user, success])
 
@@ -54,7 +54,7 @@ const EditUserMain = ({ userId }) => {
         name,
         email,
         password,
-        role,
+        from,
       })
     )
   }
@@ -130,7 +130,7 @@ const EditUserMain = ({ userId }) => {
                         </label>
                         <select
                           name="role"
-                          onChange={(e) => setRole(e.target.value)}
+                          onChange={(e) => setFrom(e.target.value)}
                           className="form-control"
                           defaultValue={user.from?.name}>
                           <option className="form-control" value={user.from?._id} selected>
@@ -142,7 +142,7 @@ const EditUserMain = ({ userId }) => {
                                 <option
                                   key={department._id}
                                   className="form-control"
-                                  value={department.name}>
+                                  value={department._id}>
                                   {department.name}
                                 </option>
                               )
