@@ -2,7 +2,7 @@ import "./App.css";
 import QnA from "./components/QnA/QnA.jsx";
 import About from "./components/About/About";
 import Footer from "./components/Footer";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Main from "./components/Home/Main";
 import Login from "./components/Login/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";

@@ -263,8 +263,7 @@ form {
   position: relative;
 }
 
-.menu-item.active::after,
-.menu-item:hover::after {
+.menu-item.active::after {
   width: 100%;
 }
 
@@ -1092,14 +1091,21 @@ mask {
   box-shadow: 1px 2px rgb(146, 146, 146);
 }
 
-/* .menu-item > .menu-link:last-child > .menu-link__sub:hover {
-  display: block !important;
-} */
-
-/* .menu-link:hover > .menu-link__sub:last-child {
-  display: block;
-} */
 
 .menu-item:last-child:hover > .menu-link > .menu-link__sub {
   display: block !important;
+}
+
+.dropdown button{
+ border: none;
+ background-color: transparent;
+}
+.dropdown-item{
+  min-width: 0;
+  padding :  2px;
+  color: #0072bb;
+}
+.dropdown-menu{
+  min-width: 100%;
+  
 }

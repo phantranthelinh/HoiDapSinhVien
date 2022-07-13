@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import lodash from "lodash";
 
 import { useDispatch, useSelector } from "react-redux";
-import { searchQnA, sendHappy, sendUnhappy } from "../../redux/Slice/qna";
+import {
+  getListQnA,
+  searchQnA,
+  sendHappy,
+  sendUnhappy,
+} from "../../redux/Slice/qna";
 import Loading from "./../LoadingError/Loading";
 import { sendNewQuesiton } from "./../../redux/Slice/qna";
 import { toast } from "react-toastify";
 import Toast from "./../LoadingError/Toast";
 import "react-toastify/dist/ReactToastify.css";
+import { Title } from "./../Title";
+import { useMemo } from "react";
+import removeVietnameseTones from "./../utils";
 
 export const ToastObjects = {
   pauseOnFocusLoss: false,
@@ -26,9 +34,9 @@ const Main = () => {
 
   const [isMobile, setisMobile] = useState(false);
 
-  const { sendNewQuestionSuccess, qnas, actionSuccess, loading } = useSelector(
-    (state) => state.qnas
-  );
+  const { sendNewQuestionSuccess, listQnA, qnas, actionSuccess, loading } =
+    useSelector((state) => state.qnas);
+
   const dispatch = useDispatch();
   let screenWidth = window.innerWidth;
 
@@ -45,7 +53,7 @@ const Main = () => {
     toast.success("Gửi câu hỏi thành công");
   };
 
-  const questionClick = (e) => {
+  const questionClick = () => {
     sendQuestion();
     sendQuestionSucces();
   };
@@ -67,30 +75,23 @@ const Main = () => {
     } else {
       setisMobile((isMobile) => (isMobile = false));
     }
-    dispatch(searchQnA(input));
 
     if (sendNewQuestionSuccess) {
       toast.success("Gửi câu hỏi thành công", ToastObjects);
     }
-  }, [
-    screenWidth,
-    dispatch,
-    input,
-    actionSuccess,
-    sendNewQuestionSuccess,
-    qnas,
-  ]);
-
+    dispatch(getListQnA());
+  }, [screenWidth, dispatch, actionSuccess, sendNewQuestionSuccess, qnas]);
+  const qnasMemo = useMemo(() => {
+    return listQnA.filter((q) => {
+      return removeVietnameseTones(q.question).includes(
+        removeVietnameseTones(input)
+      );
+    });
+  }, [input, listQnA]);
   return (
     <>
       <div className="container">
-        <div className="title">
-          <span className="text-heading">HỆ THỐNG</span>
-          <span className="text-heading">GIẢI ĐÁP TỰ ĐỘNG</span>
-          <span className="text-heading text-heading__sub">
-            TRƯỜNG ĐẠI HỌC Y DƯỢC CẦN THƠ
-          </span>
-        </div>
+        <Title />
         <div className="sub-main">
           <div className="main">
             <div className="text-show">
@@ -111,18 +112,15 @@ const Main = () => {
                       defaultValue={input}
                       onChange={handleUpdate}
                     />
-                    {/* <div className="search-voice">
-                    
-                      <SpeechToText />
-                    </div> */}
+
                     <div className="search-check">
-                      {/* {!loading && <p>Ý của bạn là...</p>} */}
                       <div className="search-check__output">
                         {loading ? (
                           <Loading />
                         ) : (
-                          qnas?.length > 0 &&
-                          qnas.map((item, index) => {
+                          input.trim() !== "" &&
+                          qnasMemo?.length > 0 &&
+                          qnasMemo.slice(0, 5).map((item, index) => {
                             return (
                               <li
                                 className="search-check__content "
@@ -134,7 +132,7 @@ const Main = () => {
                             );
                           })
                         )}
-                        {qnas?.length === 0 && input.trim() !== "" && (
+                        {qnasMemo?.length === 0 && input.trim() !== "" && (
                           <li className="li-content">
                             <div className="li-content__nope">
                               <span>Không tìm thấy câu hỏi</span>
@@ -275,7 +273,6 @@ const Main = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                // onClick={sendQuestion}
                 data-dismiss="modal"
                 onClick={questionClick}
               >

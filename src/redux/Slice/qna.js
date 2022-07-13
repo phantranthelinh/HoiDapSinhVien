@@ -8,6 +8,7 @@ export const qnaSlice = createSlice({
     loading: false,
     error: false,
     QnA: {},
+    listQnA: [],
     qnas: [],
   },
   reducers: {
@@ -50,6 +51,9 @@ export const qnaSlice = createSlice({
       state.success = true;
       state.QnA = action.payload;
     },
+    getListQnASuccess: (state, action) => {
+      state.listQnA = action.payload;
+    },
     sendNewQuestionSuccess: (state) => {
       state.sendNewQuestionSuccess = true;
     },
@@ -72,6 +76,38 @@ export const qnaSlice = createSlice({
     },
   },
 });
+
+export const getListQnA =
+  (page = 1) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Context-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.get(`/api/qnas/all?page=${page}`, config);
+      dispatch({ type: "qna/getListQnASuccess", payload: data.QAs });
+    } catch (error) {
+      const message =
+        error.reponse && error.reponse.data.message
+          ? error.reponse.data.message
+          : error.message;
+
+      if (message === "Not authorized, token failed") {
+        dispatch(logout());
+      }
+      dispatch({
+        type: "qna/Fail",
+        payload: message,
+      });
+    }
+  };
 
 export const getSingleQnA = (id) => async (dispatch, getState) => {
   try {

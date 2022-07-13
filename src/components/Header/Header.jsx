@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../redux/Slice/user";
+import { logout } from "../../redux/Slice/user";
 
 const headerNav = [
   {
@@ -64,7 +64,7 @@ const Header = () => {
                 <div class="dropdown">
                   <div className="menu-link">
                     <button
-                      class="menu-link"
+                      className="menu-link"
                       type="button"
                       id="dropdownMenuButton"
                       data-toggle="dropdown"
@@ -74,11 +74,11 @@ const Header = () => {
                       {userInfo.name}
                     </button>
                     <div
-                      class="dropdown-menu"
+                      className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton"
                     >
                       <div
-                        class="dropdown-item"
+                        className="dropdown-item"
                         onClick={() => dispatch(logout())}
                       >
                         Đăng xuất
