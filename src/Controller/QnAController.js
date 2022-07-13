@@ -84,7 +84,7 @@ const QnAController = {
             },
           }
         : {}
-      const pageSize = 10
+      const pageSize = 8
       const page = Number(req.query.page) || 1
 
       const count = await QnA.countDocuments({})
@@ -210,7 +210,7 @@ const QnAController = {
   }),
   happy: asyncHandler(async (req, res) => {
     try {
-      const { idUser } = req.body
+      const idUser = req.user._id
       const qna = await QnA.findById(req.params.id)
       if (qna) {
         const alreadyHappies = qna.happies.find((h) => h.user.toString() === idUser.toString())
@@ -235,7 +235,7 @@ const QnAController = {
 
   unhappy: asyncHandler(async (req, res) => {
     try {
-      const { idUser } = req.body
+      const idUser = req.user._id
       const qna = await QnA.findById(req.params.id)
       if (qna) {
         const alreadyUnhappies = qna.unhappies.find(

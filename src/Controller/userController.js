@@ -75,6 +75,10 @@ const userController = {
           password: user.password,
         })
       }
+      await Message.create({
+        idUser: user._id,
+        userFrom: user.from,
+      })
     } catch (err) {
       throw new Error(err)
     }
@@ -89,9 +93,13 @@ const userController = {
   }),
   edit: asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id)
-    const { name } = req.body
+    const { name, from, password, email } = req.body
     if (user) {
       user.name = name || user.name
+      user.from = from || user.from
+      user.email = email || user.email
+      user.password = password || user.password
+
       const updatedUser = await user.save()
       res.status(200).json(updatedUser)
     } else {
